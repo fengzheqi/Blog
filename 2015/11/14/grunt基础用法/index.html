@@ -1,0 +1,725 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Grunt," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="浮生奇影" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="grunt基础用法1. grunt是什么？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="grunt基础用法">
+<meta property="og:url" content="http://fengzheqi.com/2015/11/14/grunt基础用法/index.html">
+<meta property="og:site_name" content="浮生奇影">
+<meta property="og:description" content="grunt基础用法1. grunt是什么？">
+<meta property="og:image" content="http://img2.ph.126.net/1aQ7dPg3wJz_1o9CrGGwSQ==/6631204105142711267.png">
+<meta property="og:updated_time" content="2016-11-07T08:36:29.174Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="grunt基础用法">
+<meta name="twitter:description" content="grunt基础用法1. grunt是什么？">
+<meta name="twitter:image" content="http://img2.ph.126.net/1aQ7dPg3wJz_1o9CrGGwSQ==/6631204105142711267.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> grunt基础用法 | 浮生奇影 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">浮生奇影</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                grunt基础用法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-14T00:00:00+08:00" content="2015-11-14">
+              2015-11-14
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="grunt基础用法"><a href="#grunt基础用法" class="headerlink" title="grunt基础用法"></a>grunt基础用法</h3><h4 id="1-grunt是什么？"><a href="#1-grunt是什么？" class="headerlink" title="1. grunt是什么？"></a>1. grunt是什么？</h4><a id="more"></a>
+<h4 id="2-准备阶段"><a href="#2-准备阶段" class="headerlink" title="2. 准备阶段"></a>2. 准备阶段</h4><ol>
+<li><strong>开发环境</strong><ul>
+<li>window7 64bit</li>
+<li>nodejs v0.12.7</li>
+</ul>
+</li>
+<li><strong>安装nodejs环境</strong>。Grunt和Grunt插件是通过<code>npm</code>安装并管理的，所以首先需要安装<code>nodejs</code>环境。</li>
+<li><p><strong>全局安装<code>grunt-cli</code></strong>。为了更方便在任何目录下使用Grunt命令，我们需要在全局中安装<code>grunt-cli</code></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g grunt-cli</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>4.<strong>全局安装<code>grunt-init</code></strong>。<code>grunt-init</code>是一个用于自动创建项目脚手架的工具（就是提供项目文件的模板），比如我们在使用Grunt时，需要新建一个<code>gruntfile.js</code>文件，利用<code>grunt-init</code>中的<code>grunt-init-gruntfile</code>模板就可以直接生成了，详情请见：<a href="https://github.com/gruntjs/grunt-init-gruntfile" target="_blank" rel="external">grunt-init-gruntfile</a></p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g grunt-init</div></pre></td></tr></table></figure>
+</code></pre><h4 id="2-grunt的使用"><a href="#2-grunt的使用" class="headerlink" title="2. grunt的使用"></a>2. grunt的使用</h4><ol>
+<li><strong>grunt概述</strong><br><img src="http://img2.ph.126.net/1aQ7dPg3wJz_1o9CrGGwSQ==/6631204105142711267.png" alt="grunt使用使用"></li>
+</ol>
+<ul>
+<li>grunt-cli：grunt命令行，在系统全局环境中使用grunt命令；</li>
+<li>grunt-init：生成一些grunt的模板，主要是gruntfile；</li>
+<li>grunt：grunt默认导入了五个插件依赖。<pre><code>- concat：js文件的合并；
+- uglify：js文件的扰乱；
+- qunit：js文件的单元测试；
+- jshint：检验js的代码是否合法与规范；
+- watch：监控js文件的变化，包括增删改等。
+</code></pre></li>
+</ul>
+<ol>
+<li><p><strong>gruntfile配置</strong><br> 文章最下面附有生成默认的gruntfile的代码，下面我们分析每个模块</p>
+<ul>
+<li><p><strong>包装函数（wrapper function）</strong><br>  每一份 Gruntfile （和grunt插件）都遵循同样的格式，你所书写的Grunt代码必须放在此函数内：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*global module:false*/</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">grunt</span>) </span>&#123;</div><div class="line">  <span class="comment">// 包含各种插件配置、注册和执行</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>配置grunt插件（grunt.initConfig对象）</strong></p>
+<ul>
+<li><p>读取<code>package.json</code>中的JSON元数据 ，编写注释标题（banner）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">pkg: grunt.file.readJSON(<span class="string">'package.json'</span>)</div><div class="line">banner: <span class="string">'/*! &lt;%= pkg.title || pkg.name %&gt; - v&lt;%= pkg.version %&gt; - '</span> +</div><div class="line">      <span class="string">'&lt;%= grunt.template.today("yyyy-mm-dd") %&gt;\n'</span> +</div><div class="line">      <span class="string">'&lt;%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %&gt;'</span> +</div><div class="line">      <span class="string">'* Copyright (c) &lt;%= grunt.template.today("yyyy") %&gt; &lt;%= pkg.author.name %&gt;;'</span> +</div><div class="line">      <span class="string">' Licensed &lt;%= _.pluck(pkg.licenses, "type").join(", ") %&gt; */\n'</span>,</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>js文件合并（concat）</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">concat: &#123;</div><div class="line">       <span class="attr">options</span>: &#123;</div><div class="line">         <span class="attr">banner</span>: <span class="string">'&lt;%= banner %&gt;'</span>,</div><div class="line">         <span class="attr">stripBanners</span>: <span class="literal">true</span></div><div class="line">       &#125;,</div><div class="line">       <span class="attr">dist</span>: &#123;</div><div class="line">      <span class="comment">//源文件，把要压缩的文件以数组形式存入src</span></div><div class="line">         src: [<span class="string">'lib/&lt;%= pkg.name %&gt;.js'</span>],</div><div class="line">         <span class="comment">//目标目录与文件</span></div><div class="line">         dest: <span class="string">'dist/&lt;%= pkg.name %&gt;.js'</span></div><div class="line">       &#125;</div><div class="line">     &#125;,</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code>- **js文件扰乱（uglify）**
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">uglify: &#123;</div><div class="line">       <span class="attr">options</span>: &#123;</div><div class="line">         <span class="attr">banner</span>: <span class="string">'&lt;%= banner %&gt;'</span></div><div class="line">       &#125;,</div><div class="line">       <span class="attr">dist</span>: &#123;</div><div class="line">      <span class="comment">//源文件，需要被扰乱的js文件</span></div><div class="line">         src: <span class="string">'&lt;%= concat.dist.dest %&gt;'</span>,</div><div class="line">         <span class="comment">//生成的目标文件</span></div><div class="line">         dest: <span class="string">'dist/&lt;%= pkg.name %&gt;.min.js'</span></div><div class="line">       &#125;</div><div class="line">     &#125;,</div></pre></td></tr></table></figure>
+
+
+- **js文件检验（jshint）**
+    jshint具体option配置信息请参考[jshint中文doc](http://www.cnblogs.com/code/articles/4103070.html)
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">jshint: &#123;</div><div class="line">	<span class="comment">//jshint的校验配置</span></div><div class="line">       options: &#123;</div><div class="line">         <span class="attr">curly</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">eqeqeq</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">immed</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">latedef</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">newcap</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">noarg</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">sub</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">undef</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">unused</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">boss</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">eqnull</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">browser</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">globals</span>: &#123;&#125;</div><div class="line">       &#125;,</div><div class="line">       <span class="comment">//配置要校验的文件，任务gruntfile</span></div><div class="line">       gruntfile: &#123;</div><div class="line">         <span class="attr">src</span>: <span class="string">'Gruntfile.js'</span></div><div class="line">       &#125;,</div><div class="line">       <span class="comment">//配置要校验的文件，任务lib_test</span></div><div class="line">       lib_test: &#123;</div><div class="line">         <span class="attr">src</span>: [<span class="string">'lib/**/*.js'</span>, <span class="string">'test/**/*.js'</span>]</div><div class="line">       &#125;</div><div class="line">     &#125;,</div></pre></td></tr></table></figure>
+
+- **js文件单元测试（quint）**
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">qunit: &#123;</div><div class="line"><span class="comment">/*需要测试的文件，</span></div><div class="line">*单元测试对新手来说成本较高（包括我），起初不推荐</div><div class="line">*/</div><div class="line">      files: [<span class="string">'test/**/*.html'</span>]</div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+
+
+- **监控js文件变化（watch）**
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">watch: &#123;</div><div class="line">	<span class="comment">/*配置任务gruntfile，</span></div><div class="line">	*files：指监控的文件，</div><div class="line">	*tasks：指当监控的文件变化中进行的任务</div><div class="line">	*/</div><div class="line">       gruntfile: &#123;</div><div class="line">         <span class="attr">files</span>: <span class="string">'&lt;%= jshint.gruntfile.src %&gt;'</span>,</div><div class="line">         <span class="attr">tasks</span>: [<span class="string">'jshint:gruntfile'</span>]</div><div class="line">       &#125;,</div><div class="line">       <span class="comment">/*配置任务lib_test，</span></div><div class="line">	*files：指监控的文件，</div><div class="line">	*tasks：指当监控的文件变化中进行的任务</div><div class="line">	*/</div><div class="line">       lib_test: &#123;</div><div class="line">         <span class="attr">files</span>: <span class="string">'&lt;%= jshint.lib_test.src %&gt;'</span>,</div><div class="line">         <span class="attr">tasks</span>: [<span class="string">'jshint:lib_test'</span>, <span class="string">'qunit'</span>]</div><div class="line">       &#125;</div><div class="line">     &#125;</div></pre></td></tr></table></figure>
+</code></pre><h4 id="3-gruntfile初始文档"><a href="#3-gruntfile初始文档" class="headerlink" title="3. gruntfile初始文档"></a>3. gruntfile初始文档</h4><pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*global module:false*/</span></div><div class="line"> <span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">grunt</span>) </span>&#123;</div><div class="line">	</div><div class="line">   <span class="comment">// Project configuration.</span></div><div class="line">   grunt.initConfig(&#123;</div><div class="line">     <span class="comment">// Metadata.</span></div><div class="line">     pkg: grunt.file.readJSON(<span class="string">'package.json'</span>),</div><div class="line">     <span class="attr">banner</span>: <span class="string">'/*! &lt;%= pkg.title || pkg.name %&gt; - v&lt;%= pkg.version %&gt; - '</span> +</div><div class="line">       <span class="string">'&lt;%= grunt.template.today("yyyy-mm-dd") %&gt;\n'</span> +</div><div class="line">       <span class="string">'&lt;%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %&gt;'</span> +</div><div class="line">       <span class="string">'* Copyright (c) &lt;%= grunt.template.today("yyyy") %&gt; &lt;%= pkg.author.name %&gt;;'</span> +</div><div class="line">       <span class="string">' Licensed &lt;%= _.pluck(pkg.licenses, "type").join(", ") %&gt; */\n'</span>,</div><div class="line">     <span class="comment">// Task configuration.</span></div><div class="line">     concat: &#123;</div><div class="line">       <span class="attr">options</span>: &#123;</div><div class="line">         <span class="attr">banner</span>: <span class="string">'&lt;%= banner %&gt;'</span>,</div><div class="line">         <span class="attr">stripBanners</span>: <span class="literal">true</span></div><div class="line">       &#125;,</div><div class="line">       <span class="attr">dist</span>: &#123;</div><div class="line">         <span class="attr">src</span>: [<span class="string">'lib/&lt;%= pkg.name %&gt;.js'</span>],</div><div class="line">         <span class="attr">dest</span>: <span class="string">'dist/&lt;%= pkg.name %&gt;.js'</span></div><div class="line">       &#125;</div><div class="line">     &#125;,</div><div class="line">     <span class="attr">uglify</span>: &#123;</div><div class="line">       <span class="attr">options</span>: &#123;</div><div class="line">         <span class="attr">banner</span>: <span class="string">'&lt;%= banner %&gt;'</span></div><div class="line">       &#125;,</div><div class="line">       <span class="attr">dist</span>: &#123;</div><div class="line">         <span class="attr">src</span>: <span class="string">'&lt;%= concat.dist.dest %&gt;'</span>,</div><div class="line">         <span class="attr">dest</span>: <span class="string">'dist/&lt;%= pkg.name %&gt;.min.js'</span></div><div class="line">       &#125;</div><div class="line">     &#125;,</div><div class="line">     <span class="attr">jshint</span>: &#123;</div><div class="line">       <span class="attr">options</span>: &#123;</div><div class="line">         <span class="attr">curly</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">eqeqeq</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">immed</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">latedef</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">newcap</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">noarg</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">sub</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">undef</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">unused</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">boss</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">eqnull</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">browser</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">globals</span>: &#123;&#125;</div><div class="line">       &#125;,</div><div class="line">       <span class="attr">gruntfile</span>: &#123;</div><div class="line">         <span class="attr">src</span>: <span class="string">'Gruntfile.js'</span></div><div class="line">       &#125;,</div><div class="line">       <span class="attr">lib_test</span>: &#123;</div><div class="line">         <span class="attr">src</span>: [<span class="string">'lib/**/*.js'</span>, <span class="string">'test/**/*.js'</span>]</div><div class="line">       &#125;</div><div class="line">     &#125;,</div><div class="line">     <span class="attr">qunit</span>: &#123;</div><div class="line">       <span class="attr">files</span>: [<span class="string">'test/**/*.html'</span>]</div><div class="line">     &#125;,</div><div class="line">     <span class="attr">watch</span>: &#123;</div><div class="line">       <span class="attr">gruntfile</span>: &#123;</div><div class="line">         <span class="attr">files</span>: <span class="string">'&lt;%= jshint.gruntfile.src %&gt;'</span>,</div><div class="line">         <span class="attr">tasks</span>: [<span class="string">'jshint:gruntfile'</span>]</div><div class="line">       &#125;,</div><div class="line">       <span class="attr">lib_test</span>: &#123;</div><div class="line">         <span class="attr">files</span>: <span class="string">'&lt;%= jshint.lib_test.src %&gt;'</span>,</div><div class="line">         <span class="attr">tasks</span>: [<span class="string">'jshint:lib_test'</span>, <span class="string">'qunit'</span>]</div><div class="line">       &#125;</div><div class="line">     &#125;</div><div class="line">   &#125;);</div><div class="line">	</div><div class="line">   <span class="comment">// These plugins provide necessary tasks.</span></div><div class="line">   grunt.loadNpmTasks(<span class="string">'grunt-contrib-concat'</span>);</div><div class="line">   grunt.loadNpmTasks(<span class="string">'grunt-contrib-uglify'</span>);</div><div class="line">   grunt.loadNpmTasks(<span class="string">'grunt-contrib-qunit'</span>);</div><div class="line">   grunt.loadNpmTasks(<span class="string">'grunt-contrib-jshint'</span>);</div><div class="line">   grunt.loadNpmTasks(<span class="string">'grunt-contrib-watch'</span>);</div><div class="line">	</div><div class="line">   <span class="comment">// Default task.</span></div><div class="line">   grunt.registerTask(<span class="string">'default'</span>, [<span class="string">'jshint'</span>, <span class="string">'qunit'</span>, <span class="string">'concat'</span>, <span class="string">'uglify'</span>]);</div><div class="line">	</div><div class="line"> &#125;;</div></pre></td></tr></table></figure>
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/asserts/wepay.png" alt="tommyzqfeng WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/asserts/alipay.png" alt="tommyzqfeng Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Grunt/" rel="tag">#Grunt</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/13/CentOS linux安装MongoDB/" rel="next" title="CentOS linux安装MongoDB">
+                <i class="fa fa-chevron-left"></i> CentOS linux安装MongoDB
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/14/JavaScript基础（一）——类型、值和变量/" rel="prev" title="JavaScript基础（一）——类型、值和变量">
+                JavaScript基础（一）——类型、值和变量 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/asserts/author.png"
+               alt="tommyzqfeng" />
+          <p class="site-author-name" itemprop="name">tommyzqfeng</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://facebook.com/your-user-name" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://github.com/" title="Github" target="_blank">Github</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#grunt基础用法"><span class="nav-number">1.</span> <span class="nav-text">grunt基础用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-grunt是什么？"><span class="nav-number">1.1.</span> <span class="nav-text">1. grunt是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-准备阶段"><span class="nav-number">1.2.</span> <span class="nav-text">2. 准备阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-grunt的使用"><span class="nav-number">1.3.</span> <span class="nav-text">2. grunt的使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-gruntfile初始文档"><span class="nav-number">1.4.</span> <span class="nav-text">3. gruntfile初始文档</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tommyzqfeng</span>
+</div>
+
+<div class="powered-by" style="display:none">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info" style="display:none">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

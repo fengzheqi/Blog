@@ -1,0 +1,792 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="浮生奇影" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="JavaScript语言基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端面试总结（JavaScript篇）">
+<meta property="og:url" content="http://fengzheqi.com/2015/12/24/前端面试总结（JavaScript篇）/index.html">
+<meta property="og:site_name" content="浮生奇影">
+<meta property="og:description" content="JavaScript语言基础">
+<meta property="og:updated_time" content="2016-11-07T08:36:29.176Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端面试总结（JavaScript篇）">
+<meta name="twitter:description" content="JavaScript语言基础">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 前端面试总结（JavaScript篇） | 浮生奇影 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">浮生奇影</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                前端面试总结（JavaScript篇）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-12-24T00:00:00+08:00" content="2015-12-24">
+              2015-12-24
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="JavaScript语言基础"><a href="#JavaScript语言基础" class="headerlink" title="JavaScript语言基础"></a>JavaScript语言基础</h2><a id="more"></a>
+<ol>
+<li><p><strong>JavaScript数据类型</strong><br> javaScript的数据类型分为两大类：简单数据类型和复杂数据类型。<br> 简单数据类型：Undefined、Null、Boolean、Number、String；<br> 复杂数据类型：Object<br> 其中，简单数据类型的值也称为原始值（Primitive Value）；复杂数据类型的值称为引用类型的值。</p>
+</li>
+<li><p><strong>JavaScript字符串转化</strong><br> 参考博客<a href="http://www.cnblogs.com/fengzheqi/p/5087240.html" target="_blank" rel="external">JavaScript字符串的操作</a></p>
+</li>
+<li><strong>this问题</strong><br> 参考博客</li>
+<li><strong>模块化原理（作用域）</strong><br> 参考博客：<a href="http://www.cnblogs.com/fengzheqi/p/5105517.html" target="_blank" rel="external">JavaScript基础–作用域</a></li>
+<li><strong>JavaScript原型链</strong><br> 参考博客</li>
+<li><strong>闭包及闭包的用处</strong><br> 参考博客</li>
+<li><strong>常用数组方法</strong><br> 参考博客</li>
+<li><strong>js数组去重复项</strong><br> 参考博客</li>
+<li><strong>常见算法的JS实现（例如：实现将两个不同长度的数组组合，顺序越乱越好，以及其的复杂度）</strong></li>
+<li><p><strong>call与apply的作用及不同，以及bind的用法</strong><br>call方法: <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/call" target="_blank" rel="external">见MDN中call()</a>；<br>apply方法：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/apply" target="_blank" rel="external">见MDN中apply()</a>；<br>bind方法：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">见MDN中bind()</a>；<br><code>call()</code>与<code>apply()</code>的作用类似，作用同于理解是这样：比如一个对象想调用另外一个对象的方法，但又希望方法的作用域是自己的作用域，这个时候就可以利用<code>call()</code>或者<code>apply()</code>来解决这个问题。<br><code>call()</code>与<code>apply()</code>的不同点在于它们的第二个参数，<code>call()</code>方法接受的是一个参数列表，而<code>apply()</code>的第二参数是一个包含多个参数的数组。<br><code>bind()</code>是在ES5.1中新加的一个方法，作用与<code>call()</code>、<code>apply()</code>类似，不过<code>bind()</code>返回是函数，而<code>call()</code>和<code>apply()</code>是直接执行调用了的函数。<br>所以三者只是用法差不多，作用是类似的。可参考<a href="http://www.cnblogs.com/cosiray/p/4512969.html" target="_blank" rel="external">javascript中apply、call和bind的区别</a></p>
+</li>
+<li><p><strong>变量名提升</strong><br>参考博客：<a href="http://www.cnblogs.com/fengzheqi/p/5106783.html" target="_blank" rel="external">JavsScript基础–声明提升</a></p>
+</li>
+<li><p><strong>== 与 ===</strong><br>“==”与”===”都属于关系表达式的范畴，用来比较两个值是否相等，<code>==</code>可以理解为<code>相等</code>，而<code>===</code>则理解为<code>严格相等</code>，如何理解？在关系表达式中，利用<code>==</code>进行两个值的比较时，通常会进行类型转换，比如<code>null</code>、<code>undefined</code>在<code>==</code>的表达式中都会转换为<code>false</code>，所以它们<code>相等</code>。而利用<code>===</code>比较时，比较的两个值是不做类型转换的，<br>所以<code>null === undefined</code>返回false。一般来说，在代码中推荐使用<code>===</code>。</p>
+<p>扩展：<code>==</code>与<code>===</code>的运算规则</p>
+<ol>
+<li><code>===</code></li>
+</ol>
+<ul>
+<li>如果两个值类型不同，则它们不相等；<ul>
+<li>如果两个值一个是null，一个是undefined，则它们不相等；</li>
+</ul>
+</li>
+<li>如果两个值都是<code>true</code>或都是<code>false</code>，则它们相等；</li>
+<li>如果其中一个是<code>NaN</code>，或者两个都是<code>NaN</code>，则它们不相等（<code>NaN</code>和任何值都不相等，包括本身）；</li>
+<li>如果两个值都是数字且数值相等，则它们相等（<code>0</code>与<code>-0</code>相等）；</li>
+<li>如果两个值都是字符串，且编码和数值相同，则它们相同（连个字符串含义相同但编码不同，则不相等）；</li>
+<li>如果两个引用值都指向同一个对象、数组或函数，则它们是相等的。</li>
+</ul>
+<ol>
+<li><code>==</code></li>
+</ol>
+<ul>
+<li>如果两个值的类型相同，则按照<code>===</code>的运算规则；</li>
+<li>如果两个值的类型不同，<code>==</code>认为它们可能相等。检测相等时会遵守以下规则和类型转换；<pre><code>- 如果一个值是null，另一个是undefined，则它们相等；
+- 如果一个值是数字，另一个是字符串，先将字符串转换为数字，然后利用转换后的值进行比较；
+- 如果其中一个是true，则将其转换为1再进行比较。如果其中一个是false，则将其转换为0再进行比较；
+- 如果其中一个值是对象，另一个值为数字或字符串，则对象先通过`valueOf()`或者`toString()`方法转换为原始值，再进行比较；
+- 其他不同类型的值进行比较，均不相等。
+</code></pre></li>
+</ul>
+</li>
+<li><p><strong>“use strict”作用</strong><br>“use strict”是ES5推出来的一个严格模式，是为了JavaScript在更格言的条件下运行。主要目的如下：</p>
+<ul>
+<li>消除JavaScript语法的一些不合理、不严谨之处和不安全的因素，减少一个怪异行为；</li>
+<li>提高编译器效率，增加运行速度；</li>
+<li>为未来的JavaScript做好铺垫。</li>
+</ul>
+<p>添加”use strict”通常有两种用法，第一种是在脚本文件的第一行添加，但这种方式在多个脚本合并的时候回失效，不推荐使用；第二种是添加在函数中第一行，整个函数以”严格模式”运行。如果希望在整个脚本中运行”严格模式”，在可以将脚本写成一个立即执行的匿名函数里，比如<code>(function(){&quot;use strict&quot;;})();</code><br>具体的”严格模式”下还有其他什么限制，可以参考阮一峰的博客：<a href="http://www.ruanyifeng.com/blog/2013/01/javascript_strict_mode.html" target="_blank" rel="external">JavaScript严格模式详解</a></p>
+</li>
+<li><p><strong>函数柯里化（Currying）</strong><br>函数的柯里化：柯里化（Currying），又称部分求值（Partial Evaluation），是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。<br>柯里化有三个作用：1.参数复用；2.提前返回；3.延迟计算/运行。细节可参考张鑫旭的博客：<a href="http://www.zhangxinxu.com/wordpress/2013/02/js-currying/" target="_blank" rel="external">JS中的柯里化(currying)</a></p>
+</li>
+<li><p><strong>JS中random的概率问题</strong><br>参考博客：<a href="http://www.soulteary.com/2014/07/05/js-math-random-trick.html" target="_blank" rel="external">Math.random()随机数的二三事</a></p>
+</li>
+<li><strong>JS中的垃圾回收机制</strong><br>在JS中进行垃圾回收，是为了避免无用的实体消耗系统的内存。JS不像C/C++，他有自己的一套垃圾回收机制（Garbage Collection）。主要有两种方法：<strong>标记清除</strong>、<strong>引用计数</strong>。<br><strong>标记清除</strong>：垃圾回收器会在运行的时候给存储在内存中的所有变量加上标记，然后去掉环境中的变量以及被环境中变量所引用的变量（闭包），在这些完成之后仍存在标记的就是要删除的变量了，因为环境中的变量已经无法访问到这些变量了，然后垃圾回收器相会这些带有标记的变量机器所占空间。<br><strong>引用计数</strong>：引用计数的策略是跟踪记录每个值被使用的次数，当声明了一个变量并将一个引用类型赋值给该变量的时候这个值的引用次数就加1，如果该变量的值变成了另外一个，则这个值得引用次数减1，当这个值的引用次数变为0的时候，说明没有变量在使用，这个值没法被访问了，因此可以将其占用的空间回收，这样垃圾回收器会在运行的时候清理掉引用次数为0的值占用的空间。<br>参考博客：<a href="http://www.cnblogs.com/hustskyking/archive/2013/04/27/garbage-collection.html" target="_blank" rel="external">JavaScript垃圾回收机制</a></li>
+<li><strong>常见的JS设计模式</strong></li>
+</ol>
+<h2 id="客户端JavaScript"><a href="#客户端JavaScript" class="headerlink" title="客户端JavaScript"></a>客户端JavaScript</h2><ol>
+<li><p><strong>同源策略及跨域请求的方法和原理（比较JSONP和document.domain的不同及优劣，以及HTML5的跨域方案）</strong></p>
+<p> 同源策略限制了一个源（origin）从其它源（origin）中加载文本或脚本资源。<br> 同源定义：如果两个页面拥有相同的协议（protocol）、主机名和端口（如果指定），那么这两个页面就属于同一个源（origin）。</p>
+<p> 跨域请求目前方法有：JSONP、document.domain和HTML5的跨域方案（CORS特性）。</p>
+</li>
+</ol>
+<pre><code>**JSONP**：JSON with padding，填充式JSON。JSONP是由两部分组成：回调函数（callback）和数据（json）。回调函数是当响应到来时应该在页面中调用的函数，一般在请求中指定。同时，JSONP是通过动态`&lt;script&gt;`元素来使用的，使用时可以为src属性指定一个跨域的URL。
+**原理**：是首先在客户端注册一个callback, 然后把callback的名字传给服务器；此时，服务端生成json数据，然后以JavaScript的语法组装一个function，function的名称就是传过来的callback参数名；最后json数据以参数的形式插入到function(..)的“..”中，这样就生成了一段js语法的代码，返回给客户端。客户端浏览器解析`script`标签，并执行返回的JavaScript文档（代码），此时客户端直接调用callback函数执行代码，其中参数数据就是之前在服务端生成的json数据。
+
+**document.domain**：Document内置的属性。用来获取/设置当前网页的原始域部分，用于同源策略。获取原始域：例如`var badDomain = &quot;www.baidu.com/map&quot;;`，那么在document.domain`www.baidu.com`。设置原始域：例如`document.domain = string`，注意一点就是设置原始域只能设置为它的上一级域。例如`www.baidu.com`，只能把document.domain设置为`baidu.com`。
+**原理**：document.domain实现跨域的前提条件是这两个域名必须属于同一个基础域名!而且所用的协议，端口都要一致，否则无法利用document.domain进行跨域。所以`wwww.example.com`与`blog.example.com`是没法实现跨域的，但是这个两个基础域名的上级域名，也就是`example.com`是相同的，所以将这两个页面的document.domain都设置为`example.com`就可以实现跨域了。
+
+**HTML5跨域方案**：利用CORS（Cross-Origin Resource Sharing）新特性。
+**原理**：CORS通过服务器增加一个特殊的Header[Access-Control-Allow-Origin]来告知客户端跨域的限制，如果浏览器支持CORS的话，如果判断Origin通过的话，就会允许XHR进行请求。使用这个Header返回被允许请求跨域请求的来源域，例如网站`a.com`设置了下面的`Header Access-Control-Allow-Origin: http://b.com`。这样设置之后，通过`http://b.com`下的页面对于`a.com`进行ajax请求就会被允许，而其他网站对`a.com`依旧会被阻拦，通过这种方式网站拥有者可以自己对此进行限制。当然，如果不想限制来源，可以通过`Access-Control-Allow-Origin: *`来允许任何站点对该资源进行跨域请求
+
+参考资料：
+- [MDN-JavaScript 的同源策略](https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy)
+- [AJAX跨域请求-JSONP获取JSON数据](http://justcoding.iteye.com/blog/1366102/)
+</code></pre><ol>
+<li><p><strong>JSONP原理及优缺点</strong><br> 原理参考第1个问题。<br> <strong>优点</strong>：借用了json的优势，比如可读性好，轻量等；其次简单易用，实现了跨域请求。<br> <strong>缺点</strong>：1.JSONP是从其他域加载代码执行，必须保证被请求的域是安全可靠的，如果被请求的域不被信任， Web 应用程序更容易受到攻击；2.JSONP发生请求错误时，并不容易确定，如果动态脚本插入有效，就执行调用；如果无效，就静默失败。失败是没有任何提示的。</p>
+</li>
+<li><p><strong>XMLHttpRequest</strong><br> 博客</p>
+</li>
+<li><p><strong>事件委托</strong><br> 博客</p>
+</li>
+<li><strong>session与Cookie</strong><br> 博客</li>
+<li><strong>JavaScript动画算法</strong></li>
+<li><strong>拖拽的实现</strong></li>
+<li><strong>事件冒泡和事件捕获</strong></li>
+<li><strong>浏览器检测（能力检测、怪癖检测等）</strong></li>
+<li><p><strong>AJAX请求的细节</strong><br>AJAX请求的细节：</p>
+<ul>
+<li>从Web表单中获取需要的数据；</li>
+<li>建立要连接的URL；</li>
+<li>打开到服务器的连接；</li>
+<li>设置服务器在完成后要运行的函数；</li>
+<li>发送请求。</li>
+</ul>
+<p>推荐阅读：<a href="http://www.ibm.com/developerworks/cn/views/xml/libraryview.jsp?sort_by=&amp;show_abstract=true&amp;show_all=&amp;search_flag=&amp;contentarea_by=XML&amp;search_by=%E6%8E%8C%E6%8F%A1+Ajax&amp;topic_by=-1&amp;type_by=%E6%89%80%E6%9C%89%E7%B1%BB%E5%88%AB&amp;ibm-search=%E6%90%9C%E7%B4%A2" target="_blank" rel="external">掌握Ajax</a></p>
+</li>
+<li><p><strong>客户端存储及他们的异同（例如：cookie, sessionStorage和localStorage等）</strong></p>
+</li>
+</ol>
+<h2 id="安全与测试"><a href="#安全与测试" class="headerlink" title="安全与测试"></a>安全与测试</h2><ol>
+<li><strong>你如何测试你的JS代码</strong></li>
+<li><strong>DOM1\DOM2\DOM3都有什么不同</strong></li>
+<li><strong>XSS</strong></li>
+<li><strong>JavaScript代码测试</strong></li>
+</ol>
+<h2 id="JQuery"><a href="#JQuery" class="headerlink" title="JQuery"></a>JQuery</h2><ol>
+<li><strong>jQuery链式调用的原理</strong></li>
+</ol>
+<h2 id="NodeJS"><a href="#NodeJS" class="headerlink" title="NodeJS"></a>NodeJS</h2><ol>
+<li><strong>NodeJS健壮性方面的实践（子进程等）</strong></li>
+<li><strong>NodeJS能否用利用多核实现在计算性能上的劣势等</strong></li>
+<li><strong>NodeJS的优缺点及使用场景</strong></li>
+</ol>
+<h2 id="AngularJS"><a href="#AngularJS" class="headerlink" title="AngularJS"></a>AngularJS</h2><ol>
+<li><strong>AngularJS的文件管理及打包（包括模板打包及请求、JS的打包和请求等）</strong></li>
+<li><strong>AngularJS的JS模块管理及实践</strong></li>
+<li><strong>在你的Angular App页面里随意加一个JS文件，会有什么影响</strong></li>
+<li><strong>AngularJS directive及自己如何定义directive</strong></li>
+<li><strong>AngularJS双向绑定的原理及实现</strong></li>
+</ol>
+<h2 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h2><ol>
+<li><strong>ES6及jQuery新引进的Promise有什么用处</strong></li>
+</ol>
+<h2 id="前端工程化"><a href="#前端工程化" class="headerlink" title="前端工程化"></a>前端工程化</h2><ol>
+<li><strong>前端模块化（AMD和CommonJS的原理及异同，requirejs的用法）</strong><br> 博客</li>
+<li><strong>seaJS的用法及原理，依赖加载的原理、初始化、实现等</strong></li>
+<li><strong>webpack的使用</strong></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/asserts/wepay.png" alt="tommyzqfeng WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/asserts/alipay.png" alt="tommyzqfeng Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag">#JavaScript</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/08/CommonJS、AMD与CMD/" rel="next" title="CommonJS、AMD与CMD">
+                <i class="fa fa-chevron-left"></i> CommonJS、AMD与CMD
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/28/JavaScript字符串的操作/" rel="prev" title="JavaScript字符串的操作">
+                JavaScript字符串的操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/asserts/author.png"
+               alt="tommyzqfeng" />
+          <p class="site-author-name" itemprop="name">tommyzqfeng</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://facebook.com/your-user-name" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://github.com/" title="Github" target="_blank">Github</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript语言基础"><span class="nav-number">1.</span> <span class="nav-text">JavaScript语言基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端JavaScript"><span class="nav-number">2.</span> <span class="nav-text">客户端JavaScript</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安全与测试"><span class="nav-number">3.</span> <span class="nav-text">安全与测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JQuery"><span class="nav-number">4.</span> <span class="nav-text">JQuery</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NodeJS"><span class="nav-number">5.</span> <span class="nav-text">NodeJS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AngularJS"><span class="nav-number">6.</span> <span class="nav-text">AngularJS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES6"><span class="nav-number">7.</span> <span class="nav-text">ES6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端工程化"><span class="nav-number">8.</span> <span class="nav-text">前端工程化</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tommyzqfeng</span>
+</div>
+
+<div class="powered-by" style="display:none">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info" style="display:none">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

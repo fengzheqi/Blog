@@ -1,0 +1,838 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="浮生奇影" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="JavaScript字符串的操作平常我们在写JS代码时，遇到最频繁的操作之一也许是字符相关的操作了，同时在面试中也常常会设计字符串的转化的问题，今天刚好将看到资料和前人的经验总结一下，整理如下，希望大家补充和纠正。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript字符串的操作">
+<meta property="og:url" content="http://fengzheqi.com/2015/12/28/JavaScript字符串的操作/index.html">
+<meta property="og:site_name" content="浮生奇影">
+<meta property="og:description" content="JavaScript字符串的操作平常我们在写JS代码时，遇到最频繁的操作之一也许是字符相关的操作了，同时在面试中也常常会设计字符串的转化的问题，今天刚好将看到资料和前人的经验总结一下，整理如下，希望大家补充和纠正。">
+<meta property="og:updated_time" content="2016-11-07T08:36:29.173Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript字符串的操作">
+<meta name="twitter:description" content="JavaScript字符串的操作平常我们在写JS代码时，遇到最频繁的操作之一也许是字符相关的操作了，同时在面试中也常常会设计字符串的转化的问题，今天刚好将看到资料和前人的经验总结一下，整理如下，希望大家补充和纠正。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> JavaScript字符串的操作 | 浮生奇影 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">浮生奇影</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JavaScript字符串的操作
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-12-28T00:00:00+08:00" content="2015-12-28">
+              2015-12-28
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="JavaScript字符串的操作"><a href="#JavaScript字符串的操作" class="headerlink" title="JavaScript字符串的操作"></a>JavaScript字符串的操作</h1><p>平常我们在写JS代码时，遇到最频繁的操作之一也许是字符相关的操作了，同时在面试中也常常会设计字符串的转化的问题，今天刚好将看到资料和前人的经验总结一下，整理如下，希望大家补充和纠正。</p>
+<a id="more"></a>
+<h2 id="1-非字符串转化为字符串"><a href="#1-非字符串转化为字符串" class="headerlink" title="1. 非字符串转化为字符串"></a>1. 非字符串转化为字符串</h2><h3 id="1-1-原始值转字符串"><a href="#1-1-原始值转字符串" class="headerlink" title="1.1 原始值转字符串"></a>1.1 原始值转字符串</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">值</th>
+<th style="text-align:center">转换为字符串</th>
+<th style="text-align:center">值</th>
+<th style="text-align:center">转换为字符串</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">undefined</td>
+<td style="text-align:center">“undefined”</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">“0”</td>
+</tr>
+<tr>
+<td style="text-align:center">null</td>
+<td style="text-align:center">“null”</td>
+<td style="text-align:center">NaN</td>
+<td style="text-align:center">“NaN”</td>
+</tr>
+<tr>
+<td style="text-align:center">true</td>
+<td style="text-align:center">“true”</td>
+<td style="text-align:center">Infinity</td>
+<td style="text-align:center">“Infinity”</td>
+</tr>
+<tr>
+<td style="text-align:center">false</td>
+<td style="text-align:center">“false”</td>
+<td style="text-align:center">-Infinity</td>
+<td style="text-align:center">“-Infinity”</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-2-对象转字符串"><a href="#1-2-对象转字符串" class="headerlink" title="1.2 对象转字符串"></a>1.2 对象转字符串</h3><p>如果是<code>{}</code>、<code>[]</code>和<code>function{}</code>等对象 转字符串情况又如何呢？</p>
+<p>对象转换为字符串，有两个调用的方法：<code>toString()</code>和<code>valueOf()</code>。调用规则是这样的：</p>
+<ol>
+<li>如果对象具有<code>toString()</code>方法，则调用这个方法。如果它返回一个原始值（undefined、null、number、boolean、string），JavaScript将这个值转化为字符串，并返回这个字符串结果。</li>
+<li>如果对象没有<code>toString()</code>方法，或者这个方法并不返回一个原始值，那么JavaScript会调用<code>valueOf()</code>方法。如果存在这个方法，则JavaScript调用它。如果返回值是原始值，JavaScript将这个值转换为字符串，并返回这个字符串结果。</li>
+<li>否则，JavaScript无法从<code>toString()</code>或<code>valueOf()</code>获得一个原始值，抛出异常。</li>
+</ol>
+<p>事实上大部分情况对象都会调用<code>toString()</code>方法，我们来研究一下。</p>
+<ul>
+<li><p>默认的<code>toString()</code>方法，即<code>Object.prototype.toString()</code>，并不会返回一个有效的值，例子如下：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(&#123;x:1, y:2&#125;).toString() // =&gt; &quot;[object Object]&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>数组（Array）对象在原型里自定义了<code>toString()</code>，即<code>Array.prototype.toString()</code>，所以数组在调用<code>toString()</code>时，有一些不同。<br>  数据在调用<code>toString()</code>时，覆盖了Object的<code>toString()</code>方法。    <code>toString()</code> 方法返回一个字符串，该字符串由数组中的每个元素的 <code>toString()</code> 返回值经调用 <code>join()</code> 方法连接（由逗号隔开）组成。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var a = [];</div><div class="line">var b = [1, 2, 3];</div><div class="line">a.toString();// =&gt; &quot;&quot;</div><div class="line">b.toString();// =&gt; &quot;1,2,3&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>函数（Function）对象在原型里自定义了<code>toString()</code>，即<code>Function.prototype.toString()</code>。<br>  Function 对象覆盖了从 Object 继承来的 <code>Object.prototype.toString()</code> 方法。函数的 <code>toString()</code> 方法会返回一个表示函数源代码的字符串。具体来说，包括 function关键字，形参列表，大括号，以及函数体中的内容。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(function(x) &#123;f(x);&#125;).toString(); // =&gt; &quot;function(x) &#123;\n f(x); \n&#125;&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>日期（Date）对象在原型里自定义了<code>toString()</code>，即<code>Date.prototype.toString()</code>。<br>  Date 对象覆盖了从 Object 继承来的 <code>Object.prototype.toString()</code> 方法。Date的 <code>toString()</code> 方法总是返回一个美式英语日期格式的字符串。当一个日期对象被用来作为文本值或用来进行字符串连接时，<code>toString()</code> 方法会被自动调用。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var date = new Date();</div><div class="line">date.toString(); // =&gt; &quot;Mon Dec 28 2015 21:58:10 GMT+0800 (中国标准时间)&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>正则（RegExp）对象在原型里自定义了<code>toString()</code>，即<code>RegExp.prototype.toString()</code>。<br>  RegExp 对象覆盖了 Object 继承来的 <code>Object.prototype.toString()</code> 方法。对于 RegExp 对象，toString 方法返回一个该正则表达式的字符串形式。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var reg = new RegExp(&quot;a+b+c&quot;);</div><div class="line">console.log(reg.toString()); // =&gt; &quot;/a+b+c/&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="2-字符串的常用操作"><a href="#2-字符串的常用操作" class="headerlink" title="2.字符串的常用操作"></a>2.字符串的常用操作</h2><p>定义在String原型对象中的方法，大概有二三十个，完全记得这么多方法对于普通人来说太难了，不过常用的七八个方法是应该记住的，其他的只需要有印象，用的时候在<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank" rel="external">MDN</a>查就可以了。</p>
+<h3 id="2-1-字符串属性"><a href="#2-1-字符串属性" class="headerlink" title="2.1 字符串属性"></a>2.1 字符串属性</h3><p>字符串默认只定义了两个属性：<code>length</code>和<code>prototype</code>。<code>length</code>表示字符串长度；<code>prototype</code>表示原型。</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.length); // =&gt; 16</div></pre></td></tr></table></figure>
+</code></pre><h3 id="2-2-字符串查找"><a href="#2-2-字符串查找" class="headerlink" title="2.2 字符串查找"></a>2.2 字符串查找</h3><p>字符串查找对应两个方法：<code>indexOf()</code>、<code>lastIndexOf()</code>。</p>
+<ul>
+<li><p><code>indexOf()</code></p>
+<blockquote>
+<p> <strong>str.indexOf(searchValue[, fromIndex])</strong></p>
+</blockquote>
+<p>   searchValue：表示被查找的值； fromIndex：表示调用该方法的字符串中开始查找的位置，可以是任意整数，默认值为 0。<code>indexOf()</code> 方法返回指定值在字符串对象中首次出现的位置。如果不存在，则返回 -1。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.indexOf(&quot;a&quot;));// =&gt; 8</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>lastIndexOf()</code></p>
+<blockquote>
+<p> <strong>str.lastIndexOf(searchValue[, fromIndex])</strong>    </p>
+</blockquote>
+<p>searchValue：表示被查找的值； fromIndex：表示调用该方法的字符串中开始查找的位置，往前查找，可以是任意整数，默认值为 0。<code>lastIndexOf()</code> 方法返回指定值在调用该方法的字符串中最后出现的位置，如果没找到则返回 -1。从该字符串的后面向前查找，从 fromIndex 处开始。</p>
+</li>
+<li><p><strong>小结</strong>：<code>index()</code>是从前向后查找，<code>lastIndexOf()</code>是从后向前查找，两个方法只是查找方式不一样，但是两个方法中被查找的index值一直是不变。</p>
+</li>
+</ul>
+<h3 id="2-3-字符串的截取与分割"><a href="#2-3-字符串的截取与分割" class="headerlink" title="2.3 字符串的截取与分割"></a>2.3 字符串的截取与分割</h3><p>这里涉及到四个方法：<code>slice()</code>、<code>split()</code>、<code>substring()</code>、<code>substr()</code>。之所以把这四个方法一起讲，是因为平常我们有时候将它们混淆，先看看它们各自用法。</p>
+<ul>
+<li><p><code>slice()</code>：<code>slice()</code>方法提取字符串中的一部分，并返回这个新的字符串。</p>
+<blockquote>
+<p> <strong>str.slice(beginSlice[, endSlice])</strong>    </p>
+</blockquote>
+<p>beginSlice：从该索引（以 0 为基数）处开始提取原字符串中的字符，如果该参数为负数，则它表示从原字符串中的倒数第几个字符开始抽取。endSlice：在该索引（以 0 为基数）处结束提取字符串；如果省略该参数，slice会一直提取到字符串末尾；如果该参数为负数，则它表示在原字符串中的倒数第几个字符结束抽取.。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.slice(5)); //=&gt; &quot;is a string&quot; </div><div class="line">console.log(myStr.slice(5, 7)); //=&gt; &quot;is&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>split()</code>：<code>split()</code> 方法通过把字符串分割成子字符串来把一个 String 对象分割成一个字符串数组。</p>
+<blockquote>
+<p> <strong>str.split([separator][, limit])</strong>    </p>
+</blockquote>
+<p>  separator：指定用来分割字符串的字符（串）。limit：一个整数，限定返回的分割片段数量。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.split(&quot; &quot;)); //=&gt; [&quot;this&quot;, &quot;is&quot;, &quot;a&quot;, &quot;string&quot;]</div><div class="line">console.log(myStr.split(&quot; &quot;, 3)); //=&gt; [&quot;this&quot;, &quot;is&quot;, &quot;a&quot;]</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>substring()</code>：<code>substring()</code> 返回字符串两个索引之间（或到字符串末尾）的子串。</p>
+<blockquote>
+<p> <strong>str.substring(indexA[, indexB])</strong>    </p>
+</blockquote>
+<p>  indexA：一个 0 到字符串长度之间的整数。indexB：(optional) 一个 0 到字符串长度之间的整数。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.substring(2)); //=&gt; &quot;is is a string&quot;</div><div class="line">console.log(myStr.substring(2, 3)); //=&gt;  &quot;i&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>substr()</code>：<code>substr()</code> 方法返回字符串中从指定位置开始的指定数量的字符。</p>
+<blockquote>
+<p> <strong>str.substr(start[, length])</strong>    </p>
+</blockquote>
+<p>  start：开始提取字符的位置。length：提取的字符数。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.substr(2)); //=&gt; &quot;is is a string&quot;</div><div class="line">console.log(myStr.substr(2, 2)); //=&gt;  &quot;is&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>小结</strong>：四个方法各自用法如上，有一两个注意地方：<code>split()</code>返回的是数组，可以这样记忆，split后面有t，可以看着<code>[</code>，即数组；涉及到index的截取的方法，都是取头不取尾。</p>
+</li>
+</ul>
+<h3 id="2-4-字符串索引"><a href="#2-4-字符串索引" class="headerlink" title="2.4 字符串索引"></a>2.4 字符串索引</h3><p>字符串的索引涉及两个方法：<code>indexOf()</code>、<code>charOf()</code>。</p>
+<ul>
+<li><p><code>indexOf()</code>：返回指定值在字符串对象中首次出现的位置。从 fromIndex 位置开始查找，如果不存在，则返回 -1。</p>
+<blockquote>
+<p> <strong>str.indexOf(searchValue[, fromIndex])</strong>    </p>
+</blockquote>
+<p>  searchValue：一个字符串表示被查找的值。fromIndex ：表示调用该方法的字符串中开始查找的位置。可以是任意整数。默认值为 0。如果 fromIndex &lt; 0 则查找整个字符串（如同传进了 0）。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.indexOf(&quot;a&quot;)); // =&gt; 8</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>charOf()</code>：返回字符串中指定位置的字符。</p>
+<blockquote>
+<p><strong>str.charAt(index)</strong></p>
+</blockquote>
+<p>  index：0 到 字符串长度-1 的一个整数。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.charAt(8)); // =&gt; &quot;a&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-5-字符串合并"><a href="#2-5-字符串合并" class="headerlink" title="2.5 字符串合并"></a>2.5 字符串合并</h3><p>涉及到一个方法：<code>concat()</code>.</p>
+<ul>
+<li><p><code>concat()</code>：将一个或多个字符串与原字符串连接合并，形成一个新的字符串并返回。</p>
+<blockquote>
+<p><strong>string.concat(string2, string3[, …, stringN])</strong></p>
+</blockquote>
+<p>  string2…stringN：原字符串连接的多个字符串</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var myStr1 = &quot;this is &quot;;</div><div class="line">var myStr2 = &quot;a string&quot;;</div><div class="line">console.log(myStr1.concat(myStr2)); // =&gt; &quot;this is a string&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-6-字符串匹配"><a href="#2-6-字符串匹配" class="headerlink" title="2.6 字符串匹配"></a>2.6 字符串匹配</h3><p>涉及到两个方法：<code>match()</code>、<code>search()</code></p>
+<ul>
+<li><p><code>match()</code>：当字符串匹配到正则表达式（regular expression）时，<code>match()</code> 方法会提取匹配项，返回一个数组。如果正则表达式没有 g 标志，返回和 RegExp.exec(str) 相同的结果。而且返回的数组拥有一个额外的 input 属性，该属性包含原始字符串。另外，还拥有一个 index 属性，该属性表示匹配结果在原字符串中的索引（以0开始）。如果正则表达式包含 g 标志，则该方法返回一个包含所有匹配结果的数组。如果没有匹配到，则返回 null。</p>
+<blockquote>
+<p><strong>str.match(regexp);</strong></p>
+</blockquote>
+<p>  regexp：一个正则表达式对象。如果传入一个非正则表达式对象，则会隐式地使用 new RegExp(obj) 将其转换为正则表达式对象。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">var pattern1 = /i[a-z]/;</div><div class="line">var pattern2 = /i[a-z]/g;</div><div class="line">console.log(myStr.match(pattern1));// =&gt;[&quot;is&quot;, index: 2, input: &quot;this is a string&quot;]</div><div class="line">console.log(myStr.match(pattern2));// =&gt;[&quot;is&quot;, &quot;is&quot;, &quot;in&quot;]</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>search()</code>：执行一个查找，看该字符串对象与一个正则表达式是否匹配。如果匹配成功，则 search() 返回正则表达式在字符串中首次匹配项的索引。否则，返回 -1。</p>
+<blockquote>
+<p><strong>str.search(regexp)</strong></p>
+</blockquote>
+<p>  regexp：一个正则表达式对象。如果传入一个非正则表达式对象，则会隐式地使用 new RegExp(obj) 将其转换为正则表达式对象。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">var pattern = /i[a-z]/;</div><div class="line">console.log(myStr.search(pattern));// =&gt; 2</div><div class="line">console.log(myStr.search(&quot;z&quot;));// =&gt; -1</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-7-字符串大小写转换"><a href="#2-7-字符串大小写转换" class="headerlink" title="2.7 字符串大小写转换"></a>2.7 字符串大小写转换</h3><p>涉及的两个方法：<code>toLowerCase()</code>、<code>toUpperCase()</code>。</p>
+<ul>
+<li><p><code>toLowerCase()</code>：将调用该方法的字符串值转为小写形式，并返回。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;This is a String&quot;;</div><div class="line">console.log(myStr.toLowerCase()); // =&gt; &quot;this is a string&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>toUpperCase()</code>： 将调用该方法的字符串值转换为大写形式，并返回。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;This is a String&quot;;</div><div class="line">console.log(myStr.toUpperCase()); // =&gt; &quot;THIS IS A STRING&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3 总结"></a>3 总结</h2><p>以上就是我关于字符串操作的大概总结，可能有需要完善和纠正的地方，希望有想法和建议，希望大家多多留言。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/asserts/wepay.png" alt="tommyzqfeng WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/asserts/alipay.png" alt="tommyzqfeng Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag">#JavaScript</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/24/前端面试总结（JavaScript篇）/" rel="next" title="前端面试总结（JavaScript篇）">
+                <i class="fa fa-chevron-left"></i> 前端面试总结（JavaScript篇）
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/06/avaScript基础--作用域/" rel="prev" title="JavaScript基础--作用域">
+                JavaScript基础--作用域 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/asserts/author.png"
+               alt="tommyzqfeng" />
+          <p class="site-author-name" itemprop="name">tommyzqfeng</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://facebook.com/your-user-name" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://github.com/" title="Github" target="_blank">Github</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JavaScript字符串的操作"><span class="nav-number">1.</span> <span class="nav-text">JavaScript字符串的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-非字符串转化为字符串"><span class="nav-number">1.1.</span> <span class="nav-text">1. 非字符串转化为字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-原始值转字符串"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 原始值转字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-对象转字符串"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 对象转字符串</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-字符串的常用操作"><span class="nav-number">1.2.</span> <span class="nav-text">2.字符串的常用操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-字符串属性"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 字符串属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-字符串查找"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 字符串查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-字符串的截取与分割"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 字符串的截取与分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-字符串索引"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 字符串索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-字符串合并"><span class="nav-number">1.2.5.</span> <span class="nav-text">2.5 字符串合并</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-字符串匹配"><span class="nav-number">1.2.6.</span> <span class="nav-text">2.6 字符串匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-字符串大小写转换"><span class="nav-number">1.2.7.</span> <span class="nav-text">2.7 字符串大小写转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-总结"><span class="nav-number">1.3.</span> <span class="nav-text">3 总结</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tommyzqfeng</span>
+</div>
+
+<div class="powered-by" style="display:none">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info" style="display:none">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

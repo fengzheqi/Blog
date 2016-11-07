@@ -1,0 +1,696 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript," />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="浮生奇影" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="JavaScript基础–作用域什么是作用域作用域定义了变量在哪查找和怎样查找的一系列规则。通常我们在JS中定义的变量具有一定调用范围，比如全局变量可以在任意位置调用；而这个范围通常就是我们所指的作用域，JS中的作用域不同于C/C++，那么有哪些不同呢，请先和我一起了解一下JS简单的编译原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript基础--作用域">
+<meta property="og:url" content="http://fengzheqi.com/2016/01/06/avaScript基础--作用域/index.html">
+<meta property="og:site_name" content="浮生奇影">
+<meta property="og:description" content="JavaScript基础–作用域什么是作用域作用域定义了变量在哪查找和怎样查找的一系列规则。通常我们在JS中定义的变量具有一定调用范围，比如全局变量可以在任意位置调用；而这个范围通常就是我们所指的作用域，JS中的作用域不同于C/C++，那么有哪些不同呢，请先和我一起了解一下JS简单的编译原理">
+<meta property="og:image" content="http://img1.ph.126.net/1qzLRSjLPp54qoBZOaOjLw==/6630607070329665184.jpg">
+<meta property="og:updated_time" content="2016-11-07T08:36:29.173Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript基础--作用域">
+<meta name="twitter:description" content="JavaScript基础–作用域什么是作用域作用域定义了变量在哪查找和怎样查找的一系列规则。通常我们在JS中定义的变量具有一定调用范围，比如全局变量可以在任意位置调用；而这个范围通常就是我们所指的作用域，JS中的作用域不同于C/C++，那么有哪些不同呢，请先和我一起了解一下JS简单的编译原理">
+<meta name="twitter:image" content="http://img1.ph.126.net/1qzLRSjLPp54qoBZOaOjLw==/6630607070329665184.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> JavaScript基础--作用域 | 浮生奇影 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">浮生奇影</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JavaScript基础--作用域
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-01-06T00:00:00+08:00" content="2016-01-06">
+              2016-01-06
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="JavaScript基础–作用域"><a href="#JavaScript基础–作用域" class="headerlink" title="JavaScript基础–作用域"></a>JavaScript基础–作用域</h1><h2 id="什么是作用域"><a href="#什么是作用域" class="headerlink" title="什么是作用域"></a>什么是作用域</h2><p>作用域定义了变量<strong>在哪查找</strong>和<strong>怎样查找</strong>的一系列规则。通常我们在JS中定义的变量具有一定调用范围，比如全局变量可以在任意位置调用；而这个范围通常就是我们所指的作用域，JS中的作用域不同于C/C++，那么有哪些不同呢，请先和我一起了解一下JS简单的编译原理</p>
+<a id="more"></a>
+<h3 id="编译原理"><a href="#编译原理" class="headerlink" title="编译原理"></a>编译原理</h3><p>JS虽然是一门脚本语言，但是事实上它也是需要编译的（ps.通常脚本语言只需要“解释”，而不是“编译”）。但与其他传统的编译语言（例如java）不同的是，JS并不会提前编译好代码等待执行，而是很快被编译，然后再迅速执行（通常在几微秒以内）。即使有这样的差异，实际上它们的大致的编辑过程差不多，主要分为三个阶段：</p>
+<pre><code>1. **分词/词法分析**
+    分词就是将表达式进行拆分，比如`var a hexo = 5;`，编译引擎会将其分解为`var`，`a`，`=`，`5`和`;`。词法分析与分词差不多，它的作用是分析表达式中各个组成部分的意思，类似于一个句子中什么是主语、谓语等。
+2. **解析代码**
+第二步，解析代码。在这个过程中会生成一个抽象语法树（AST，Abstract Syntax Tree），这个树上嵌套了第一步分解的各个“小元件”。还是以上面的表达式为例子，`var a = 5;`，这时根节点为`var`，它有两个子节点，一个是`a`，一个是`=`，`=`下面还有一个子节点`5`。
+![AST树](http://img2.ph.126.net/-nEUMrTc1wRFZKi4iP_FDA==/6631429505027617499.png)
+3. **代码生成** 
+</code></pre><p>这个过程生成可以执行的代码，是面向机器的。这个过程中机器开始给变量分配内存，构建作用域等等。</p>
+<h2 id="理解作用域"><a href="#理解作用域" class="headerlink" title="理解作用域"></a>理解作用域</h2><p>JS代码在编译和执行的整个过程中，有三个“人物”扮演了重要的角色，分别是引擎、编译器和作用域。怎么理解这三个“人物”呢？引擎相当于这三者中的老大，负责JS代码的编译和执行；编译器负责解析代码、代码生成等；作用域负责管理代码中各个变量应该活动的范围。三人各司其职，保障JS在平台上的顺利运行。</p>
+<h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><p>引擎、编译器和作用器各自承担成自己的责任，那么三者是如何协调工作的呢？以<code>var a = 5;</code>为例。</p>
+<pre><code>1. 首先编译阶段，编译器会询问作用域那边是否有变量`a`，如果有，则编译器忽略这句声明，如果没有，则在作用域中生成一个变量`a`;
+2. 在代码生成过程中，编译器就将`5`赋给变量`a`；
+3. 最后在引擎在执行代码过程中，也会先问作用域哪里有没有`a`，有就取它的值来用，如果没有，就去别的地方找（具体在哪里，继续往下看）。
+</code></pre><h3 id="查找方式"><a href="#查找方式" class="headerlink" title="查找方式"></a>查找方式</h3><p>引擎在执行代码的过程中，比如<code>var a = 5;</code>，很多书和博客将会搬出两个概念：左查找（LHS）和右查找（RHS），然后又解释了很多，其实左查找就是查找变量，右查找就是查找变量的值，如果这样理解的话，你就很容易知道什么时候用的左查找，什么时候用的右查找。<br>后来我自己研究了一下，发现左查找和右查找的唯一作用是标识引擎查找返回错误，如果找不到变量，就报<code>ReferenceError</code>，找不到变量的值（属性），就报<code>TypeError</code>。如果还有其他作用，欢迎补充。</p>
+<h3 id="嵌套作用域"><a href="#嵌套作用域" class="headerlink" title="嵌套作用域"></a>嵌套作用域</h3><p>嵌套作用域比较好理解，不过这里要注意两点：一个认识到JS是函数作用域，作用域以函数为单位来嵌套的；第二个是区分嵌套作用域与闭包的不同。</p>
+<pre><code>function foo(a) {
+console.log( a + b );
+}
+var b = 2;
+foo( 2 ); // 4
+</code></pre><p>上面的代码中就是一个简单的嵌套作用域的例子，全局定义了<code>b</code>，在函数里定义了<code>a</code>，被嵌套在全局作用域里的函数<code>foo</code>可以调用<code>b</code>，但全局作用域里不能调用<code>a</code>。<br>引擎在查找变量时，是先从所执行的代码的作用域里开始查找的，如果找不到，再一级一级往外层的作用域里查找。</p>
+<h2 id="进一步理解作用域"><a href="#进一步理解作用域" class="headerlink" title="进一步理解作用域"></a>进一步理解作用域</h2><p>在编译的阶段，作用域就形成，在引擎执行代码时，作用域的规则就开始限定引擎要怎么取变量或者值了。我们举个例子。<br><img src="http://img1.ph.126.net/1qzLRSjLPp54qoBZOaOjLw==/6630607070329665184.jpg" alt="作用域"><br>在上面的例子中，嵌套了三层作用域，第一层是全局作用域，第二层是函数<code>foo</code>的作用域，第三层是函数<code>bar</code>的作用域。引擎在执行某段代码时，查找的规则是这样的：</p>
+<ul>
+<li>首先在当下的作用域里找，找的到就直接调用，找不到就想上一层作用域继续找，再找不到就再往上，直到全局作用域；</li>
+<li>如果在当下的作用域下定义了一个与外层作用域相同的变量，以当下的作用域的为准。</li>
+</ul>
+<p>在第一条规则中，定义变量时，需要在变量的前面加上<code>var</code>，如果不加，在非严格的模式下，会在全局作用域创建这个变量，在严格模式下会报错。<br>在第二条规则中，如果在当下作用域中依然想调用全局那个重复的变量，可以这样定义<code>window.a = 5;</code>，调用的时候直接去<code>window.a</code>就可以了。</p>
+<p><em>注：调用<code>with</code>和<code>eval()</code>改变执行环境作用域并不推荐使用，因为它们会带来性能问题，这里不详细解释，大家可以参考文章后面参考文献。</em></p>
+<h2 id="扩展：JS中的块级作用域"><a href="#扩展：JS中的块级作用域" class="headerlink" title="扩展：JS中的块级作用域"></a>扩展：JS中的块级作用域</h2><p>JS中的函数作用域带来了灵活性，但在一些地方有存在不方便，比如在<code>for</code>、<code>if</code>语句中，我们可能只需要在它们的<code>{}</code>里定义一些临时的变量，并不希望污染当前的作用域。基于这些问题，ES6中新增了<code>let</code>、<code>const</code>这两个关键字来实现了块级作用域定义变量。<br><code>let</code>的用法和<code>var</code>一样，只不过是作用域不同罢了例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for (let i =0; i&lt;3; i++)&#123;</div><div class="line">	console.log(i);</div><div class="line">&#125; // 0,1,2</div><div class="line">cosole.log(i); //i is undefined</div></pre></td></tr></table></figure></p>
+<p><code>const</code>也是用来定义变量，不过它定义的是静态变量（常量），一旦定义了，重新赋值就会报错。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var foo = true;</div><div class="line">if (foo) &#123;</div><div class="line">    var a = 2;</div><div class="line">    const b = 3; // 定义常量</div><div class="line"></div><div class="line">    a = 3; </div><div class="line">    b = 4; // error!</div><div class="line">&#125;</div><div class="line"></div><div class="line">console.log( a ); // 3</div><div class="line">console.log( b ); // ReferenceError!</div></pre></td></tr></table></figure></p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li><a href="https://github.com/getify/You-Dont-Know-JS/tree/master/scope%20%26%20closures" target="_blank" rel="external">You-Dont-Know-JS</a></li>
+<li>JavaScript权威指南</li>
+<li>JavaScript高级程序设计</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/asserts/wepay.png" alt="tommyzqfeng WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/asserts/alipay.png" alt="tommyzqfeng Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag">#JavaScript</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/28/JavaScript字符串的操作/" rel="next" title="JavaScript字符串的操作">
+                <i class="fa fa-chevron-left"></i> JavaScript字符串的操作
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/asserts/author.png"
+               alt="tommyzqfeng" />
+          <p class="site-author-name" itemprop="name">tommyzqfeng</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://facebook.com/your-user-name" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://github.com/" title="Github" target="_blank">Github</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JavaScript基础–作用域"><span class="nav-number">1.</span> <span class="nav-text">JavaScript基础–作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是作用域"><span class="nav-number">1.1.</span> <span class="nav-text">什么是作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编译原理"><span class="nav-number">1.1.1.</span> <span class="nav-text">编译原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理解作用域"><span class="nav-number">1.2.</span> <span class="nav-text">理解作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#工作流程"><span class="nav-number">1.2.1.</span> <span class="nav-text">工作流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找方式"><span class="nav-number">1.2.2.</span> <span class="nav-text">查找方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌套作用域"><span class="nav-number">1.2.3.</span> <span class="nav-text">嵌套作用域</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进一步理解作用域"><span class="nav-number">1.3.</span> <span class="nav-text">进一步理解作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展：JS中的块级作用域"><span class="nav-number">1.4.</span> <span class="nav-text">扩展：JS中的块级作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">1.5.</span> <span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tommyzqfeng</span>
+</div>
+
+<div class="powered-by" style="display:none">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info" style="display:none">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

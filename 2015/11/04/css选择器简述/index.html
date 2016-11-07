@@ -1,0 +1,685 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="CSS," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="浮生奇影" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="CSS选择器简述&amp;emsp;&amp;emsp;在css中，选择器的重要性不言而喻，平常用的时候总是会忘记，刚好抽个时间整理一下，如有遗漏和不对的地方，希望大家多提意见:)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="css选择器简述">
+<meta property="og:url" content="http://fengzheqi.com/2015/11/04/css选择器简述/index.html">
+<meta property="og:site_name" content="浮生奇影">
+<meta property="og:description" content="CSS选择器简述&amp;emsp;&amp;emsp;在css中，选择器的重要性不言而喻，平常用的时候总是会忘记，刚好抽个时间整理一下，如有遗漏和不对的地方，希望大家多提意见:)">
+<meta property="og:updated_time" content="2016-11-07T08:36:29.174Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="css选择器简述">
+<meta name="twitter:description" content="CSS选择器简述&amp;emsp;&amp;emsp;在css中，选择器的重要性不言而喻，平常用的时候总是会忘记，刚好抽个时间整理一下，如有遗漏和不对的地方，希望大家多提意见:)">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> css选择器简述 | 浮生奇影 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">浮生奇影</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                css选择器简述
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-04T00:00:00+08:00" content="2015-11-04">
+              2015-11-04
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="CSS选择器简述"><a href="#CSS选择器简述" class="headerlink" title="CSS选择器简述"></a>CSS选择器简述</h3><p>&emsp;&emsp;在css中，选择器的重要性不言而喻，平常用的时候总是会忘记，刚好抽个时间整理一下，如有遗漏和不对的地方，希望大家多提意见:)</p>
+<a id="more"></a>
+<h4 id="一、分类"><a href="#一、分类" class="headerlink" title="一、分类"></a>一、分类</h4><h5 id="1-基本选择器分类"><a href="#1-基本选择器分类" class="headerlink" title="1.基本选择器分类"></a>1.基本选择器分类</h5><ul>
+<li>元素选择器</li>
+<li>类选择器</li>
+<li>id选择器</li>
+<li>属性选择器</li>
+</ul>
+<h5 id="2-文档结构分类"><a href="#2-文档结构分类" class="headerlink" title="2.文档结构分类"></a>2.文档结构分类</h5><ul>
+<li>后代选择器（子代选择器）</li>
+<li>相邻选择器</li>
+</ul>
+<h5 id="3-伪类与伪元素"><a href="#3-伪类与伪元素" class="headerlink" title="3.伪类与伪元素"></a>3.伪类与伪元素</h5><ul>
+<li>伪类选择器</li>
+<li>伪元素选择器 </li>
+</ul>
+<h4 id="二、选择器举例"><a href="#二、选择器举例" class="headerlink" title="二、选择器举例"></a>二、选择器举例</h4><h5 id="1-元素选择器"><a href="#1-元素选择器" class="headerlink" title="1.元素选择器"></a>1.元素选择器</h5><p>根据<code>html</code>元素来选择，例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">p</span> &#123;<span class="attribute">marigin</span>:<span class="number">20px</span>;&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="2-类选择器"><a href="#2-类选择器" class="headerlink" title="2.类选择器"></a>2.类选择器</h5><p>根据元素中<code>class</code>属性来选择，例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.nav</span> &#123;<span class="attribute">color</span>:<span class="number">#fff</span>;&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="3-id选择器"><a href="#3-id选择器" class="headerlink" title="3.id选择器"></a>3.id选择器</h5><p>根据元素中<code>id</code>属性来选择，例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#header</span> &#123;<span class="attribute">font-size</span>: <span class="number">14px</span>;&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="4-属性选择器"><a href="#4-属性选择器" class="headerlink" title="4.属性选择器"></a>4.属性选择器</h5><p>根据元素定义的属性来选择，例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">input</span><span class="selector-attr">[type=text]</span> &#123;<span class="attribute">padding</span>: <span class="number">10px</span>;&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="5-后代选择器"><a href="#5-后代选择器" class="headerlink" title="5.后代选择器"></a>5.后代选择器</h5><p>在dom结构中，当我们需要对文档结构进行选择时，则可以利用后代选择器，例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*对div内的全部p元素应用margin、padding规则*/</span></div><div class="line"> <span class="selector-tag">div</span> <span class="selector-tag">p</span> &#123;<span class="attribute">margin</span>:<span class="number">20px</span>; <span class="attribute">padding</span>:<span class="number">10px</span>;&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>子代选择器</strong>：如果只是对子代进行选择，则可利用如下规则<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*对tr下第一个td应用color:#ccc样式*/</span></div><div class="line"><span class="selector-tag">tr</span> &gt; <span class="selector-tag">td</span> &#123;<span class="attribute">color</span>: <span class="number">#ccc</span>;&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="6-相邻选择器"><a href="#6-相邻选择器" class="headerlink" title="6.相邻选择器"></a>6.相邻选择器</h5><p>对于选择同一级的节点，可以使用相邻选择器，如下：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*p和div属于同一级相邻元素*/</span></div><div class="line"> <span class="selector-tag">p</span> + <span class="selector-tag">div</span> &#123;<span class="attribute">margin</span>: <span class="number">20px</span>&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="7-伪类选择器"><a href="#7-伪类选择器" class="headerlink" title="7.伪类选择器"></a>7.伪类选择器</h5><p>在元素<code>a</code>中，常常需要对hover，visited等伪类做样式控制，在css中可以这样写：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*在定义a元素的伪类时，顺序很重要，link-visited-focus-hover-active*/</span></div><div class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:link</span> &#123;<span class="attribute">color</span>: navy;&#125;</div><div class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:visited</span> &#123;<span class="attribute">color</span>: gray;&#125;</div><div class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:focus</span> &#123;<span class="attribute">color</span>: green;&#125;</div><div class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:hover</span> &#123;<span class="attribute">color</span>: red;&#125;</div><div class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:active</span> &#123;<span class="attribute">color</span>: yellow;&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="8-伪元素选择器"><a href="#8-伪元素选择器" class="headerlink" title="8.伪元素选择器"></a>8.伪元素选择器</h5><p>伪元素目前在css2.1中定义了4个：设置首字母样式、设置第一行样式、设置之前和之后元素的样式。例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">p</span><span class="selector-pseudo">:first-letter</span> &#123;<span class="attribute">color</span>: red;&#125;</div><div class="line"><span class="selector-tag">p</span><span class="selector-pseudo">:first-line</span> &#123;<span class="attribute">color</span>: purple;&#125;</div><div class="line"><span class="selector-tag">h2</span><span class="selector-pseudo">:before</span> &#123;<span class="attribute">content</span>: <span class="string">"**"</span>; <span class="attribute">color</span>: silver;&#125;</div><div class="line"><span class="selector-tag">h2</span><span class="selector-pseudo">:after</span> &#123;<span class="attribute">content</span>: <span class="string">"the end"</span>;&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="三、常见选择器例子"><a href="#三、常见选择器例子" class="headerlink" title="三、常见选择器例子"></a>三、常见选择器例子</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*css中分组,对h2、p都应用样式*/</span></div><div class="line"><span class="selector-tag">h2</span>, <span class="selector-tag">p</span> &#123;<span class="attribute">color</span>: gray;&#125;</div><div class="line"></div><div class="line"><span class="comment">/*选择器混用，如下例，查找的是元素p中class="warning"的元素*/</span></div><div class="line"><span class="selector-tag">p</span><span class="selector-class">.warning</span> &#123;<span class="attribute">font-weight</span>: bold;&#125;</div><div class="line"></div><div class="line"><span class="comment">/*多类选择器，对于一个元素中同时包含多个类的元素。ps. 注意匹配的是同时包含这些类的元素*/</span></div><div class="line"><span class="selector-class">.warning</span><span class="selector-class">.urgent</span> &#123;<span class="attribute">background</span>: silver;&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/asserts/wepay.png" alt="tommyzqfeng WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/asserts/alipay.png" alt="tommyzqfeng Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CSS/" rel="tag">#CSS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/18/浏览器兼容/" rel="next" title="IE的兼容性问题">
+                <i class="fa fa-chevron-left"></i> IE的兼容性问题
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/12/web前端代码规范（JavaScript篇）/" rel="prev" title="web前端代码规范--JavaScript篇">
+                web前端代码规范--JavaScript篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/asserts/author.png"
+               alt="tommyzqfeng" />
+          <p class="site-author-name" itemprop="name">tommyzqfeng</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://facebook.com/your-user-name" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://github.com/" title="Github" target="_blank">Github</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS选择器简述"><span class="nav-number">1.</span> <span class="nav-text">CSS选择器简述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、分类"><span class="nav-number">1.1.</span> <span class="nav-text">一、分类</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-基本选择器分类"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.基本选择器分类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-文档结构分类"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.文档结构分类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-伪类与伪元素"><span class="nav-number">1.1.3.</span> <span class="nav-text">3.伪类与伪元素</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、选择器举例"><span class="nav-number">1.2.</span> <span class="nav-text">二、选择器举例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-元素选择器"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.元素选择器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-类选择器"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.类选择器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-id选择器"><span class="nav-number">1.2.3.</span> <span class="nav-text">3.id选择器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-属性选择器"><span class="nav-number">1.2.4.</span> <span class="nav-text">4.属性选择器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-后代选择器"><span class="nav-number">1.2.5.</span> <span class="nav-text">5.后代选择器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-相邻选择器"><span class="nav-number">1.2.6.</span> <span class="nav-text">6.相邻选择器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#7-伪类选择器"><span class="nav-number">1.2.7.</span> <span class="nav-text">7.伪类选择器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#8-伪元素选择器"><span class="nav-number">1.2.8.</span> <span class="nav-text">8.伪元素选择器</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、常见选择器例子"><span class="nav-number">1.3.</span> <span class="nav-text">三、常见选择器例子</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tommyzqfeng</span>
+</div>
+
+<div class="powered-by" style="display:none">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info" style="display:none">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

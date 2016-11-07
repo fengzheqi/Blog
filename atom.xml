@@ -1,0 +1,1288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>浮生奇影</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://fengzheqi.com/"/>
+  <updated>2016-11-07T08:36:29.173Z</updated>
+  <id>http://fengzheqi.com/</id>
+  
+  <author>
+    <name>tommyzqfeng</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JavaScript基础--作用域</title>
+    <link href="http://fengzheqi.com/2016/01/06/avaScript%E5%9F%BA%E7%A1%80--%E4%BD%9C%E7%94%A8%E5%9F%9F/"/>
+    <id>http://fengzheqi.com/2016/01/06/avaScript基础--作用域/</id>
+    <published>2016-01-05T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.173Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="JavaScript基础–作用域"><a href="#JavaScript基础–作用域" class="headerlink" title="JavaScript基础–作用域"></a>JavaScript基础–作用域</h1><h2 id="什么是作用域"><a href="#什么是作用域" class="headerlink" title="什么是作用域"></a>什么是作用域</h2><p>作用域定义了变量<strong>在哪查找</strong>和<strong>怎样查找</strong>的一系列规则。通常我们在JS中定义的变量具有一定调用范围，比如全局变量可以在任意位置调用；而这个范围通常就是我们所指的作用域，JS中的作用域不同于C/C++，那么有哪些不同呢，请先和我一起了解一下JS简单的编译原理</p>
+<a id="more"></a>
+<h3 id="编译原理"><a href="#编译原理" class="headerlink" title="编译原理"></a>编译原理</h3><p>JS虽然是一门脚本语言，但是事实上它也是需要编译的（ps.通常脚本语言只需要“解释”，而不是“编译”）。但与其他传统的编译语言（例如java）不同的是，JS并不会提前编译好代码等待执行，而是很快被编译，然后再迅速执行（通常在几微秒以内）。即使有这样的差异，实际上它们的大致的编辑过程差不多，主要分为三个阶段：</p>
+<pre><code>1. **分词/词法分析**
+    分词就是将表达式进行拆分，比如`var a hexo = 5;`，编译引擎会将其分解为`var`，`a`，`=`，`5`和`;`。词法分析与分词差不多，它的作用是分析表达式中各个组成部分的意思，类似于一个句子中什么是主语、谓语等。
+2. **解析代码**
+第二步，解析代码。在这个过程中会生成一个抽象语法树（AST，Abstract Syntax Tree），这个树上嵌套了第一步分解的各个“小元件”。还是以上面的表达式为例子，`var a = 5;`，这时根节点为`var`，它有两个子节点，一个是`a`，一个是`=`，`=`下面还有一个子节点`5`。
+![AST树](http://img2.ph.126.net/-nEUMrTc1wRFZKi4iP_FDA==/6631429505027617499.png)
+3. **代码生成** 
+</code></pre><p>这个过程生成可以执行的代码，是面向机器的。这个过程中机器开始给变量分配内存，构建作用域等等。</p>
+<h2 id="理解作用域"><a href="#理解作用域" class="headerlink" title="理解作用域"></a>理解作用域</h2><p>JS代码在编译和执行的整个过程中，有三个“人物”扮演了重要的角色，分别是引擎、编译器和作用域。怎么理解这三个“人物”呢？引擎相当于这三者中的老大，负责JS代码的编译和执行；编译器负责解析代码、代码生成等；作用域负责管理代码中各个变量应该活动的范围。三人各司其职，保障JS在平台上的顺利运行。</p>
+<h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><p>引擎、编译器和作用器各自承担成自己的责任，那么三者是如何协调工作的呢？以<code>var a = 5;</code>为例。</p>
+<pre><code>1. 首先编译阶段，编译器会询问作用域那边是否有变量`a`，如果有，则编译器忽略这句声明，如果没有，则在作用域中生成一个变量`a`;
+2. 在代码生成过程中，编译器就将`5`赋给变量`a`；
+3. 最后在引擎在执行代码过程中，也会先问作用域哪里有没有`a`，有就取它的值来用，如果没有，就去别的地方找（具体在哪里，继续往下看）。
+</code></pre><h3 id="查找方式"><a href="#查找方式" class="headerlink" title="查找方式"></a>查找方式</h3><p>引擎在执行代码的过程中，比如<code>var a = 5;</code>，很多书和博客将会搬出两个概念：左查找（LHS）和右查找（RHS），然后又解释了很多，其实左查找就是查找变量，右查找就是查找变量的值，如果这样理解的话，你就很容易知道什么时候用的左查找，什么时候用的右查找。<br>后来我自己研究了一下，发现左查找和右查找的唯一作用是标识引擎查找返回错误，如果找不到变量，就报<code>ReferenceError</code>，找不到变量的值（属性），就报<code>TypeError</code>。如果还有其他作用，欢迎补充。</p>
+<h3 id="嵌套作用域"><a href="#嵌套作用域" class="headerlink" title="嵌套作用域"></a>嵌套作用域</h3><p>嵌套作用域比较好理解，不过这里要注意两点：一个认识到JS是函数作用域，作用域以函数为单位来嵌套的；第二个是区分嵌套作用域与闭包的不同。</p>
+<pre><code>function foo(a) {
+console.log( a + b );
+}
+var b = 2;
+foo( 2 ); // 4
+</code></pre><p>上面的代码中就是一个简单的嵌套作用域的例子，全局定义了<code>b</code>，在函数里定义了<code>a</code>，被嵌套在全局作用域里的函数<code>foo</code>可以调用<code>b</code>，但全局作用域里不能调用<code>a</code>。<br>引擎在查找变量时，是先从所执行的代码的作用域里开始查找的，如果找不到，再一级一级往外层的作用域里查找。</p>
+<h2 id="进一步理解作用域"><a href="#进一步理解作用域" class="headerlink" title="进一步理解作用域"></a>进一步理解作用域</h2><p>在编译的阶段，作用域就形成，在引擎执行代码时，作用域的规则就开始限定引擎要怎么取变量或者值了。我们举个例子。<br><img src="http://img1.ph.126.net/1qzLRSjLPp54qoBZOaOjLw==/6630607070329665184.jpg" alt="作用域"><br>在上面的例子中，嵌套了三层作用域，第一层是全局作用域，第二层是函数<code>foo</code>的作用域，第三层是函数<code>bar</code>的作用域。引擎在执行某段代码时，查找的规则是这样的：</p>
+<ul>
+<li>首先在当下的作用域里找，找的到就直接调用，找不到就想上一层作用域继续找，再找不到就再往上，直到全局作用域；</li>
+<li>如果在当下的作用域下定义了一个与外层作用域相同的变量，以当下的作用域的为准。</li>
+</ul>
+<p>在第一条规则中，定义变量时，需要在变量的前面加上<code>var</code>，如果不加，在非严格的模式下，会在全局作用域创建这个变量，在严格模式下会报错。<br>在第二条规则中，如果在当下作用域中依然想调用全局那个重复的变量，可以这样定义<code>window.a = 5;</code>，调用的时候直接去<code>window.a</code>就可以了。</p>
+<p><em>注：调用<code>with</code>和<code>eval()</code>改变执行环境作用域并不推荐使用，因为它们会带来性能问题，这里不详细解释，大家可以参考文章后面参考文献。</em></p>
+<h2 id="扩展：JS中的块级作用域"><a href="#扩展：JS中的块级作用域" class="headerlink" title="扩展：JS中的块级作用域"></a>扩展：JS中的块级作用域</h2><p>JS中的函数作用域带来了灵活性，但在一些地方有存在不方便，比如在<code>for</code>、<code>if</code>语句中，我们可能只需要在它们的<code>{}</code>里定义一些临时的变量，并不希望污染当前的作用域。基于这些问题，ES6中新增了<code>let</code>、<code>const</code>这两个关键字来实现了块级作用域定义变量。<br><code>let</code>的用法和<code>var</code>一样，只不过是作用域不同罢了例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for (let i =0; i&lt;3; i++)&#123;</div><div class="line">	console.log(i);</div><div class="line">&#125; // 0,1,2</div><div class="line">cosole.log(i); //i is undefined</div></pre></td></tr></table></figure></p>
+<p><code>const</code>也是用来定义变量，不过它定义的是静态变量（常量），一旦定义了，重新赋值就会报错。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var foo = true;</div><div class="line">if (foo) &#123;</div><div class="line">    var a = 2;</div><div class="line">    const b = 3; // 定义常量</div><div class="line"></div><div class="line">    a = 3; </div><div class="line">    b = 4; // error!</div><div class="line">&#125;</div><div class="line"></div><div class="line">console.log( a ); // 3</div><div class="line">console.log( b ); // ReferenceError!</div></pre></td></tr></table></figure></p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li><a href="https://github.com/getify/You-Dont-Know-JS/tree/master/scope%20%26%20closures" target="_blank" rel="external">You-Dont-Know-JS</a></li>
+<li>JavaScript权威指南</li>
+<li>JavaScript高级程序设计</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;JavaScript基础–作用域&quot;&gt;&lt;a href=&quot;#JavaScript基础–作用域&quot; class=&quot;headerlink&quot; title=&quot;JavaScript基础–作用域&quot;&gt;&lt;/a&gt;JavaScript基础–作用域&lt;/h1&gt;&lt;h2 id=&quot;什么是作用域&quot;&gt;&lt;a href=&quot;#什么是作用域&quot; class=&quot;headerlink&quot; title=&quot;什么是作用域&quot;&gt;&lt;/a&gt;什么是作用域&lt;/h2&gt;&lt;p&gt;作用域定义了变量&lt;strong&gt;在哪查找&lt;/strong&gt;和&lt;strong&gt;怎样查找&lt;/strong&gt;的一系列规则。通常我们在JS中定义的变量具有一定调用范围，比如全局变量可以在任意位置调用；而这个范围通常就是我们所指的作用域，JS中的作用域不同于C/C++，那么有哪些不同呢，请先和我一起了解一下JS简单的编译原理&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="JavaScript" scheme="http://fengzheqi.com/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JavaScript字符串的操作</title>
+    <link href="http://fengzheqi.com/2015/12/28/JavaScript%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%93%8D%E4%BD%9C/"/>
+    <id>http://fengzheqi.com/2015/12/28/JavaScript字符串的操作/</id>
+    <published>2015-12-27T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.173Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="JavaScript字符串的操作"><a href="#JavaScript字符串的操作" class="headerlink" title="JavaScript字符串的操作"></a>JavaScript字符串的操作</h1><p>平常我们在写JS代码时，遇到最频繁的操作之一也许是字符相关的操作了，同时在面试中也常常会设计字符串的转化的问题，今天刚好将看到资料和前人的经验总结一下，整理如下，希望大家补充和纠正。</p>
+<a id="more"></a>
+<h2 id="1-非字符串转化为字符串"><a href="#1-非字符串转化为字符串" class="headerlink" title="1. 非字符串转化为字符串"></a>1. 非字符串转化为字符串</h2><h3 id="1-1-原始值转字符串"><a href="#1-1-原始值转字符串" class="headerlink" title="1.1 原始值转字符串"></a>1.1 原始值转字符串</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">值</th>
+<th style="text-align:center">转换为字符串</th>
+<th style="text-align:center">值</th>
+<th style="text-align:center">转换为字符串</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">undefined</td>
+<td style="text-align:center">“undefined”</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">“0”</td>
+</tr>
+<tr>
+<td style="text-align:center">null</td>
+<td style="text-align:center">“null”</td>
+<td style="text-align:center">NaN</td>
+<td style="text-align:center">“NaN”</td>
+</tr>
+<tr>
+<td style="text-align:center">true</td>
+<td style="text-align:center">“true”</td>
+<td style="text-align:center">Infinity</td>
+<td style="text-align:center">“Infinity”</td>
+</tr>
+<tr>
+<td style="text-align:center">false</td>
+<td style="text-align:center">“false”</td>
+<td style="text-align:center">-Infinity</td>
+<td style="text-align:center">“-Infinity”</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-2-对象转字符串"><a href="#1-2-对象转字符串" class="headerlink" title="1.2 对象转字符串"></a>1.2 对象转字符串</h3><p>如果是<code>{}</code>、<code>[]</code>和<code>function{}</code>等对象 转字符串情况又如何呢？</p>
+<p>对象转换为字符串，有两个调用的方法：<code>toString()</code>和<code>valueOf()</code>。调用规则是这样的：</p>
+<ol>
+<li>如果对象具有<code>toString()</code>方法，则调用这个方法。如果它返回一个原始值（undefined、null、number、boolean、string），JavaScript将这个值转化为字符串，并返回这个字符串结果。</li>
+<li>如果对象没有<code>toString()</code>方法，或者这个方法并不返回一个原始值，那么JavaScript会调用<code>valueOf()</code>方法。如果存在这个方法，则JavaScript调用它。如果返回值是原始值，JavaScript将这个值转换为字符串，并返回这个字符串结果。</li>
+<li>否则，JavaScript无法从<code>toString()</code>或<code>valueOf()</code>获得一个原始值，抛出异常。</li>
+</ol>
+<p>事实上大部分情况对象都会调用<code>toString()</code>方法，我们来研究一下。</p>
+<ul>
+<li><p>默认的<code>toString()</code>方法，即<code>Object.prototype.toString()</code>，并不会返回一个有效的值，例子如下：</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(&#123;x:1, y:2&#125;).toString() // =&gt; &quot;[object Object]&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>数组（Array）对象在原型里自定义了<code>toString()</code>，即<code>Array.prototype.toString()</code>，所以数组在调用<code>toString()</code>时，有一些不同。<br>  数据在调用<code>toString()</code>时，覆盖了Object的<code>toString()</code>方法。    <code>toString()</code> 方法返回一个字符串，该字符串由数组中的每个元素的 <code>toString()</code> 返回值经调用 <code>join()</code> 方法连接（由逗号隔开）组成。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var a = [];</div><div class="line">var b = [1, 2, 3];</div><div class="line">a.toString();// =&gt; &quot;&quot;</div><div class="line">b.toString();// =&gt; &quot;1,2,3&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>函数（Function）对象在原型里自定义了<code>toString()</code>，即<code>Function.prototype.toString()</code>。<br>  Function 对象覆盖了从 Object 继承来的 <code>Object.prototype.toString()</code> 方法。函数的 <code>toString()</code> 方法会返回一个表示函数源代码的字符串。具体来说，包括 function关键字，形参列表，大括号，以及函数体中的内容。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(function(x) &#123;f(x);&#125;).toString(); // =&gt; &quot;function(x) &#123;\n f(x); \n&#125;&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>日期（Date）对象在原型里自定义了<code>toString()</code>，即<code>Date.prototype.toString()</code>。<br>  Date 对象覆盖了从 Object 继承来的 <code>Object.prototype.toString()</code> 方法。Date的 <code>toString()</code> 方法总是返回一个美式英语日期格式的字符串。当一个日期对象被用来作为文本值或用来进行字符串连接时，<code>toString()</code> 方法会被自动调用。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var date = new Date();</div><div class="line">date.toString(); // =&gt; &quot;Mon Dec 28 2015 21:58:10 GMT+0800 (中国标准时间)&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>正则（RegExp）对象在原型里自定义了<code>toString()</code>，即<code>RegExp.prototype.toString()</code>。<br>  RegExp 对象覆盖了 Object 继承来的 <code>Object.prototype.toString()</code> 方法。对于 RegExp 对象，toString 方法返回一个该正则表达式的字符串形式。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var reg = new RegExp(&quot;a+b+c&quot;);</div><div class="line">console.log(reg.toString()); // =&gt; &quot;/a+b+c/&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="2-字符串的常用操作"><a href="#2-字符串的常用操作" class="headerlink" title="2.字符串的常用操作"></a>2.字符串的常用操作</h2><p>定义在String原型对象中的方法，大概有二三十个，完全记得这么多方法对于普通人来说太难了，不过常用的七八个方法是应该记住的，其他的只需要有印象，用的时候在<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank" rel="external">MDN</a>查就可以了。</p>
+<h3 id="2-1-字符串属性"><a href="#2-1-字符串属性" class="headerlink" title="2.1 字符串属性"></a>2.1 字符串属性</h3><p>字符串默认只定义了两个属性：<code>length</code>和<code>prototype</code>。<code>length</code>表示字符串长度；<code>prototype</code>表示原型。</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.length); // =&gt; 16</div></pre></td></tr></table></figure>
+</code></pre><h3 id="2-2-字符串查找"><a href="#2-2-字符串查找" class="headerlink" title="2.2 字符串查找"></a>2.2 字符串查找</h3><p>字符串查找对应两个方法：<code>indexOf()</code>、<code>lastIndexOf()</code>。</p>
+<ul>
+<li><p><code>indexOf()</code></p>
+<blockquote>
+<p> <strong>str.indexOf(searchValue[, fromIndex])</strong></p>
+</blockquote>
+<p>   searchValue：表示被查找的值； fromIndex：表示调用该方法的字符串中开始查找的位置，可以是任意整数，默认值为 0。<code>indexOf()</code> 方法返回指定值在字符串对象中首次出现的位置。如果不存在，则返回 -1。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.indexOf(&quot;a&quot;));// =&gt; 8</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>lastIndexOf()</code></p>
+<blockquote>
+<p> <strong>str.lastIndexOf(searchValue[, fromIndex])</strong>    </p>
+</blockquote>
+<p>searchValue：表示被查找的值； fromIndex：表示调用该方法的字符串中开始查找的位置，往前查找，可以是任意整数，默认值为 0。<code>lastIndexOf()</code> 方法返回指定值在调用该方法的字符串中最后出现的位置，如果没找到则返回 -1。从该字符串的后面向前查找，从 fromIndex 处开始。</p>
+</li>
+<li><p><strong>小结</strong>：<code>index()</code>是从前向后查找，<code>lastIndexOf()</code>是从后向前查找，两个方法只是查找方式不一样，但是两个方法中被查找的index值一直是不变。</p>
+</li>
+</ul>
+<h3 id="2-3-字符串的截取与分割"><a href="#2-3-字符串的截取与分割" class="headerlink" title="2.3 字符串的截取与分割"></a>2.3 字符串的截取与分割</h3><p>这里涉及到四个方法：<code>slice()</code>、<code>split()</code>、<code>substring()</code>、<code>substr()</code>。之所以把这四个方法一起讲，是因为平常我们有时候将它们混淆，先看看它们各自用法。</p>
+<ul>
+<li><p><code>slice()</code>：<code>slice()</code>方法提取字符串中的一部分，并返回这个新的字符串。</p>
+<blockquote>
+<p> <strong>str.slice(beginSlice[, endSlice])</strong>    </p>
+</blockquote>
+<p>beginSlice：从该索引（以 0 为基数）处开始提取原字符串中的字符，如果该参数为负数，则它表示从原字符串中的倒数第几个字符开始抽取。endSlice：在该索引（以 0 为基数）处结束提取字符串；如果省略该参数，slice会一直提取到字符串末尾；如果该参数为负数，则它表示在原字符串中的倒数第几个字符结束抽取.。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.slice(5)); //=&gt; &quot;is a string&quot; </div><div class="line">console.log(myStr.slice(5, 7)); //=&gt; &quot;is&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>split()</code>：<code>split()</code> 方法通过把字符串分割成子字符串来把一个 String 对象分割成一个字符串数组。</p>
+<blockquote>
+<p> <strong>str.split([separator][, limit])</strong>    </p>
+</blockquote>
+<p>  separator：指定用来分割字符串的字符（串）。limit：一个整数，限定返回的分割片段数量。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.split(&quot; &quot;)); //=&gt; [&quot;this&quot;, &quot;is&quot;, &quot;a&quot;, &quot;string&quot;]</div><div class="line">console.log(myStr.split(&quot; &quot;, 3)); //=&gt; [&quot;this&quot;, &quot;is&quot;, &quot;a&quot;]</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>substring()</code>：<code>substring()</code> 返回字符串两个索引之间（或到字符串末尾）的子串。</p>
+<blockquote>
+<p> <strong>str.substring(indexA[, indexB])</strong>    </p>
+</blockquote>
+<p>  indexA：一个 0 到字符串长度之间的整数。indexB：(optional) 一个 0 到字符串长度之间的整数。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.substring(2)); //=&gt; &quot;is is a string&quot;</div><div class="line">console.log(myStr.substring(2, 3)); //=&gt;  &quot;i&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>substr()</code>：<code>substr()</code> 方法返回字符串中从指定位置开始的指定数量的字符。</p>
+<blockquote>
+<p> <strong>str.substr(start[, length])</strong>    </p>
+</blockquote>
+<p>  start：开始提取字符的位置。length：提取的字符数。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.substr(2)); //=&gt; &quot;is is a string&quot;</div><div class="line">console.log(myStr.substr(2, 2)); //=&gt;  &quot;is&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>小结</strong>：四个方法各自用法如上，有一两个注意地方：<code>split()</code>返回的是数组，可以这样记忆，split后面有t，可以看着<code>[</code>，即数组；涉及到index的截取的方法，都是取头不取尾。</p>
+</li>
+</ul>
+<h3 id="2-4-字符串索引"><a href="#2-4-字符串索引" class="headerlink" title="2.4 字符串索引"></a>2.4 字符串索引</h3><p>字符串的索引涉及两个方法：<code>indexOf()</code>、<code>charOf()</code>。</p>
+<ul>
+<li><p><code>indexOf()</code>：返回指定值在字符串对象中首次出现的位置。从 fromIndex 位置开始查找，如果不存在，则返回 -1。</p>
+<blockquote>
+<p> <strong>str.indexOf(searchValue[, fromIndex])</strong>    </p>
+</blockquote>
+<p>  searchValue：一个字符串表示被查找的值。fromIndex ：表示调用该方法的字符串中开始查找的位置。可以是任意整数。默认值为 0。如果 fromIndex &lt; 0 则查找整个字符串（如同传进了 0）。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.indexOf(&quot;a&quot;)); // =&gt; 8</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>charOf()</code>：返回字符串中指定位置的字符。</p>
+<blockquote>
+<p><strong>str.charAt(index)</strong></p>
+</blockquote>
+<p>  index：0 到 字符串长度-1 的一个整数。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">console.log(myStr.charAt(8)); // =&gt; &quot;a&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-5-字符串合并"><a href="#2-5-字符串合并" class="headerlink" title="2.5 字符串合并"></a>2.5 字符串合并</h3><p>涉及到一个方法：<code>concat()</code>.</p>
+<ul>
+<li><p><code>concat()</code>：将一个或多个字符串与原字符串连接合并，形成一个新的字符串并返回。</p>
+<blockquote>
+<p><strong>string.concat(string2, string3[, …, stringN])</strong></p>
+</blockquote>
+<p>  string2…stringN：原字符串连接的多个字符串</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var myStr1 = &quot;this is &quot;;</div><div class="line">var myStr2 = &quot;a string&quot;;</div><div class="line">console.log(myStr1.concat(myStr2)); // =&gt; &quot;this is a string&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-6-字符串匹配"><a href="#2-6-字符串匹配" class="headerlink" title="2.6 字符串匹配"></a>2.6 字符串匹配</h3><p>涉及到两个方法：<code>match()</code>、<code>search()</code></p>
+<ul>
+<li><p><code>match()</code>：当字符串匹配到正则表达式（regular expression）时，<code>match()</code> 方法会提取匹配项，返回一个数组。如果正则表达式没有 g 标志，返回和 RegExp.exec(str) 相同的结果。而且返回的数组拥有一个额外的 input 属性，该属性包含原始字符串。另外，还拥有一个 index 属性，该属性表示匹配结果在原字符串中的索引（以0开始）。如果正则表达式包含 g 标志，则该方法返回一个包含所有匹配结果的数组。如果没有匹配到，则返回 null。</p>
+<blockquote>
+<p><strong>str.match(regexp);</strong></p>
+</blockquote>
+<p>  regexp：一个正则表达式对象。如果传入一个非正则表达式对象，则会隐式地使用 new RegExp(obj) 将其转换为正则表达式对象。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">var pattern1 = /i[a-z]/;</div><div class="line">var pattern2 = /i[a-z]/g;</div><div class="line">console.log(myStr.match(pattern1));// =&gt;[&quot;is&quot;, index: 2, input: &quot;this is a string&quot;]</div><div class="line">console.log(myStr.match(pattern2));// =&gt;[&quot;is&quot;, &quot;is&quot;, &quot;in&quot;]</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>search()</code>：执行一个查找，看该字符串对象与一个正则表达式是否匹配。如果匹配成功，则 search() 返回正则表达式在字符串中首次匹配项的索引。否则，返回 -1。</p>
+<blockquote>
+<p><strong>str.search(regexp)</strong></p>
+</blockquote>
+<p>  regexp：一个正则表达式对象。如果传入一个非正则表达式对象，则会隐式地使用 new RegExp(obj) 将其转换为正则表达式对象。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;this is a string&quot;;</div><div class="line">var pattern = /i[a-z]/;</div><div class="line">console.log(myStr.search(pattern));// =&gt; 2</div><div class="line">console.log(myStr.search(&quot;z&quot;));// =&gt; -1</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-7-字符串大小写转换"><a href="#2-7-字符串大小写转换" class="headerlink" title="2.7 字符串大小写转换"></a>2.7 字符串大小写转换</h3><p>涉及的两个方法：<code>toLowerCase()</code>、<code>toUpperCase()</code>。</p>
+<ul>
+<li><p><code>toLowerCase()</code>：将调用该方法的字符串值转为小写形式，并返回。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;This is a String&quot;;</div><div class="line">console.log(myStr.toLowerCase()); // =&gt; &quot;this is a string&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>toUpperCase()</code>： 将调用该方法的字符串值转换为大写形式，并返回。</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var myStr = &quot;This is a String&quot;;</div><div class="line">console.log(myStr.toUpperCase()); // =&gt; &quot;THIS IS A STRING&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3 总结"></a>3 总结</h2><p>以上就是我关于字符串操作的大概总结，可能有需要完善和纠正的地方，希望有想法和建议，希望大家多多留言。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;JavaScript字符串的操作&quot;&gt;&lt;a href=&quot;#JavaScript字符串的操作&quot; class=&quot;headerlink&quot; title=&quot;JavaScript字符串的操作&quot;&gt;&lt;/a&gt;JavaScript字符串的操作&lt;/h1&gt;&lt;p&gt;平常我们在写JS代码时，遇到最频繁的操作之一也许是字符相关的操作了，同时在面试中也常常会设计字符串的转化的问题，今天刚好将看到资料和前人的经验总结一下，整理如下，希望大家补充和纠正。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="JavaScript" scheme="http://fengzheqi.com/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>前端面试总结（JavaScript篇）</title>
+    <link href="http://fengzheqi.com/2015/12/24/%E5%89%8D%E7%AB%AF%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%EF%BC%88JavaScript%E7%AF%87%EF%BC%89/"/>
+    <id>http://fengzheqi.com/2015/12/24/前端面试总结（JavaScript篇）/</id>
+    <published>2015-12-23T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.176Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="JavaScript语言基础"><a href="#JavaScript语言基础" class="headerlink" title="JavaScript语言基础"></a>JavaScript语言基础</h2><a id="more"></a>
+<ol>
+<li><p><strong>JavaScript数据类型</strong><br> javaScript的数据类型分为两大类：简单数据类型和复杂数据类型。<br> 简单数据类型：Undefined、Null、Boolean、Number、String；<br> 复杂数据类型：Object<br> 其中，简单数据类型的值也称为原始值（Primitive Value）；复杂数据类型的值称为引用类型的值。</p>
+</li>
+<li><p><strong>JavaScript字符串转化</strong><br> 参考博客<a href="http://www.cnblogs.com/fengzheqi/p/5087240.html" target="_blank" rel="external">JavaScript字符串的操作</a></p>
+</li>
+<li><strong>this问题</strong><br> 参考博客</li>
+<li><strong>模块化原理（作用域）</strong><br> 参考博客：<a href="http://www.cnblogs.com/fengzheqi/p/5105517.html" target="_blank" rel="external">JavaScript基础–作用域</a></li>
+<li><strong>JavaScript原型链</strong><br> 参考博客</li>
+<li><strong>闭包及闭包的用处</strong><br> 参考博客</li>
+<li><strong>常用数组方法</strong><br> 参考博客</li>
+<li><strong>js数组去重复项</strong><br> 参考博客</li>
+<li><strong>常见算法的JS实现（例如：实现将两个不同长度的数组组合，顺序越乱越好，以及其的复杂度）</strong></li>
+<li><p><strong>call与apply的作用及不同，以及bind的用法</strong><br>call方法: <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/call" target="_blank" rel="external">见MDN中call()</a>；<br>apply方法：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/apply" target="_blank" rel="external">见MDN中apply()</a>；<br>bind方法：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind" target="_blank" rel="external">见MDN中bind()</a>；<br><code>call()</code>与<code>apply()</code>的作用类似，作用同于理解是这样：比如一个对象想调用另外一个对象的方法，但又希望方法的作用域是自己的作用域，这个时候就可以利用<code>call()</code>或者<code>apply()</code>来解决这个问题。<br><code>call()</code>与<code>apply()</code>的不同点在于它们的第二个参数，<code>call()</code>方法接受的是一个参数列表，而<code>apply()</code>的第二参数是一个包含多个参数的数组。<br><code>bind()</code>是在ES5.1中新加的一个方法，作用与<code>call()</code>、<code>apply()</code>类似，不过<code>bind()</code>返回是函数，而<code>call()</code>和<code>apply()</code>是直接执行调用了的函数。<br>所以三者只是用法差不多，作用是类似的。可参考<a href="http://www.cnblogs.com/cosiray/p/4512969.html" target="_blank" rel="external">javascript中apply、call和bind的区别</a></p>
+</li>
+<li><p><strong>变量名提升</strong><br>参考博客：<a href="http://www.cnblogs.com/fengzheqi/p/5106783.html" target="_blank" rel="external">JavsScript基础–声明提升</a></p>
+</li>
+<li><p><strong>== 与 ===</strong><br>“==”与”===”都属于关系表达式的范畴，用来比较两个值是否相等，<code>==</code>可以理解为<code>相等</code>，而<code>===</code>则理解为<code>严格相等</code>，如何理解？在关系表达式中，利用<code>==</code>进行两个值的比较时，通常会进行类型转换，比如<code>null</code>、<code>undefined</code>在<code>==</code>的表达式中都会转换为<code>false</code>，所以它们<code>相等</code>。而利用<code>===</code>比较时，比较的两个值是不做类型转换的，<br>所以<code>null === undefined</code>返回false。一般来说，在代码中推荐使用<code>===</code>。</p>
+<p>扩展：<code>==</code>与<code>===</code>的运算规则</p>
+<ol>
+<li><code>===</code></li>
+</ol>
+<ul>
+<li>如果两个值类型不同，则它们不相等；<ul>
+<li>如果两个值一个是null，一个是undefined，则它们不相等；</li>
+</ul>
+</li>
+<li>如果两个值都是<code>true</code>或都是<code>false</code>，则它们相等；</li>
+<li>如果其中一个是<code>NaN</code>，或者两个都是<code>NaN</code>，则它们不相等（<code>NaN</code>和任何值都不相等，包括本身）；</li>
+<li>如果两个值都是数字且数值相等，则它们相等（<code>0</code>与<code>-0</code>相等）；</li>
+<li>如果两个值都是字符串，且编码和数值相同，则它们相同（连个字符串含义相同但编码不同，则不相等）；</li>
+<li>如果两个引用值都指向同一个对象、数组或函数，则它们是相等的。</li>
+</ul>
+<ol>
+<li><code>==</code></li>
+</ol>
+<ul>
+<li>如果两个值的类型相同，则按照<code>===</code>的运算规则；</li>
+<li>如果两个值的类型不同，<code>==</code>认为它们可能相等。检测相等时会遵守以下规则和类型转换；<pre><code>- 如果一个值是null，另一个是undefined，则它们相等；
+- 如果一个值是数字，另一个是字符串，先将字符串转换为数字，然后利用转换后的值进行比较；
+- 如果其中一个是true，则将其转换为1再进行比较。如果其中一个是false，则将其转换为0再进行比较；
+- 如果其中一个值是对象，另一个值为数字或字符串，则对象先通过`valueOf()`或者`toString()`方法转换为原始值，再进行比较；
+- 其他不同类型的值进行比较，均不相等。
+</code></pre></li>
+</ul>
+</li>
+<li><p><strong>“use strict”作用</strong><br>“use strict”是ES5推出来的一个严格模式，是为了JavaScript在更格言的条件下运行。主要目的如下：</p>
+<ul>
+<li>消除JavaScript语法的一些不合理、不严谨之处和不安全的因素，减少一个怪异行为；</li>
+<li>提高编译器效率，增加运行速度；</li>
+<li>为未来的JavaScript做好铺垫。</li>
+</ul>
+<p>添加”use strict”通常有两种用法，第一种是在脚本文件的第一行添加，但这种方式在多个脚本合并的时候回失效，不推荐使用；第二种是添加在函数中第一行，整个函数以”严格模式”运行。如果希望在整个脚本中运行”严格模式”，在可以将脚本写成一个立即执行的匿名函数里，比如<code>(function(){&quot;use strict&quot;;})();</code><br>具体的”严格模式”下还有其他什么限制，可以参考阮一峰的博客：<a href="http://www.ruanyifeng.com/blog/2013/01/javascript_strict_mode.html" target="_blank" rel="external">JavaScript严格模式详解</a></p>
+</li>
+<li><p><strong>函数柯里化（Currying）</strong><br>函数的柯里化：柯里化（Currying），又称部分求值（Partial Evaluation），是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。<br>柯里化有三个作用：1.参数复用；2.提前返回；3.延迟计算/运行。细节可参考张鑫旭的博客：<a href="http://www.zhangxinxu.com/wordpress/2013/02/js-currying/" target="_blank" rel="external">JS中的柯里化(currying)</a></p>
+</li>
+<li><p><strong>JS中random的概率问题</strong><br>参考博客：<a href="http://www.soulteary.com/2014/07/05/js-math-random-trick.html" target="_blank" rel="external">Math.random()随机数的二三事</a></p>
+</li>
+<li><strong>JS中的垃圾回收机制</strong><br>在JS中进行垃圾回收，是为了避免无用的实体消耗系统的内存。JS不像C/C++，他有自己的一套垃圾回收机制（Garbage Collection）。主要有两种方法：<strong>标记清除</strong>、<strong>引用计数</strong>。<br><strong>标记清除</strong>：垃圾回收器会在运行的时候给存储在内存中的所有变量加上标记，然后去掉环境中的变量以及被环境中变量所引用的变量（闭包），在这些完成之后仍存在标记的就是要删除的变量了，因为环境中的变量已经无法访问到这些变量了，然后垃圾回收器相会这些带有标记的变量机器所占空间。<br><strong>引用计数</strong>：引用计数的策略是跟踪记录每个值被使用的次数，当声明了一个变量并将一个引用类型赋值给该变量的时候这个值的引用次数就加1，如果该变量的值变成了另外一个，则这个值得引用次数减1，当这个值的引用次数变为0的时候，说明没有变量在使用，这个值没法被访问了，因此可以将其占用的空间回收，这样垃圾回收器会在运行的时候清理掉引用次数为0的值占用的空间。<br>参考博客：<a href="http://www.cnblogs.com/hustskyking/archive/2013/04/27/garbage-collection.html" target="_blank" rel="external">JavaScript垃圾回收机制</a></li>
+<li><strong>常见的JS设计模式</strong></li>
+</ol>
+<h2 id="客户端JavaScript"><a href="#客户端JavaScript" class="headerlink" title="客户端JavaScript"></a>客户端JavaScript</h2><ol>
+<li><p><strong>同源策略及跨域请求的方法和原理（比较JSONP和document.domain的不同及优劣，以及HTML5的跨域方案）</strong></p>
+<p> 同源策略限制了一个源（origin）从其它源（origin）中加载文本或脚本资源。<br> 同源定义：如果两个页面拥有相同的协议（protocol）、主机名和端口（如果指定），那么这两个页面就属于同一个源（origin）。</p>
+<p> 跨域请求目前方法有：JSONP、document.domain和HTML5的跨域方案（CORS特性）。</p>
+</li>
+</ol>
+<pre><code>**JSONP**：JSON with padding，填充式JSON。JSONP是由两部分组成：回调函数（callback）和数据（json）。回调函数是当响应到来时应该在页面中调用的函数，一般在请求中指定。同时，JSONP是通过动态`&lt;script&gt;`元素来使用的，使用时可以为src属性指定一个跨域的URL。
+**原理**：是首先在客户端注册一个callback, 然后把callback的名字传给服务器；此时，服务端生成json数据，然后以JavaScript的语法组装一个function，function的名称就是传过来的callback参数名；最后json数据以参数的形式插入到function(..)的“..”中，这样就生成了一段js语法的代码，返回给客户端。客户端浏览器解析`script`标签，并执行返回的JavaScript文档（代码），此时客户端直接调用callback函数执行代码，其中参数数据就是之前在服务端生成的json数据。
+
+**document.domain**：Document内置的属性。用来获取/设置当前网页的原始域部分，用于同源策略。获取原始域：例如`var badDomain = &quot;www.baidu.com/map&quot;;`，那么在document.domain`www.baidu.com`。设置原始域：例如`document.domain = string`，注意一点就是设置原始域只能设置为它的上一级域。例如`www.baidu.com`，只能把document.domain设置为`baidu.com`。
+**原理**：document.domain实现跨域的前提条件是这两个域名必须属于同一个基础域名!而且所用的协议，端口都要一致，否则无法利用document.domain进行跨域。所以`wwww.example.com`与`blog.example.com`是没法实现跨域的，但是这个两个基础域名的上级域名，也就是`example.com`是相同的，所以将这两个页面的document.domain都设置为`example.com`就可以实现跨域了。
+
+**HTML5跨域方案**：利用CORS（Cross-Origin Resource Sharing）新特性。
+**原理**：CORS通过服务器增加一个特殊的Header[Access-Control-Allow-Origin]来告知客户端跨域的限制，如果浏览器支持CORS的话，如果判断Origin通过的话，就会允许XHR进行请求。使用这个Header返回被允许请求跨域请求的来源域，例如网站`a.com`设置了下面的`Header Access-Control-Allow-Origin: http://b.com`。这样设置之后，通过`http://b.com`下的页面对于`a.com`进行ajax请求就会被允许，而其他网站对`a.com`依旧会被阻拦，通过这种方式网站拥有者可以自己对此进行限制。当然，如果不想限制来源，可以通过`Access-Control-Allow-Origin: *`来允许任何站点对该资源进行跨域请求
+
+参考资料：
+- [MDN-JavaScript 的同源策略](https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy)
+- [AJAX跨域请求-JSONP获取JSON数据](http://justcoding.iteye.com/blog/1366102/)
+</code></pre><ol>
+<li><p><strong>JSONP原理及优缺点</strong><br> 原理参考第1个问题。<br> <strong>优点</strong>：借用了json的优势，比如可读性好，轻量等；其次简单易用，实现了跨域请求。<br> <strong>缺点</strong>：1.JSONP是从其他域加载代码执行，必须保证被请求的域是安全可靠的，如果被请求的域不被信任， Web 应用程序更容易受到攻击；2.JSONP发生请求错误时，并不容易确定，如果动态脚本插入有效，就执行调用；如果无效，就静默失败。失败是没有任何提示的。</p>
+</li>
+<li><p><strong>XMLHttpRequest</strong><br> 博客</p>
+</li>
+<li><p><strong>事件委托</strong><br> 博客</p>
+</li>
+<li><strong>session与Cookie</strong><br> 博客</li>
+<li><strong>JavaScript动画算法</strong></li>
+<li><strong>拖拽的实现</strong></li>
+<li><strong>事件冒泡和事件捕获</strong></li>
+<li><strong>浏览器检测（能力检测、怪癖检测等）</strong></li>
+<li><p><strong>AJAX请求的细节</strong><br>AJAX请求的细节：</p>
+<ul>
+<li>从Web表单中获取需要的数据；</li>
+<li>建立要连接的URL；</li>
+<li>打开到服务器的连接；</li>
+<li>设置服务器在完成后要运行的函数；</li>
+<li>发送请求。</li>
+</ul>
+<p>推荐阅读：<a href="http://www.ibm.com/developerworks/cn/views/xml/libraryview.jsp?sort_by=&amp;show_abstract=true&amp;show_all=&amp;search_flag=&amp;contentarea_by=XML&amp;search_by=%E6%8E%8C%E6%8F%A1+Ajax&amp;topic_by=-1&amp;type_by=%E6%89%80%E6%9C%89%E7%B1%BB%E5%88%AB&amp;ibm-search=%E6%90%9C%E7%B4%A2" target="_blank" rel="external">掌握Ajax</a></p>
+</li>
+<li><p><strong>客户端存储及他们的异同（例如：cookie, sessionStorage和localStorage等）</strong></p>
+</li>
+</ol>
+<h2 id="安全与测试"><a href="#安全与测试" class="headerlink" title="安全与测试"></a>安全与测试</h2><ol>
+<li><strong>你如何测试你的JS代码</strong></li>
+<li><strong>DOM1\DOM2\DOM3都有什么不同</strong></li>
+<li><strong>XSS</strong></li>
+<li><strong>JavaScript代码测试</strong></li>
+</ol>
+<h2 id="JQuery"><a href="#JQuery" class="headerlink" title="JQuery"></a>JQuery</h2><ol>
+<li><strong>jQuery链式调用的原理</strong></li>
+</ol>
+<h2 id="NodeJS"><a href="#NodeJS" class="headerlink" title="NodeJS"></a>NodeJS</h2><ol>
+<li><strong>NodeJS健壮性方面的实践（子进程等）</strong></li>
+<li><strong>NodeJS能否用利用多核实现在计算性能上的劣势等</strong></li>
+<li><strong>NodeJS的优缺点及使用场景</strong></li>
+</ol>
+<h2 id="AngularJS"><a href="#AngularJS" class="headerlink" title="AngularJS"></a>AngularJS</h2><ol>
+<li><strong>AngularJS的文件管理及打包（包括模板打包及请求、JS的打包和请求等）</strong></li>
+<li><strong>AngularJS的JS模块管理及实践</strong></li>
+<li><strong>在你的Angular App页面里随意加一个JS文件，会有什么影响</strong></li>
+<li><strong>AngularJS directive及自己如何定义directive</strong></li>
+<li><strong>AngularJS双向绑定的原理及实现</strong></li>
+</ol>
+<h2 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h2><ol>
+<li><strong>ES6及jQuery新引进的Promise有什么用处</strong></li>
+</ol>
+<h2 id="前端工程化"><a href="#前端工程化" class="headerlink" title="前端工程化"></a>前端工程化</h2><ol>
+<li><strong>前端模块化（AMD和CommonJS的原理及异同，requirejs的用法）</strong><br> 博客</li>
+<li><strong>seaJS的用法及原理，依赖加载的原理、初始化、实现等</strong></li>
+<li><strong>webpack的使用</strong></li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;JavaScript语言基础&quot;&gt;&lt;a href=&quot;#JavaScript语言基础&quot; class=&quot;headerlink&quot; title=&quot;JavaScript语言基础&quot;&gt;&lt;/a&gt;JavaScript语言基础&lt;/h2&gt;
+    
+    </summary>
+    
+    
+      <category term="JavaScript" scheme="http://fengzheqi.com/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CommonJS、AMD与CMD</title>
+    <link href="http://fengzheqi.com/2015/12/08/CommonJS%E3%80%81AMD%E4%B8%8ECMD/"/>
+    <id>http://fengzheqi.com/2015/12/08/CommonJS、AMD与CMD/</id>
+    <published>2015-12-07T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.171Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="CommonJS-Modules-小译"><a href="#CommonJS-Modules-小译" class="headerlink" title="CommonJS Modules 小译"></a>CommonJS Modules 小译</h1><p>CommonJS中定义了很多规范，这篇文章只是简述一下CommonJS中有关Module部分的规范。</p>
+<a id="more"></a>
+<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>为了能够使系统中的各个模块协同合作，也为了现在和未来在客户端、服务端约定统一的模块语法规范。</p>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><p>这些模块具有以下特性：保证私有的作用域、保证从其他模块引用单个对象的灵活性、暴露本身的API。为了实现模块间的协同合作，规范定义了以下最基础的特性。</p>
+<h2 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h2><h3 id="模块上下文"><a href="#模块上下文" class="headerlink" title="模块上下文"></a>模块上下文</h3><ul>
+<li><p>在模块中，定义一个自由变量<code>require</code>函数</p>
+<ul>
+<li><code>require</code>函数接受一个模块标识符。</li>
+<li><code>require</code>函数中返回暴露给其他模块调用的API。</li>
+<li>如果有依赖循环，可能存在引入的依赖模块还没加载完就被调用的情况。为了避免这种情况发生，<code>require</code>函数必须在依赖模块被调用前就准备好相关暴露接口。</li>
+<li>如果被调用的模块没有被返回，<code>require</code>函数返回一个错误信息。</li>
+</ul>
+</li>
+<li><p>在模块中定义一个自由变量<code>exports</code>，即一个对象，该模块可以添加其API来在执行</p>
+</li>
+</ul>
+<h3 id="模块标识符"><a href="#模块标识符" class="headerlink" title="模块标识符"></a>模块标识符</h3><ul>
+<li>模块名是由一个或多个单词以正斜杠为分隔符拼接成的字符串</li>
+<li>单词须为驼峰形式，或者”.”，”..”</li>
+<li>模块名不允许文件扩展名的形式，如”.js”</li>
+<li>模块名可以为 “相对的” 或 “顶级的”。如果首字符为”.”或”..”则为”相对的”模块名</li>
+<li>顶级的模块名从根命名空间的概念模块解析</li>
+<li>相对的模块名从 “require” 书写和调用的模块解析</li>
+</ul>
+<h3 id="未说明部分"><a href="#未说明部分" class="headerlink" title="未说明部分"></a>未说明部分</h3><p>在规范中并没有将以下两个部分解释清楚：</p>
+<ul>
+<li>模块是否存储在数据库中、文件系统、工厂函数、或者可变的外部library</li>
+<li>模块加载器是否支持对模块标识符路径的解析</li>
+</ul>
+<h2 id="单元测试"><a href="#单元测试" class="headerlink" title="单元测试"></a>单元测试</h2><ul>
+<li><a href="http://code.google.com/p/interoperablejs/" target="_blank" rel="external">Unit Tests at Google Code</a> by Kris Kowal</li>
+<li><a href="http://github.com/ashb/interoperablejs/tree/master" target="_blank" rel="external">Unit Tests Git Mirror</a> by Ash Berlin</li>
+</ul>
+<h2 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h2><p>meth.js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">exports.add = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">	<span class="keyword">var</span> sum = <span class="number">0</span>, </div><div class="line">		i = <span class="number">0</span>, </div><div class="line">		args = <span class="built_in">arguments</span>, </div><div class="line">		l = args.length;</div><div class="line">	<span class="keyword">while</span> (i &lt; l) &#123;</div><div class="line">		sum += args[i++];</div><div class="line">	&#125;</div><div class="line">		<span class="keyword">return</span> sum;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>increment.js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> add = <span class="built_in">require</span>(<span class="string">'math'</span>).add;</div><div class="line">exports.increment = <span class="function"><span class="keyword">function</span>(<span class="params">val</span>) </span>&#123;</div><div class="line">	<span class="keyword">return</span> add(val, <span class="number">1</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>program.js</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> inc = <span class="built_in">require</span>(<span class="string">'increment'</span>).increment;</div><div class="line"><span class="keyword">var</span> a = <span class="number">1</span>;</div><div class="line">inc(a); <span class="comment">// 2</span></div></pre></td></tr></table></figure>
+<h3 id="原文地址"><a href="#原文地址" class="headerlink" title="原文地址"></a>原文地址</h3><ul>
+<li><a href="http://www.commonjs.org/specs/modules/1.0/" target="_blank" rel="external">http://www.commonjs.org/specs/modules/1.0/</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;CommonJS-Modules-小译&quot;&gt;&lt;a href=&quot;#CommonJS-Modules-小译&quot; class=&quot;headerlink&quot; title=&quot;CommonJS Modules 小译&quot;&gt;&lt;/a&gt;CommonJS Modules 小译&lt;/h1&gt;&lt;p&gt;CommonJS中定义了很多规范，这篇文章只是简述一下CommonJS中有关Module部分的规范。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="MongoDB" scheme="http://fengzheqi.com/tags/MongoDB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HTML5中canvas标签</title>
+    <link href="http://fengzheqi.com/2015/11/25/HTML5%E4%B8%ADcanvas%E6%A0%87%E7%AD%BE%E5%B0%8F%E8%B0%88/"/>
+    <id>http://fengzheqi.com/2015/11/25/HTML5中canvas标签小谈/</id>
+    <published>2015-11-24T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.171Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="HTML5中canvas标签"><a href="#HTML5中canvas标签" class="headerlink" title="HTML5中canvas标签"></a>HTML5中canvas标签</h3><h4 id="一、-canvas（画布）"><a href="#一、-canvas（画布）" class="headerlink" title="一、 canvas（画布）"></a>一、 canvas（画布）</h4><p>&emsp;&emsp;在HTML5出现之前，网页中只能用<code>img</code>标签来显示静态图片，为看增强图形实时绘制和渲染的效果，后来引入了一些第三方解决方案，如Flash Play等。<br>&emsp;&emsp;在HTML5发布之后，引入了<code>canvas</code>标签，允许JavaScript动态的绘制图形。</p>
+<a id="more"></a>
+<ol>
+<li><p>使用canvas，必须先设置元素的width和height属性；</p>
+ <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">"test"</span> <span class="attr">width</span>=<span class="string">"500"</span> <span class="attr">heigth</span>=<span class="string">"500"</span>&gt;</span></div><div class="line"><span class="comment">&lt;!--如果浏览器不支持canvas标签，显示下面提示--&gt;</span></div><div class="line">您的浏览器不支持canvas标签，请您更新浏览器享受更好的体验！</div><div class="line"><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>在js文件中取得绘画上下文的引用，调用getContext()方法并传入上下文的名字。</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//获取元素对象</span></div><div class="line"><span class="keyword">var</span> test = <span class="built_in">document</span>.getElementById(<span class="string">'test'</span>);</div><div class="line"><span class="keyword">if</span>(test.getContext) &#123; <span class="comment">//判断是否浏览器是否支持&lt;canvas&gt;元素</span></div><div class="line">  <span class="comment">//获取2D上下文对象</span></div><div class="line">  <span class="keyword">var</span> context = test.getContext(<span class="string">'2d'</span>); </div><div class="line">  ......</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="二、canvas中运用WebGL"><a href="#二、canvas中运用WebGL" class="headerlink" title="二、canvas中运用WebGL"></a>二、canvas中运用WebGL</h4><h5 id="1-WebGL简介"><a href="#1-WebGL简介" class="headerlink" title="1. WebGL简介"></a>1. WebGL简介</h5><p>&emsp;&emsp;HTML5作为最新的HTML标准，扩展了传统HTML的特性，并致力于使浏览器从简单的展示工具发展为复杂的应用平台，人们希望网页不仅仅是由二维图形组成。WebGL被设计出来的目的，就是在网页上创建三维的应用和用户体验。<br>&emsp;&emsp;WebGL起源于openGL ES 2.0，而openGL ES 2.0常用于嵌入式计算机、智能手机、家用游戏机等设备。WebGL的只要优点有：</p>
+<ul>
+<li>开发环境简单。只需要一个编辑器和浏览器级可以编写代码</li>
+<li>跨平台。因为WebGL是内嵌在浏览器中，所以适合多种设备运行</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;HTML5中canvas标签&quot;&gt;&lt;a href=&quot;#HTML5中canvas标签&quot; class=&quot;headerlink&quot; title=&quot;HTML5中canvas标签&quot;&gt;&lt;/a&gt;HTML5中canvas标签&lt;/h3&gt;&lt;h4 id=&quot;一、-canvas（画布）&quot;&gt;&lt;a href=&quot;#一、-canvas（画布）&quot; class=&quot;headerlink&quot; title=&quot;一、 canvas（画布）&quot;&gt;&lt;/a&gt;一、 canvas（画布）&lt;/h4&gt;&lt;p&gt;&amp;emsp;&amp;emsp;在HTML5出现之前，网页中只能用&lt;code&gt;img&lt;/code&gt;标签来显示静态图片，为看增强图形实时绘制和渲染的效果，后来引入了一些第三方解决方案，如Flash Play等。&lt;br&gt;&amp;emsp;&amp;emsp;在HTML5发布之后，引入了&lt;code&gt;canvas&lt;/code&gt;标签，允许JavaScript动态的绘制图形。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="HTML" scheme="http://fengzheqi.com/tags/HTML/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>前端面试总结（HTML篇）</title>
+    <link href="http://fengzheqi.com/2015/11/22/%E5%89%8D%E7%AB%AF%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93%EF%BC%88HTML%E7%AF%87%EF%BC%89/"/>
+    <id>http://fengzheqi.com/2015/11/22/前端面试总结（HTML篇）/</id>
+    <published>2015-11-21T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.175Z</updated>
+    
+    <content type="html"><![CDATA[<p>@(高性能web前端)[面试 | HTML]</p>
+<h3 id="前端面试总结（HTML篇）"><a href="#前端面试总结（HTML篇）" class="headerlink" title="前端面试总结（HTML篇）"></a>前端面试总结（HTML篇）</h3><a id="more"></a>
+<h4 id="1-ie的某些兼容性问题"><a href="#1-ie的某些兼容性问题" class="headerlink" title="1. ie的某些兼容性问题"></a>1. ie的某些兼容性问题</h4><p>我的博客：<a href="http://fengzheqi.com/2015/10/18/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9/">IE的兼容性问题</a></p>
+<h4 id="2-HTML5的新特性"><a href="#2-HTML5的新特性" class="headerlink" title="2. HTML5的新特性"></a>2. HTML5的新特性</h4><p>推荐博客：</p>
+<ol>
+<li><a href="http://code.tutsplus.com/tutorials/25-html5-features-tips-and-techniques-you-must-know--net-13520" target="_blank" rel="external">28 HTML5 Features, Tips, and Techniques you Must Know</a></li>
+<li><a href="http://www.zhangxinxu.com/wordpress/2010/08/%E7%BF%BB%E8%AF%91-%E4%BD%A0%E5%BF%85%E9%A1%BB%E7%9F%A5%E9%81%93%E7%9A%8428%E4%B8%AAhtml5%E7%89%B9%E5%BE%81%E3%80%81%E7%AA%8D%E9%97%A8%E5%92%8C%E6%8A%80%E6%9C%AF/" target="_blank" rel="external">翻译-你必须知道的28个HTML5特征、窍门和技术</a></li>
+</ol>
+<h4 id="3-canvas画图"><a href="#3-canvas画图" class="headerlink" title="3. canvas画图"></a>3. canvas画图</h4><p>&emsp;&emsp;具体canvas细节可以参考另外一篇博文<a href="http://fengzheqi.com/2015/11/25/HTML5%E4%B8%ADcanvas%E6%A0%87%E7%AD%BE%E5%B0%8F%E8%B0%88/">HTML5中的canvas标签</a></p>
+<h4 id="4-doctype的作用"><a href="#4-doctype的作用" class="headerlink" title="4. doctype的作用"></a>4. doctype的作用</h4><p>&emsp;&emsp;doctype告诉浏览器它使用了什么文档类型。它指出阅读程序应该用什么规则集来解释文档中的标记。XHTML中有三种，包括过度型、严格型、框架型。HTML4严格。随着XML的流行，HTML推出了XHTML标准，其中严格模式严格遵守了XML的规范，例如属性必须有值、标签必须闭合等，同时也抛弃了一些不推荐的标签。而XHTML过度版本，则稍微比严格模式松散些，一些不推荐的标签依然可用外。当页面有框架时，则应该使用框架型。再就是HTML5的版本。使用HTML5的Doctype会默认触发标准模式。</p>
+<h4 id="5-HTML5中引进data-有什么作用"><a href="#5-HTML5中引进data-有什么作用" class="headerlink" title="5. HTML5中引进data-有什么作用"></a>5. HTML5中引进<code>data-</code>有什么作用</h4><p>在HTML5中我们可以使用data-前缀设置我们需要的自定义属性，来进行一些数据的存放。</p>
+<p>在JS中取得<code>data-</code>中数据有两种方法，一种是利用dataset属性集来获取（推荐），另外一种是利用getAttribute()方法。虽然dataset的执行速度比getAttribute慢一点，但是更加方便，而且这种速度上的差异可以忽略。</p>
+<p>推荐博客：<a href="http://www.zhangxinxu.com/wordpress/2011/06/html5%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E5%AF%B9%E8%B1%A1dataset%E7%AE%80%E4%BB%8B/" target="_blank" rel="external">HTML5自定义属性对象Dataset简介</a></p>
+<h4 id="6-HTML中标准模式和怪异模式有什么不同"><a href="#6-HTML中标准模式和怪异模式有什么不同" class="headerlink" title="6. HTML中标准模式和怪异模式有什么不同"></a>6. HTML中标准模式和怪异模式有什么不同</h4><p>&emsp;&emsp;由于历史的原因，各个浏览器在对页面的渲染上存在差异，甚至同一浏览器在不同版本中，对页面的渲染也不同。在W3C标准出台以前，浏览器在对页面的渲染上没有统一规范，产生了差异(Quirks mode或者称为Compatibility Mode)；由于W3C标准的推出，浏览器渲染页面有了统一的标准(CSScompat或称为Strict mode也有叫做Standars mode)，这就是二者最简单的区别。</p>
+<p>&emsp;&emsp;W3C标准推出以后，浏览器都开始采纳新标准，但存在一个问题就是如何保证旧的网页还能继续浏览，在标准出来以前，很多页面都是根据旧的渲染方法编写的，如果用的标准来渲染，将导致页面显示异常。为保持浏览器渲染的兼容性，使以前的页面能够正常浏览，浏览器都保留了旧的渲染方法（如：微软的IE）。这样浏览器渲染上就产生了Quircks mode和Standars mode，两种渲染方法共存在一个浏览器上。 </p>
+<p>&emsp;&emsp;那么浏览器究竟该采用哪种模式渲染呢？这就引出的DTD，既是网页的头部声明，浏览器会通过识别DTD而采用相对应的渲染模式：</p>
+<ol>
+<li>浏览器要使老旧的网页正常工作，但这部分网页是没有doctype声明的，所以浏览器对没有doctype声明的网页采用quirks mode解析；</li>
+<li>对于拥有doctype声明的网页，什么浏览器采用何种模式解析，这里有一张详细列表可参考：<a href="http://hsivonen.iki.fi/doctype/" target="_blank" rel="external">http://hsivonen.iki.fi/doctype/</a> ；</li>
+<li>对于拥有doctype声明的网页，这里有几条简单的规则可用于判断：对于那些浏览器不能识别的doctype声明，浏览器采用strict mode解析；</li>
+<li>在doctype声明中，没有使用DTD声明或者使用HTML4以下（不包括HTML4）的DTD声明时，基本所有的浏览器都是使用quirks mode呈现，其他的则使用strict mode解析； </li>
+<li>可以这么说，在现有有doctype声明的网页，绝大多数是采用strict mode进行解析的；</li>
+<li>在ie6中，如果在doctype声明前有一个xml声明(比如:&lt;?xml version=”1.0” encoding=”iso-8859-1”?&gt;)，则采用quirks mode解析。这条规则在ie7中已经移除了。 </li>
+</ol>
+<h4 id="7-写出你常用的HTML标签"><a href="#7-写出你常用的HTML标签" class="headerlink" title="7. 写出你常用的HTML标签"></a>7. 写出你常用的HTML标签</h4><ul>
+<li><code>&lt;!-- --&gt;</code>：注释</li>
+<li><code>&lt;!DOCTYPE&gt;</code>：定义文档类型，通常是HTML5</li>
+<li><code>&lt;html&gt;</code>：定义 HTML 文档</li>
+<li><code>&lt;head&gt;</code>：定义关于文档的信息</li>
+<li><code>&lt;base&gt;</code>：定义页面中所有链接的默认地址或默认目标，常用属性href</li>
+<li><code>&lt;meta&gt;</code>：定义关于 HTML 文档的元信息</li>
+<li><code>&lt;title&gt;</code>：定义文档的标题</li>
+<li><p><code>&lt;style&gt;</code>：定义文档的样式信息</p>
+</li>
+<li><p><code>&lt;body&gt;</code>：定义文档的主体</p>
+</li>
+<li><code>&lt;br&gt;</code>：定义简单的折行</li>
+<li><code>&lt;hr&gt;</code>：定义水平线</li>
+<li><code>&lt;h1&gt; to &lt;h6&gt;</code>：定义 HTML 标题</li>
+<li><code>&lt;p&gt;</code>：定义段落</li>
+<li><code>&lt;span&gt;</code>：定义文档中的节</li>
+<li><code>&lt;div&gt;</code>：定义文档中的节</li>
+<li><code>&lt;img&gt;</code>：定义图像</li>
+<li><code>&lt;form&gt;</code>：定义供用户输入的 HTML 表单</li>
+<li><code>&lt;a&gt;</code>：定义锚，常用属性id、class、href、name</li>
+<li><code>&lt;label&gt;</code>：定义 input 元素的标注</li>
+<li><code>&lt;input&gt;</code>：定义输入控件</li>
+<li><code>&lt;select&gt;</code>：定义选择列表（下拉列表）</li>
+<li><code>&lt;option&gt;</code>：定义选择列表中的选项</li>
+<li><code>&lt;ol&gt;</code>：定义有序列表</li>
+<li><code>&lt;ul&gt;</code>：定义无序列表</li>
+<li><code>&lt;li&gt;</code>：定义列表的项目</li>
+<li><code>&lt;table&gt;</code>：定义表格</li>
+<li><code>&lt;thead&gt;</code>：定义表格中的表头内容</li>
+<li><code>&lt;th&gt;</code>：定义表格中的表头单元格</li>
+<li><code>&lt;tbody&gt;</code>：定义表格中的主体内容</li>
+<li><code>&lt;tr&gt;</code>：定义表格中的行</li>
+<li><code>&lt;td&gt;</code>：定义表格中的单元</li>
+<li><code>&lt;tfoot&gt;</code>：定义表格中的表注内容（脚注）</li>
+<li><code>&lt;textarea&gt;</code>：定义多行的文本输入控件</li>
+<li><p><code>&lt;button&gt;</code>：定义按钮 (push button)</p>
+</li>
+<li><p><code>&lt;script&gt;</code>：定义客户端脚本</p>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;@(高性能web前端)[面试 | HTML]&lt;/p&gt;
+&lt;h3 id=&quot;前端面试总结（HTML篇）&quot;&gt;&lt;a href=&quot;#前端面试总结（HTML篇）&quot; class=&quot;headerlink&quot; title=&quot;前端面试总结（HTML篇）&quot;&gt;&lt;/a&gt;前端面试总结（HTML篇）&lt;/h3&gt;
+    
+    </summary>
+    
+    
+      <category term="HTML" scheme="http://fengzheqi.com/tags/HTML/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JSHint中options配置详解</title>
+    <link href="http://fengzheqi.com/2015/11/19/JSHint%E4%B8%ADoptions%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/"/>
+    <id>http://fengzheqi.com/2015/11/19/JSHint中options配置详解/</id>
+    <published>2015-11-18T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.172Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="JSHint中options配置详解"><a href="#JSHint中options配置详解" class="headerlink" title="JSHint中options配置详解"></a>JSHint中<code>options</code>配置详解</h3><p><em>本文引用博客<a href="http://www.cnblogs.com/code/articles/4103070.html" target="_blank" rel="external">JSHint中文DOC</a></em></p>
+<a id="more"></a>
+<h4 id="1-增强参数（Enforcing-Options）"><a href="#1-增强参数（Enforcing-Options）" class="headerlink" title="1. 增强参数（Enforcing Options）"></a>1. 增强参数（Enforcing Options）</h4><p>本类参数设为true，JSHint会产生更多告警。</p>
+<ul>
+<li><p><code>bitwise</code><br>  禁用位运算符(如^，&amp;)<br>  位运算符在JS中很少使用，性能也较差，出现&amp;也很可能是想写&amp;&amp;。</p>
+</li>
+<li><p><code>camelcase</code><br>  使用驼峰命名(camelCase)或全大写下划线命名(UPPER_CASE)<br>  这是条最佳实践，关键不在于采用什么样的命名规则(比如纯小写配下划线)，而在于要有规则，在代码中看到不同的命名规则会让人头痛不已。</p>
+</li>
+<li><p><code>curly</code><br>  if和while等语句中使用{}来明确代码块</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> (day)</div><div class="line">    shuffle();</div><div class="line">    sleep();</div></pre></td></tr></table></figure>
+<p>  虽然缩进表示两条语句都在循环中，但事实却是只有一句循环。</p>
+</li>
+<li><p><code>eqeqeq</code><br>  使用===和!==替代==和!=<br>  ==和!=比较时会对前后元素进行自动转义，作为读者，需要动脑筋想这里可能有什么样的转义规则，加重负担；作为作者，其实很可能是不确定这段代码运行时是怎么样的，想要偷懒。</p>
+</li>
+<li><p><code>es3</code><br>  强制使用ECMAScript 3规范</p>
+</li>
+<li><p><code>forin</code><br>  在for in循环中使用Object.prototype.hasOwnProperty()来过滤原型链中的属性</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (key <span class="keyword">in</span> obj) &#123;</div><div class="line">    <span class="keyword">if</span> (obj.hasOwnProperty(key)) &#123;</div><div class="line">    <span class="comment">// We are sure that obj[key] belongs to the object and was not inherieted.</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>  for in遍历对象属性的时候，包括继承自原型链的属性，hasOwnProperty可以来判断一个属性是否是对象本身的属性而不是继承得来的。</p>
+</li>
+<li><p><code>freeze</code><br>  禁止复写原生对象(如Array, Date)的原型</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/* jshint freeze:true */</div><div class="line">Array.prototype.count = function (value) &#123; return 4; &#125;;</div><div class="line">// -&gt; Warning: Extending prototype of native object: &apos;Array&apos;.</div></pre></td></tr></table></figure>
+<p>  为原生对象添加属性确实看上去很方便，但也带来了潜在的问题，一是如果项目中有多处为同一个对象添加了同样的属性（或函数），则很可能产生冲突；二是如果某段逻辑依赖于对象属性遍历，则可能产生错误。</p>
+</li>
+<li><p><code>immed</code><br>  匿名函数调用必须</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">   <span class="comment">// body </span></div><div class="line">&#125;());</div><div class="line">而不是</div><div class="line"></div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">   <span class="comment">// body</span></div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<p>  这是为了表明，表达式的值是函数的结果，而不是函数本身。</p>
+</li>
+<li><p><code>indent</code><br>  代码缩进宽度（空格数）<br>  前面几个项目我比较喜欢4，新项目我又在尝试2。关键不在于是几，而在于大家都要设成一样的。</p>
+</li>
+<li><p><code>latedef</code><br>  变量定义前禁止使用<br>  JS的变量是“函数级作用域”，而不是通常所见的“块级作用域”，简单说</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">numbers</span>) </span>&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, n = numbers.length; i &lt; n; i++) &#123;</div><div class="line">        <span class="keyword">var</span> sum = sum + numbers[i];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> sum;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>  相当于</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">numbers</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> i, n, sum;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>, n = numbers.length; i &lt; n; i++) &#123;</div><div class="line">       sum = sum + numbers[i];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> sum;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>  这个行为叫做“变量声明提升”，为了不产生混淆，这条规则建议函数都使用第二种写法。</p>
+</li>
+<li><p><code>newcap</code><br>  构造函数名首字母必须大写<br>  这条最佳实践是为了方便区分构造函数和普通函数，这样在直接调用大写字母开头的函数时，使用者就会想想是不是自己写错了。<br>不通过new而直接调用构造函数，会使得构造函数中的this指向global对象，从而产生错误。<br>PS. 有些高手可以通过在构造函数中判断this的指向来判断是否重新new自身，从而让构造函数也能直接调用产生新对象。但这有些高深，加重开发人员和使用人员的负担，也不利于统一编码风格。</p>
+</li>
+<li><p><code>noarg</code><br>  禁止使用arguments.caller和arguments.callee<br>  一方面这两个属性不是所有的浏览器都支持，另一方面这两个属性的使用会导致JS引擎很难优化代码，在未来的JS规范中会被去掉，所以不建议使用。</p>
+</li>
+<li><p><code>noempty</code><br>  禁止出现空的代码块<br>  空的代码块并不是有害的，但是出现的话我们需要考虑下为什么。</p>
+</li>
+<li><p><code>nonbsp</code><br>  禁止”non-breaking whitespace”<br>  这是Mac键盘在某种情况下可以键入的字符，据说会破坏非UTF8编码的页面。</p>
+</li>
+<li><p><code>nonew</code><br>  禁止使用构造器<br>  new MyConstructor();<br>  构造一个对象，却不给它赋值到某个变量，只是利用构造函数中的逻辑。这个行为完全可以用一个普通函数来完成，不应该借助构造器。</p>
+</li>
+<li><p><code>plusplus</code><br>  禁止使用++和–-<br>  不是很赞成把这个选项打成true，不过乱用自增/自减确实也会带来阅读上的障碍。</p>
+</li>
+<li><p><code>quotemark</code><br>  统一使用单引号或双引号<br>  这个最佳实践要求代码风格统一，我比较喜欢统一成单引号。<br>  这是为什么规定最佳实践的一个好例子，在写到字符串的时候我们就不用考虑使用单引号好还是用双引号好，就都用单引号，这在一定程度上也减轻了我们的思考负担。</p>
+</li>
+<li><p><code>undef</code><br>  禁止使用不在全局变量列表中的未定义的变量</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> myVar = <span class="string">'Hello, World'</span>;</div><div class="line">    <span class="built_in">console</span>.log(myvar); <span class="comment">// Oops, typoed here. JSHint with undef will complain</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>如果本地作用域里的变量没有使用var来声明，则会被放到全局作用域下面，众所周知，全局变量时罪恶的源泉。</p>
+<ul>
+<li><p><code>unused</code><br>  禁止定义变量却不使用</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">a, b</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> c, d = <span class="number">2</span>;</div><div class="line">    <span class="keyword">return</span> a + d;</div><div class="line">&#125;</div><div class="line">test(<span class="number">1</span>, <span class="number">2</span>);</div><div class="line"><span class="comment">// Line 1: 'b' was defined but never used.</span></div><div class="line"><span class="comment">// Line 2: 'c' was defined but never used.</span></div></pre></td></tr></table></figure>
+<p>  这种变量通常是写作过程中遗留下来的垃圾，需要及时清理掉。</p>
+</li>
+<li><p><code>strict</code><br>  强制使用ES5的严格模式<br>  Strict Mode是对JS用法的一些限制，过滤掉了容易出错的特性和不容易优化的特性。<br>通过在函数开头处加入’use strict’;来触发严格模式，不要在文件头部加入，因为在JS链接的时候很可能就失效了。</p>
+</li>
+<li><p><code>trailing</code><br>  禁止行尾空格</p>
+</li>
+<li><p><code>maxparams</code><br>  函数可以接受的最大参数数量<br>  函数参数数量应该控制在3个以内，超出则可能造成使用困难，比如需要记忆参数顺序，难以设定默认值等。另外，在JS中可以很方便的使用参数对象来封装多个参数。</p>
+</li>
+<li><p><code>maxdepth</code><br>  代码块中可以嵌入{}的最大深度</p>
+</li>
+<li><p><code>maxstatement</code><br>  函数中最大语句数</p>
+</li>
+<li><p><code>maxcomplexity</code><br>  函数的最大圈复杂度</p>
+</li>
+<li><p><code>maxlen</code><br>  一行中最大字符数<br>  这个是为了减轻代码阅读的困难，简单说就是不要折行。<br>上面四个参数最终都是为了减小代码的复杂程度，简单轻巧的代码片段更容易阅读和维护。</p>
+</li>
+</ul>
+<h4 id="2-松弛参数（Relaxing-Options）"><a href="#2-松弛参数（Relaxing-Options）" class="headerlink" title="2. 松弛参数（Relaxing Options）"></a>2. 松弛参数（Relaxing Options）</h4><p>本类参数设为true，JSHint会产生更少告警。</p>
+<ul>
+<li><p><code>asi</code><br>  允许省略分号<br>  JavaScript的语法允许自动补全分号，但是这一特性也会造成难以定位的错误，所以建议写代码时不要省略分号。</p>
+</li>
+<li><p><code>boss</code><br>允许在if，for，while语句中使用赋值<br>在条件语句中使用赋值经常是笔误if (a = 10) {}，但是牛人(boss)可以把这个特性用的很好，我们作为普通人就算了。</p>
+</li>
+<li><p><code>debug</code><br>允许debugger语句<br>debugger语句在产品代码中应该去掉。</p>
+</li>
+<li><p><code>eqnull</code><br>允许==null<br>==null通常用来比较=== null         === undefined</p>
+</li>
+<li><p><code>esnext</code><br>允许ECMAScript 6规约<br>目前ES6的特性不是所有的浏览器都支持。</p>
+</li>
+<li><p><code>evil</code><br>允许使用eval<br>eval有“注入攻击”的危险，另一方面也不利于JS引擎优化代码，所以尽量不要使用。</p>
+</li>
+<li><p><code>expr</code><br>允许应该出现赋值或函数调用的地方使用表达式</p>
+</li>
+<li><p><code>funcscope</code><br>允许在控制体内定义变量而在外部使用</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</div><div class="line">        <span class="keyword">var</span> x = <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    x += <span class="number">1</span>; <span class="comment">// Default: 'x' used out of scope.</span></div><div class="line">            <span class="comment">// No warning when funcscope:true</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>虽然“变量声明提升”使得上面的代码可以运行通过，但是读者还是会感到头晕。</p>
+<ul>
+<li><p><code>globalstrict</code><br>允许全局严格模式<br>在strict中解释了，’use strict’;放在全局域可能造成JS文件链接错误。</p>
+</li>
+<li><p><code>iterator</code><br>允许<strong>iterator</strong><br>不是所有的浏览器都支持<strong>iterator</strong>。</p>
+</li>
+<li><p><code>lastsemic</code><br>允许单行控制块省略分号</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> name = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="string">'Anton'</span> &#125;());</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>高手用得到的特性，我们还是坚持加上分号吧。</p>
+<ul>
+<li><p><code>laxbreak</code><br>允许不安全的行中断(与laxcomma配合使用)</p>
+</li>
+<li><p><code>laxcomma</code><br>允许逗号开头的编码样式</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    <span class="attr">name</span>: <span class="string">'Anton'</span></div><div class="line">  , <span class="attr">handle</span>: <span class="string">'valueof'</span></div><div class="line">  , <span class="attr">role</span>: <span class="string">'SW Engineer'</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>loopfunc</code><br>允许循环中定义函数<br>在循环中定义函数经常会导致错误：</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> nums = [];</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">    nums[i] = <span class="function"><span class="keyword">function</span> (<span class="params">j</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> i + j;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">nums[<span class="number">0</span>](<span class="number">2</span>); <span class="comment">// Prints 12 instead of 2</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>错误的根源在于function(j)中的i是对循环中的i的引用，而不是赋值。所以在最终函数执行时，i的值是10。<br>修改的方法是使用闭包：</p>
+<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> nums = [];</div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">    (<span class="function"><span class="keyword">function</span> (<span class="params">i</span>) </span>&#123;</div><div class="line">        nums[i] = <span class="function"><span class="keyword">function</span> (<span class="params">j</span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> i + j;</div><div class="line">        &#125;;</div><div class="line">    &#125;(i));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><ul>
+<li><p><code>maxerr</code><br>JSHint中断扫描前允许的最大错误数<br>因为最终我们需要清零JSHint报错的，所以这个值用在对已有项目的扫描中。</p>
+</li>
+<li><p><code>multistr</code><br>允许多行字符串</p>
+</li>
+<li><p><code>notypeof</code><br>允许非法的typeof操作</p>
+</li>
+<li><p><code>proto</code><br>允许 proto<br>不是所有的浏览器都支持<strong>proto</strong>.</p>
+</li>
+<li><p><code>smarttabs</code><br>允许混合tab和space排版<br>SmartTabs方法使用tab进行缩进，使用空格进行代码对齐。比较高级的用法，有兴趣的话可以尝试下。</p>
+</li>
+<li><p><code>shadow</code><br>允许变量shadow</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> x = <span class="number">10</span>;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</div><div class="line">        <span class="keyword">var</span> x = <span class="number">20</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> x;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>基于“函数作用域”，多次定义变量和单次定义是没有区别的，但是会造成阅读障碍。</p>
+<ul>
+<li><p><code>sub</code><br>允许person[‘name’]<br>JSHint推荐使用person.name代替person[‘name’]</p>
+</li>
+<li><p><code>supernew</code><br>允许new function() {…}和new Object;</p>
+</li>
+<li><p><code>validthis</code><br>允许严格模式下在非构造函数中使用this</p>
+</li>
+<li><p><code>noyield</code><br>允许发生器中没有yield语句</p>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;JSHint中options配置详解&quot;&gt;&lt;a href=&quot;#JSHint中options配置详解&quot; class=&quot;headerlink&quot; title=&quot;JSHint中options配置详解&quot;&gt;&lt;/a&gt;JSHint中&lt;code&gt;options&lt;/code&gt;配置详解&lt;/h3&gt;&lt;p&gt;&lt;em&gt;本文引用博客&lt;a href=&quot;http://www.cnblogs.com/code/articles/4103070.html&quot;&gt;JSHint中文DOC&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="JSHint" scheme="http://fengzheqi.com/tags/JSHint/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>sublime text软件配置</title>
+    <link href="http://fengzheqi.com/2015/11/17/sublime%20text%20%E8%BD%AF%E4%BB%B6%E9%85%8D%E7%BD%AE/"/>
+    <id>http://fengzheqi.com/2015/11/17/sublime text 软件配置/</id>
+    <published>2015-11-16T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.174Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="sublime-Text2-3-软件配置"><a href="#sublime-Text2-3-软件配置" class="headerlink" title="sublime Text2/3 软件配置"></a>sublime Text2/3 软件配置</h3><a id="more"></a>
+<h4 id="1-下载安装软件；"><a href="#1-下载安装软件；" class="headerlink" title="1.下载安装软件；"></a>1.下载安装软件；</h4><h4 id="2-破解"><a href="#2-破解" class="headerlink" title="2.破解"></a>2.破解</h4><p>在help –&gt; enter license 中输入注册码：</p>
+<blockquote>
+<p>—– BEGIN LICENSE —–<br>Andrew Weber<br>Single User License<br>EA7E-855605<br>813A03DD 5E4AD9E6 6C0EEB94 BC99798F<br>942194A6 02396E98 E62C9979 4BB979FE<br>91424C9D A45400BF F6747D88 2FB88078<br>90F5CC94 1CDC92DC 8457107A F151657B<br>1D22E383 A997F016 42397640 33F41CFC<br>E1D0AE85 A0BBD039 0E9C8D55 E1B89D5D<br>5CDB7036 E56DE1C0 EFCC0840 650CD3A6<br>B98FC99C 8FAC73EE D2B95564 DF450523<br>—— END LICENSE ——</p>
+</blockquote>
+<h4 id="3-安装-package-control。"><a href="#3-安装-package-control。" class="headerlink" title="3.安装 package control。"></a>3.安装 package control。</h4><p>打开控制台（ctrl+ ~），输入安装代码。<br><em>Sublime Text 3:</em><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import urllib.request,os; pf = &apos;Package Control.sublime-package&apos;; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), &apos;wb&apos;).write(urllib.request.urlopen( &apos;http://sublime.wbond.net/&apos; + pf.replace(&apos; &apos;,&apos;%20&apos;)).read())</div></pre></td></tr></table></figure></p>
+<p><em>Sublime Text 2:</em><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import urllib2,os; pf=&apos;Package Control.sublime-package&apos;; ipp = sublime.installed_packages_path(); os.makedirs( ipp ) if not os.path.exists(ipp) else None; urllib2.install_opener( urllib2.build_opener( urllib2.ProxyHandler( ))); open( os.path.join( ipp, pf), &apos;wb&apos; ).write( urllib2.urlopen( &apos;http://sublime.wbond.net/&apos; +pf.replace( &apos; &apos;,&apos;%20&apos; )).read()); print( &apos;Please restart Sublime Text to finish installation&apos;)</div></pre></td></tr></table></figure></p>
+<h4 id="4-安装主题"><a href="#4-安装主题" class="headerlink" title="4.安装主题"></a>4.安装主题</h4><p>首先安装在package control中安装theme-brogrammer；然后在preferencs–&gt;Color Scheme中配选择Theme-Brogrammer–&gt;brogrammer；最后在preferences–&gt;Setting-User中加入以下配置：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"theme"</span>: <span class="string">"Brogrammer.sublime-theme"</span>,</div><div class="line">  <span class="attr">"color_scheme"</span>: <span class="string">"Packages/Theme - Brogrammer/brogrammer.tmTheme"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="5-安装插件"><a href="#5-安装插件" class="headerlink" title="5.安装插件"></a>5.安装插件</h4><ul>
+<li><code>emmet</code>：代码提示</li>
+<li><code>theme-brogrammer</code>：sublime Text主题<a href="https://github.com/kenwheeler/brogrammer-theme" target="_blank" rel="external">（github地址）</a></li>
+<li><code>pretty json</code>：格式化json数据（热键Ctrl+Alt+j）</li>
+<li><code>scss高亮</code>： <a href="https://github.com/MarioRicalde/SCSS.tmbundle" target="_blank" rel="external">MarioRicalde/SCSS.tmbundle</a></li>
+</ul>
+<h4 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h4><ul>
+<li>在linux下安装sublime Text 3。可以通过PPA方式来在ubuntu系统下安装，安装方法：<blockquote>
+<p>sudo add-apt-repository ppa:webupd8team/sublime-text-3<br>sudo apt-get update<br>sudo apt-get install sublime-text-installer</p>
+</blockquote>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;sublime-Text2-3-软件配置&quot;&gt;&lt;a href=&quot;#sublime-Text2-3-软件配置&quot; class=&quot;headerlink&quot; title=&quot;sublime Text2/3 软件配置&quot;&gt;&lt;/a&gt;sublime Text2/3 软件配置&lt;/h3&gt;
+    
+    </summary>
+    
+    
+      <category term="软件配置" scheme="http://fengzheqi.com/tags/%E8%BD%AF%E4%BB%B6%E9%85%8D%E7%BD%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>JavaScript基础（一）——类型、值和变量</title>
+    <link href="http://fengzheqi.com/2015/11/14/JavaScript%E5%9F%BA%E7%A1%80%EF%BC%88%E4%B8%80%EF%BC%89%E2%80%94%E2%80%94%E7%B1%BB%E5%9E%8B%E3%80%81%E5%80%BC%E5%92%8C%E5%8F%98%E9%87%8F/"/>
+    <id>http://fengzheqi.com/2015/11/14/JavaScript基础（一）——类型、值和变量/</id>
+    <published>2015-11-13T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.172Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="JavaScript基础（一）——类型、值和变量"><a href="#JavaScript基础（一）——类型、值和变量" class="headerlink" title="JavaScript基础（一）——类型、值和变量"></a>JavaScript基础（一）——类型、值和变量</h3><h4 id="1-JavaScript类型"><a href="#1-JavaScript类型" class="headerlink" title="1. JavaScript类型"></a>1. JavaScript类型</h4><p>JavaScript的数据类型分为原始类型（primitive type）和对象类型（object type）。原始类型值也称为原始值，是不可变的；而对象也称为引用类型（reference type），对象值都是应用（reference）。<br>ps.其中<code>Null</code>和<code>Undefined</code>作为特殊数据类型纳入原始类型，symbol类型为ES6新加入的数据类型，目的是起唯一标识作用。<br><img src="http://img1.ph.126.net/oPvQlzGFa4ximJvx9AdVhQ==/6631366832863549264.png" alt="JavaScript类型图"><br><em>注：图中英文单词首字母大写是指代数据类型，而在利用<code>typeof</code>运算符判断操作符类型时，返回的是小写的字符串（例如<code>number</code>）。Null作为特例，<code>typeof</code>判断时返回<code>object</code>。</em></p>
+<a id="more"></a>
+<h4 id="2-数字（Number）"><a href="#2-数字（Number）" class="headerlink" title="2. 数字（Number）"></a>2. 数字（Number）</h4><ul>
+<li>JavaScript不区分整数值和浮点数值，JavaScript中的所有的数组均用浮点数值表示</li>
+<li>JavaScript中的算术运算在溢出（overflow）、下溢（underflow）和被零整除时不会报错。溢出：超过上限返回<code>Infinity</code>，超过下限返回<code>-Infinity</code>；下溢（无限接近0）：正数下溢返回0，负数下溢返回-0，-0和0可认为相等；被零整除：返回<code>Infinity</code>或者<code>-Infinity</code>（特例0除以0时返回<code>NaN</code>）。</li>
+<li>JavaScript采用了IEEE-754浮点数表示法（几乎所有现代编程语言所采用），存在着精度的问题，比如对于0.1，只能无限近似0.1。</li>
+</ul>
+<h4 id="3-文本（String）"><a href="#3-文本（String）" class="headerlink" title="3. 文本（String）"></a>3. 文本（String）</h4><ul>
+<li>字符串（<code>string</code>）是一组由16位值组成的<strong>不可变</strong>的有序序列</li>
+<li>在字符串中，若遇到类似单引号<code>&#39;</code>特殊符号，必须使用反斜线<code>\</code>转义</li>
+<li>字符串提供了<code>length</code>属性和众多可调用的方法，详见<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank" rel="external">MDN文档</a></li>
+</ul>
+<h4 id="4-布尔值（Boolean）"><a href="#4-布尔值（Boolean）" class="headerlink" title="4. 布尔值（Boolean）"></a>4. 布尔值（Boolean）</h4><ul>
+<li>布尔值只有两个值，保留字<code>true</code>和<code>false</code></li>
+<li>下列六个值在JavaScript类型转换中会转换为<code>false</code>：<code>undefined</code>、<code>null</code>、<code>0</code>、<code>-0</code>、<code>NaN</code>、<code>&quot;&quot;</code></li>
+</ul>
+<h4 id="5-null和undefined"><a href="#5-null和undefined" class="headerlink" title="5. null和undefined"></a>5. null和undefined</h4><ul>
+<li><code>null</code>是JavaScript语言中的关键字，表示空值。在对<code>null</code>执行<code>typeof</code>时，返回<code>object</code>，可以将<code>null</code>认为是一个特殊的对象值，含义是“非对象”</li>
+<li><code>undefined</code>可以理解为未定义的值，表示变量没有初始化。在ES5中<code>undefined</code>是只读的，不可修改</li>
+<li><code>null</code>和<code>undefined</code>都不包含任何属性和方法。使用“.”和“[ ]”来存取这两个值的成员或方法都会产生一个类型错误</li>
+</ul>
+<h4 id="6-全局对象和包装对象"><a href="#6-全局对象和包装对象" class="headerlink" title="6. 全局对象和包装对象"></a>6. 全局对象和包装对象</h4><ul>
+<li>全局对象（global object）在JavaScript中有着重要的用途：全局对象的属性是全局定义的符号，JavaScript程序可以直接使用</li>
+<li>全局对象的初始属性包括：<strong>全局属性</strong>、<strong>全局函数</strong>、<strong>构造函数</strong>、<strong>全局对象</strong>等，详见<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference" target="_blank" rel="external">MDN文档</a></li>
+<li>在代码的最顶级——不在任何函数内的JavaScript代码——可以使用JavaScript关键字this来引用全局对象</li>
+<li><p>包装对象：已下面代码为例<br>  代码中s为字符串，不是对象，怎么可以调用属性呢？这是因为有包装对象，JavaScript在执行到s.length时，会首先使用new String（s）生成一个<code>String</code>对象，然后调用属性，一旦属性引用结束，包装对象随即销毁。</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> s = <span class="string">"hello"</span>;</div><div class="line"><span class="built_in">console</span>.log(s.length);</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>null</code>和<code>undefined</code>没有对象，也不能调用任何属性和方法</p>
+</li>
+</ul>
+<h4 id="7-作用域和声明"><a href="#7-作用域和声明" class="headerlink" title="7. 作用域和声明"></a>7. 作用域和声明</h4><ul>
+<li>在函数体内，局部变量优先级高于全局变量</li>
+<li>在JavaScript中没有像C语言块级作用域的概念，JavaScript中使用的是函数作用域（function scope）：变量在声明他们的函数体以及这个函数体嵌套的任意函数体内都是有定义的。</li>
+<li>在JavaScript中具有“声明提前”的机制，什么是声明提前呢？就是只要你在作用域下声明了变量，不管这个声明在哪，都会提前至作用域的顶部。不过只有程序执行到var语句时，才会真正的赋值。</li>
+<li><p>“声明提前”也适合函数的声明，而且函数的“声明提前”也会把函数的<code>statement</code>也提前</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line">*函数声明</div><div class="line">*/</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">num1, num2</span>) </span>&#123;</div><div class="line"><span class="keyword">return</span> num1 + num2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="8-类型转换"><a href="#8-类型转换" class="headerlink" title="8. 类型转换"></a>8. 类型转换</h4><p>由于JavaScript类型转换太过于复杂，以后抽个时间再写一篇博客，不过可以推荐大家这篇：<a href="http://blog.csdn.net/yangqicong/article/details/6865513" target="_blank" rel="external">JavaScript的类型转换(字符转数字，数字转字符)</a></p>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><ul>
+<li>JavaScript权威指南.第六版.David Flanagan著.淘宝前端团队译</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;JavaScript基础（一）——类型、值和变量&quot;&gt;&lt;a href=&quot;#JavaScript基础（一）——类型、值和变量&quot; class=&quot;headerlink&quot; title=&quot;JavaScript基础（一）——类型、值和变量&quot;&gt;&lt;/a&gt;JavaScript基础（一）——类型、值和变量&lt;/h3&gt;&lt;h4 id=&quot;1-JavaScript类型&quot;&gt;&lt;a href=&quot;#1-JavaScript类型&quot; class=&quot;headerlink&quot; title=&quot;1. JavaScript类型&quot;&gt;&lt;/a&gt;1. JavaScript类型&lt;/h4&gt;&lt;p&gt;JavaScript的数据类型分为原始类型（primitive type）和对象类型（object type）。原始类型值也称为原始值，是不可变的；而对象也称为引用类型（reference type），对象值都是应用（reference）。&lt;br&gt;ps.其中&lt;code&gt;Null&lt;/code&gt;和&lt;code&gt;Undefined&lt;/code&gt;作为特殊数据类型纳入原始类型，symbol类型为ES6新加入的数据类型，目的是起唯一标识作用。&lt;br&gt;&lt;img src=&quot;http://img1.ph.126.net/oPvQlzGFa4ximJvx9AdVhQ==/6631366832863549264.png&quot; alt=&quot;JavaScript类型图&quot;&gt;&lt;br&gt;&lt;em&gt;注：图中英文单词首字母大写是指代数据类型，而在利用&lt;code&gt;typeof&lt;/code&gt;运算符判断操作符类型时，返回的是小写的字符串（例如&lt;code&gt;number&lt;/code&gt;）。Null作为特例，&lt;code&gt;typeof&lt;/code&gt;判断时返回&lt;code&gt;object&lt;/code&gt;。&lt;/em&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="JavaScript" scheme="http://fengzheqi.com/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>grunt基础用法</title>
+    <link href="http://fengzheqi.com/2015/11/14/grunt%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95/"/>
+    <id>http://fengzheqi.com/2015/11/14/grunt基础用法/</id>
+    <published>2015-11-13T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.174Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="grunt基础用法"><a href="#grunt基础用法" class="headerlink" title="grunt基础用法"></a>grunt基础用法</h3><h4 id="1-grunt是什么？"><a href="#1-grunt是什么？" class="headerlink" title="1. grunt是什么？"></a>1. grunt是什么？</h4><a id="more"></a>
+<h4 id="2-准备阶段"><a href="#2-准备阶段" class="headerlink" title="2. 准备阶段"></a>2. 准备阶段</h4><ol>
+<li><strong>开发环境</strong><ul>
+<li>window7 64bit</li>
+<li>nodejs v0.12.7</li>
+</ul>
+</li>
+<li><strong>安装nodejs环境</strong>。Grunt和Grunt插件是通过<code>npm</code>安装并管理的，所以首先需要安装<code>nodejs</code>环境。</li>
+<li><p><strong>全局安装<code>grunt-cli</code></strong>。为了更方便在任何目录下使用Grunt命令，我们需要在全局中安装<code>grunt-cli</code></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g grunt-cli</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>4.<strong>全局安装<code>grunt-init</code></strong>。<code>grunt-init</code>是一个用于自动创建项目脚手架的工具（就是提供项目文件的模板），比如我们在使用Grunt时，需要新建一个<code>gruntfile.js</code>文件，利用<code>grunt-init</code>中的<code>grunt-init-gruntfile</code>模板就可以直接生成了，详情请见：<a href="https://github.com/gruntjs/grunt-init-gruntfile" target="_blank" rel="external">grunt-init-gruntfile</a></p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g grunt-init</div></pre></td></tr></table></figure>
+</code></pre><h4 id="2-grunt的使用"><a href="#2-grunt的使用" class="headerlink" title="2. grunt的使用"></a>2. grunt的使用</h4><ol>
+<li><strong>grunt概述</strong><br><img src="http://img2.ph.126.net/1aQ7dPg3wJz_1o9CrGGwSQ==/6631204105142711267.png" alt="grunt使用使用"></li>
+</ol>
+<ul>
+<li>grunt-cli：grunt命令行，在系统全局环境中使用grunt命令；</li>
+<li>grunt-init：生成一些grunt的模板，主要是gruntfile；</li>
+<li>grunt：grunt默认导入了五个插件依赖。<pre><code>- concat：js文件的合并；
+- uglify：js文件的扰乱；
+- qunit：js文件的单元测试；
+- jshint：检验js的代码是否合法与规范；
+- watch：监控js文件的变化，包括增删改等。
+</code></pre></li>
+</ul>
+<ol>
+<li><p><strong>gruntfile配置</strong><br> 文章最下面附有生成默认的gruntfile的代码，下面我们分析每个模块</p>
+<ul>
+<li><p><strong>包装函数（wrapper function）</strong><br>  每一份 Gruntfile （和grunt插件）都遵循同样的格式，你所书写的Grunt代码必须放在此函数内：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*global module:false*/</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">grunt</span>) </span>&#123;</div><div class="line">  <span class="comment">// 包含各种插件配置、注册和执行</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>配置grunt插件（grunt.initConfig对象）</strong></p>
+<ul>
+<li><p>读取<code>package.json</code>中的JSON元数据 ，编写注释标题（banner）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">pkg: grunt.file.readJSON(<span class="string">'package.json'</span>)</div><div class="line">banner: <span class="string">'/*! &lt;%= pkg.title || pkg.name %&gt; - v&lt;%= pkg.version %&gt; - '</span> +</div><div class="line">      <span class="string">'&lt;%= grunt.template.today("yyyy-mm-dd") %&gt;\n'</span> +</div><div class="line">      <span class="string">'&lt;%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %&gt;'</span> +</div><div class="line">      <span class="string">'* Copyright (c) &lt;%= grunt.template.today("yyyy") %&gt; &lt;%= pkg.author.name %&gt;;'</span> +</div><div class="line">      <span class="string">' Licensed &lt;%= _.pluck(pkg.licenses, "type").join(", ") %&gt; */\n'</span>,</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>js文件合并（concat）</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">concat: &#123;</div><div class="line">       <span class="attr">options</span>: &#123;</div><div class="line">         <span class="attr">banner</span>: <span class="string">'&lt;%= banner %&gt;'</span>,</div><div class="line">         <span class="attr">stripBanners</span>: <span class="literal">true</span></div><div class="line">       &#125;,</div><div class="line">       <span class="attr">dist</span>: &#123;</div><div class="line">      <span class="comment">//源文件，把要压缩的文件以数组形式存入src</span></div><div class="line">         src: [<span class="string">'lib/&lt;%= pkg.name %&gt;.js'</span>],</div><div class="line">         <span class="comment">//目标目录与文件</span></div><div class="line">         dest: <span class="string">'dist/&lt;%= pkg.name %&gt;.js'</span></div><div class="line">       &#125;</div><div class="line">     &#125;,</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code>- **js文件扰乱（uglify）**
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">uglify: &#123;</div><div class="line">       <span class="attr">options</span>: &#123;</div><div class="line">         <span class="attr">banner</span>: <span class="string">'&lt;%= banner %&gt;'</span></div><div class="line">       &#125;,</div><div class="line">       <span class="attr">dist</span>: &#123;</div><div class="line">      <span class="comment">//源文件，需要被扰乱的js文件</span></div><div class="line">         src: <span class="string">'&lt;%= concat.dist.dest %&gt;'</span>,</div><div class="line">         <span class="comment">//生成的目标文件</span></div><div class="line">         dest: <span class="string">'dist/&lt;%= pkg.name %&gt;.min.js'</span></div><div class="line">       &#125;</div><div class="line">     &#125;,</div></pre></td></tr></table></figure>
+
+
+- **js文件检验（jshint）**
+    jshint具体option配置信息请参考[jshint中文doc](http://www.cnblogs.com/code/articles/4103070.html)
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">jshint: &#123;</div><div class="line">	<span class="comment">//jshint的校验配置</span></div><div class="line">       options: &#123;</div><div class="line">         <span class="attr">curly</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">eqeqeq</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">immed</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">latedef</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">newcap</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">noarg</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">sub</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">undef</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">unused</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">boss</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">eqnull</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">browser</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">globals</span>: &#123;&#125;</div><div class="line">       &#125;,</div><div class="line">       <span class="comment">//配置要校验的文件，任务gruntfile</span></div><div class="line">       gruntfile: &#123;</div><div class="line">         <span class="attr">src</span>: <span class="string">'Gruntfile.js'</span></div><div class="line">       &#125;,</div><div class="line">       <span class="comment">//配置要校验的文件，任务lib_test</span></div><div class="line">       lib_test: &#123;</div><div class="line">         <span class="attr">src</span>: [<span class="string">'lib/**/*.js'</span>, <span class="string">'test/**/*.js'</span>]</div><div class="line">       &#125;</div><div class="line">     &#125;,</div></pre></td></tr></table></figure>
+
+- **js文件单元测试（quint）**
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">qunit: &#123;</div><div class="line"><span class="comment">/*需要测试的文件，</span></div><div class="line">*单元测试对新手来说成本较高（包括我），起初不推荐</div><div class="line">*/</div><div class="line">      files: [<span class="string">'test/**/*.html'</span>]</div><div class="line">    &#125;,</div></pre></td></tr></table></figure>
+
+
+- **监控js文件变化（watch）**
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">watch: &#123;</div><div class="line">	<span class="comment">/*配置任务gruntfile，</span></div><div class="line">	*files：指监控的文件，</div><div class="line">	*tasks：指当监控的文件变化中进行的任务</div><div class="line">	*/</div><div class="line">       gruntfile: &#123;</div><div class="line">         <span class="attr">files</span>: <span class="string">'&lt;%= jshint.gruntfile.src %&gt;'</span>,</div><div class="line">         <span class="attr">tasks</span>: [<span class="string">'jshint:gruntfile'</span>]</div><div class="line">       &#125;,</div><div class="line">       <span class="comment">/*配置任务lib_test，</span></div><div class="line">	*files：指监控的文件，</div><div class="line">	*tasks：指当监控的文件变化中进行的任务</div><div class="line">	*/</div><div class="line">       lib_test: &#123;</div><div class="line">         <span class="attr">files</span>: <span class="string">'&lt;%= jshint.lib_test.src %&gt;'</span>,</div><div class="line">         <span class="attr">tasks</span>: [<span class="string">'jshint:lib_test'</span>, <span class="string">'qunit'</span>]</div><div class="line">       &#125;</div><div class="line">     &#125;</div></pre></td></tr></table></figure>
+</code></pre><h4 id="3-gruntfile初始文档"><a href="#3-gruntfile初始文档" class="headerlink" title="3. gruntfile初始文档"></a>3. gruntfile初始文档</h4><pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*global module:false*/</span></div><div class="line"> <span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">grunt</span>) </span>&#123;</div><div class="line">	</div><div class="line">   <span class="comment">// Project configuration.</span></div><div class="line">   grunt.initConfig(&#123;</div><div class="line">     <span class="comment">// Metadata.</span></div><div class="line">     pkg: grunt.file.readJSON(<span class="string">'package.json'</span>),</div><div class="line">     <span class="attr">banner</span>: <span class="string">'/*! &lt;%= pkg.title || pkg.name %&gt; - v&lt;%= pkg.version %&gt; - '</span> +</div><div class="line">       <span class="string">'&lt;%= grunt.template.today("yyyy-mm-dd") %&gt;\n'</span> +</div><div class="line">       <span class="string">'&lt;%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %&gt;'</span> +</div><div class="line">       <span class="string">'* Copyright (c) &lt;%= grunt.template.today("yyyy") %&gt; &lt;%= pkg.author.name %&gt;;'</span> +</div><div class="line">       <span class="string">' Licensed &lt;%= _.pluck(pkg.licenses, "type").join(", ") %&gt; */\n'</span>,</div><div class="line">     <span class="comment">// Task configuration.</span></div><div class="line">     concat: &#123;</div><div class="line">       <span class="attr">options</span>: &#123;</div><div class="line">         <span class="attr">banner</span>: <span class="string">'&lt;%= banner %&gt;'</span>,</div><div class="line">         <span class="attr">stripBanners</span>: <span class="literal">true</span></div><div class="line">       &#125;,</div><div class="line">       <span class="attr">dist</span>: &#123;</div><div class="line">         <span class="attr">src</span>: [<span class="string">'lib/&lt;%= pkg.name %&gt;.js'</span>],</div><div class="line">         <span class="attr">dest</span>: <span class="string">'dist/&lt;%= pkg.name %&gt;.js'</span></div><div class="line">       &#125;</div><div class="line">     &#125;,</div><div class="line">     <span class="attr">uglify</span>: &#123;</div><div class="line">       <span class="attr">options</span>: &#123;</div><div class="line">         <span class="attr">banner</span>: <span class="string">'&lt;%= banner %&gt;'</span></div><div class="line">       &#125;,</div><div class="line">       <span class="attr">dist</span>: &#123;</div><div class="line">         <span class="attr">src</span>: <span class="string">'&lt;%= concat.dist.dest %&gt;'</span>,</div><div class="line">         <span class="attr">dest</span>: <span class="string">'dist/&lt;%= pkg.name %&gt;.min.js'</span></div><div class="line">       &#125;</div><div class="line">     &#125;,</div><div class="line">     <span class="attr">jshint</span>: &#123;</div><div class="line">       <span class="attr">options</span>: &#123;</div><div class="line">         <span class="attr">curly</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">eqeqeq</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">immed</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">latedef</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">newcap</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">noarg</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">sub</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">undef</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">unused</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">boss</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">eqnull</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">browser</span>: <span class="literal">true</span>,</div><div class="line">         <span class="attr">globals</span>: &#123;&#125;</div><div class="line">       &#125;,</div><div class="line">       <span class="attr">gruntfile</span>: &#123;</div><div class="line">         <span class="attr">src</span>: <span class="string">'Gruntfile.js'</span></div><div class="line">       &#125;,</div><div class="line">       <span class="attr">lib_test</span>: &#123;</div><div class="line">         <span class="attr">src</span>: [<span class="string">'lib/**/*.js'</span>, <span class="string">'test/**/*.js'</span>]</div><div class="line">       &#125;</div><div class="line">     &#125;,</div><div class="line">     <span class="attr">qunit</span>: &#123;</div><div class="line">       <span class="attr">files</span>: [<span class="string">'test/**/*.html'</span>]</div><div class="line">     &#125;,</div><div class="line">     <span class="attr">watch</span>: &#123;</div><div class="line">       <span class="attr">gruntfile</span>: &#123;</div><div class="line">         <span class="attr">files</span>: <span class="string">'&lt;%= jshint.gruntfile.src %&gt;'</span>,</div><div class="line">         <span class="attr">tasks</span>: [<span class="string">'jshint:gruntfile'</span>]</div><div class="line">       &#125;,</div><div class="line">       <span class="attr">lib_test</span>: &#123;</div><div class="line">         <span class="attr">files</span>: <span class="string">'&lt;%= jshint.lib_test.src %&gt;'</span>,</div><div class="line">         <span class="attr">tasks</span>: [<span class="string">'jshint:lib_test'</span>, <span class="string">'qunit'</span>]</div><div class="line">       &#125;</div><div class="line">     &#125;</div><div class="line">   &#125;);</div><div class="line">	</div><div class="line">   <span class="comment">// These plugins provide necessary tasks.</span></div><div class="line">   grunt.loadNpmTasks(<span class="string">'grunt-contrib-concat'</span>);</div><div class="line">   grunt.loadNpmTasks(<span class="string">'grunt-contrib-uglify'</span>);</div><div class="line">   grunt.loadNpmTasks(<span class="string">'grunt-contrib-qunit'</span>);</div><div class="line">   grunt.loadNpmTasks(<span class="string">'grunt-contrib-jshint'</span>);</div><div class="line">   grunt.loadNpmTasks(<span class="string">'grunt-contrib-watch'</span>);</div><div class="line">	</div><div class="line">   <span class="comment">// Default task.</span></div><div class="line">   grunt.registerTask(<span class="string">'default'</span>, [<span class="string">'jshint'</span>, <span class="string">'qunit'</span>, <span class="string">'concat'</span>, <span class="string">'uglify'</span>]);</div><div class="line">	</div><div class="line"> &#125;;</div></pre></td></tr></table></figure>
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;grunt基础用法&quot;&gt;&lt;a href=&quot;#grunt基础用法&quot; class=&quot;headerlink&quot; title=&quot;grunt基础用法&quot;&gt;&lt;/a&gt;grunt基础用法&lt;/h3&gt;&lt;h4 id=&quot;1-grunt是什么？&quot;&gt;&lt;a href=&quot;#1-grunt是什么？&quot; class=&quot;headerlink&quot; title=&quot;1. grunt是什么？&quot;&gt;&lt;/a&gt;1. grunt是什么？&lt;/h4&gt;
+    
+    </summary>
+    
+    
+      <category term="Grunt" scheme="http://fengzheqi.com/tags/Grunt/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CentOS linux安装MongoDB</title>
+    <link href="http://fengzheqi.com/2015/11/13/CentOS%20linux%E5%AE%89%E8%A3%85MongoDB/"/>
+    <id>http://fengzheqi.com/2015/11/13/CentOS linux安装MongoDB/</id>
+    <published>2015-11-12T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.170Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="CentOS-linux安装MongoDB"><a href="#CentOS-linux安装MongoDB" class="headerlink" title="CentOS linux安装MongoDB"></a>CentOS linux安装MongoDB</h3><h4 id="1-安装环境"><a href="#1-安装环境" class="headerlink" title="1.安装环境"></a>1.安装环境</h4><ul>
+<li>CentOS 7 64bit（适合CentOS 5/6/7）</li>
+<li>mongoDB 3.0.7</li>
+</ul>
+<a id="more"></a>
+<h4 id="2-安装包（packages）"><a href="#2-安装包（packages）" class="headerlink" title="2.安装包（packages）"></a>2.安装包（packages）</h4><p>MongoDB 官方仓库里提供了一些安装包。包含以下部分：</p>
+<ul>
+<li><p>mongodb-org<br>  这是元安装包，安装这个包会自动安装以下四个组件包。</p>
+</li>
+<li><p>mongodb-org-server<br>  这个包包含了mongod的后台进程和相关的配置信息、以及初始脚本。</p>
+</li>
+<li><p>mongodb-org-mongos<br>  这个包包含了mongos的后台进程。</p>
+</li>
+<li><p>mongod-org-shell<br>  这个包包含了mongo shell。</p>
+</li>
+<li><p>mongodb-org-tools<br>  这个包包含了以下MongoDB工具：<a href="https://docs.mongodb.org/manual/reference/program/mongoimport/#bin.mongoimport" target="_blank" rel="external">mongoimport</a> ,<a href="https://docs.mongodb.org/manual/reference/program/bsondump/#bin.bsondump" target="_blank" rel="external">bsondump</a>, <a href="https://docs.mongodb.org/manual/reference/program/mongodump/#bin.mongodump" target="_blank" rel="external">mongodump</a>, <a href="https://docs.mongodb.org/manual/reference/program/mongoexport/#bin.mongoexport" target="_blank" rel="external">mongoexport</a>, <a href="https://docs.mongodb.org/manual/reference/program/mongofiles/#bin.mongofiles" target="_blank" rel="external">mongofiles</a>, <a href="https://docs.mongodb.org/manual/reference/program/mongooplog/#bin.mongooplog" target="_blank" rel="external">mongooplog</a>, <a href="https://docs.mongodb.org/manual/reference/program/mongoperf/#bin.mongoperf" target="_blank" rel="external">mongoperf</a>, <a href="https://docs.mongodb.org/manual/reference/program/mongorestore/#bin.mongorestore" target="_blank" rel="external">mongorestore</a>, <a href="https://docs.mongodb.org/manual/reference/program/mongostat/#bin.mongostat" target="_blank" rel="external">mongostat</a>,  <a href="https://docs.mongodb.org/manual/reference/program/mongotop/#bin.mongotop" target="_blank" rel="external">mongotop</a>。</p>
+</li>
+</ul>
+<h4 id="3-初始脚本（Init-Script）"><a href="#3-初始脚本（Init-Script）" class="headerlink" title="3.初始脚本（Init Script）"></a>3.初始脚本（Init Script）</h4><p>mongodb-org包里面包括了各种各样的初始脚本，其中包括<code>/etc/rc.d/init.d/mongod</code> 。这些脚本被用来<code>stop</code>，<code>start</code>，<code>restart</code>后台进程。</p>
+<p>利用<code>/etc/mongod.conf</code>文件，并结合初始脚本，可以配置MongoDB的一些信息。</p>
+<h4 id="4-注意事项"><a href="#4-注意事项" class="headerlink" title="4.注意事项"></a>4.注意事项</h4><ul>
+<li>安装向导只支持64bit系统；</li>
+<li>在<code>/etc/mongod.conf</code>文件中默认配置了只允许本地ip访问（127.0.0.1），如果你希望远程访问，请修改mongod.conf文件，将<code>bind_ip</code>那行注释掉。</li>
+</ul>
+<h4 id="5-安装MongoDB"><a href="#5-安装MongoDB" class="headerlink" title="5.安装MongoDB"></a>5.安装MongoDB</h4><ol>
+<li>配置安装包管理器（yum）<br>创建文件<code>/etc/yum.repos.d/mongodb-org-3.0.repo</code>，这样你可以利用<code>yum</code>命名来安装MongonDB了。</li>
+</ol>
+<blockquote>
+<p>[mongodb-org-3.0]<br>name=MongoDB Repository<br>baseurl=<a href="https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.0/x86_64/" target="_blank" rel="external">https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.0/x86_64/</a><br>gpgcheck=0<br> enabled=1</p>
+</blockquote>
+<ol>
+<li><p>安装MongoDB包和相关工具<br> 当你安装包时，可以选择安装目前的版本或者之前的版本。<br> 安装最新的稳定版的MongoDB，执行以下命令：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum  install -y mongodb-org</div></pre></td></tr></table></figure>
+<p> 如果要安装特定的特定的版本，命令如下</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install -y mongodb-org-3.0.7 mongodb-org-server-3.0.7 mongodb-org-shell-3.0.7 mongodb-org-mongos-3.0.7 mongodb-org-tools-3.0.7</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="6-运行MongoDB"><a href="#6-运行MongoDB" class="headerlink" title="6.运行MongoDB"></a>6.运行MongoDB</h4><ol>
+<li><p>启动MongoDB</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service mongod start</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li><p>验证是否启动成功<br> 查看mogod是否启动成功，可以检查log文件<code>/var/log/mongodb/mongod.log</code>否有以下记录</p>
+<blockquote>
+<p>[initandlisten] waiting for connections on port [port]</p>
+</blockquote>
+<p> [port]就是MongoDB对应的端口</p>
+</li>
+<li><p>停止MongoDB</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service mongod stop</div></pre></td></tr></table></figure>
+</li>
+<li><p>重启MongoDB</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service mongod restart</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="7-卸载MongoDB"><a href="#7-卸载MongoDB" class="headerlink" title="7.卸载MongoDB"></a>7.卸载MongoDB</h4><ol>
+<li><p>停止MongoDB</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service mongod stop</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li><p>移除包</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum erase $(rpm -qa | grep mongodb-org)</div></pre></td></tr></table></figure>
+</li>
+<li><p>移除数据库目录</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo rm -r /var/log/mongodb</div><div class="line">sudo rm -r /var/lib/mongo</div></pre></td></tr></table></figure>
+</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;CentOS-linux安装MongoDB&quot;&gt;&lt;a href=&quot;#CentOS-linux安装MongoDB&quot; class=&quot;headerlink&quot; title=&quot;CentOS linux安装MongoDB&quot;&gt;&lt;/a&gt;CentOS linux安装MongoDB&lt;/h3&gt;&lt;h4 id=&quot;1-安装环境&quot;&gt;&lt;a href=&quot;#1-安装环境&quot; class=&quot;headerlink&quot; title=&quot;1.安装环境&quot;&gt;&lt;/a&gt;1.安装环境&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;CentOS 7 64bit（适合CentOS 5/6/7）&lt;/li&gt;
+&lt;li&gt;mongoDB 3.0.7&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="MongoDB" scheme="http://fengzheqi.com/tags/MongoDB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>web前端代码规范--JavaScript篇</title>
+    <link href="http://fengzheqi.com/2015/11/12/web%E5%89%8D%E7%AB%AF%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83%EF%BC%88JavaScript%E7%AF%87%EF%BC%89/"/>
+    <id>http://fengzheqi.com/2015/11/12/web前端代码规范（JavaScript篇）/</id>
+    <published>2015-11-11T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.175Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="web前端代码规范–JavaScript篇"><a href="#web前端代码规范–JavaScript篇" class="headerlink" title="web前端代码规范–JavaScript篇"></a>web前端代码规范–JavaScript篇</h3><a id="more"></a>
+<h4 id="代码格式"><a href="#代码格式" class="headerlink" title="代码格式"></a>代码格式</h4><ul>
+<li><strong>缩进</strong>：统一使用soft tab（4个空格）。</li>
+<li><strong>分号</strong>：语句结束后面加分号。包括以下几种情况，变量声明、表达式、return、throw、break、continue、do-while。</li>
+<li><p><strong>空格</strong>：<br>以下几种情况不需要空格</p>
+<ul>
+<li>对象的属性名后；</li>
+<li>前缀一元运算符后（例如<code>++i</code>）；</li>
+<li>后缀一元运算符前（例如<code>i++</code>）；</li>
+<li>函数调用括号前（例如<code>parseInt(x)</code>）；</li>
+<li>无论是函数声明还是函数表达式，<code>&#39;(&#39;</code>前不要空格；</li>
+<li>数组的<code>&#39;[&#39;</code>后和<code>&#39;]&#39;</code>前；</li>
+<li>对象的<code>&#39;{&#39;</code>后和<code>&#39;}&#39;</code>前；</li>
+<li><p>运算符<code>&#39;(&#39;</code>后和<code>&#39;)&#39;</code>前</p>
+<p>  以下几种情况需要空格：</p>
+<ul>
+<li>二元运算符<code>&#39;+、-、*、/&#39;</code>前后；</li>
+<li>三元运算符<code>&#39;?:&#39;</code>前后；</li>
+<li>代码块<code>&#39;{&#39;</code>前</li>
+<li>下列关键字前： <code>else</code>，<code>while</code>，<code>catch</code>，<code>finally</code>；</li>
+<li>下列关键字后：<code>if</code>，<code>else</code>，<code>for</code>， <code>while</code>，<code>do</code>，<code>switch</code>，<code>case</code>，<code>try</code>，<code>catch</code>，<code>finally</code>，<code>with</code>，<code>return</code>，<code>typeof</code>；</li>
+<li>单行注释<code>//</code>后（若单行注释和代码同行，则<code>//</code>前也需要），多行注释<code>*</code>后；</li>
+<li>对象的属性值前；</li>
+<li><code>for</code>循环，分号后留有一个空格，前置条件如果有多个，逗号后留一个空格；</li>
+<li>无论是函数声明还是函数表达式，<code>{</code>前一定要有空格；</li>
+<li>函数的参数之间。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>空行</strong>：以下几种情况需要空行<ul>
+<li>变声声明后（当变量声明在代码块的最后一行时，则无需空行）；</li>
+<li>注释前（当注释在代码块的第一行时，则无需空行）；</li>
+<li>代码块后（在函数调用、数组、对象中则无需空行）；</li>
+<li>文件最后保留一个空行。</li>
+</ul>
+</li>
+<li><strong>换行</strong>：换行的地方，行未必须有<code>&#39;,&#39;</code>或者<code>&#39;;&#39;</code>；下列几种情况需要换行<ul>
+<li>代码块<code>&#39;{&#39;</code>后和<code>&#39;}&#39;</code>；</li>
+<li>变量赋值后。</li>
+</ul>
+</li>
+<li><strong>换行</strong>：双斜线后，必须跟一个空格；缩进与下一行代码保持一致；可位于一个代码行的末尾，与代码间隔一个空格。</li>
+<li><strong>多行注释</strong>：最少三行，<code>&#39;*&#39;</code>后跟一个空格，建议以下情况使用<ul>
+<li>难于理解的代码段</li>
+<li>可能存在错误的代码段</li>
+<li>浏览器特殊的HACK代码</li>
+<li>业务逻辑强相关的代码<blockquote>
+<p>/*<br> * one space after ‘*‘<br>*/<br>var x = 1;</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><strong>文档注释</strong>：各类标签@param, @method等请参考<a href="http://usejsdoc.org/" target="_blank" rel="external">usejsdoc</a>和<a href="http://yuri4ever.github.io/jsdoc/" target="_blank" rel="external">JSDoc Guide</a>；建议在以下情况使用<ul>
+<li>所有常量</li>
+<li>所有函数</li>
+<li>所有类</li>
+</ul>
+</li>
+<li><strong>文档注释</strong>：最外层统一使用单引号。</li>
+<li><strong>括号</strong>：下列关键字后必须有大括号（即使代码块的内容只有一行），<code>if</code>，<code>else</code>，<code>while</code>，<code>do</code>，<code>switch</code>，<code>try</code>，<code>catch</code>，<code>finally</code>，<code>with</code>。</li>
+<li><strong>数组、对象</strong>：对象属性名不需要加引号；对象以缩进的形式书写，不要写在一行；数组、对象最后不要有逗号。<h4 id="编码规范"><a href="#编码规范" class="headerlink" title="编码规范"></a>编码规范</h4></li>
+<li><strong>变量命名</strong>：<ul>
+<li>标准变量采用驼峰式命名（除了对象的属性外，主要是考虑到cgi返回的数据）；</li>
+<li>‘ID’在变量名中全大写；</li>
+<li>‘URL’在变量名中全大写；</li>
+<li>‘Android’在变量名中大写第一个字母；</li>
+<li>‘iOS’在变量名中小写第一个，大写后两个字母；</li>
+<li>常量全大写，用下划线连接；</li>
+<li>构造函数，大写第一个字母；</li>
+<li>jquery对象必须以’$’开头命名。</li>
+</ul>
+</li>
+<li><strong>变量命名</strong>：一个函数作用域中所有的变量声明尽量提到函数首部，用一个var声明，不允许出现两个连续的var声明。</li>
+<li><p><strong>null</strong>：<br>  适用场景：</p>
+<ul>
+<li>初始化一个将来可能被赋值的对象的变量；</li>
+<li>与已经初始化的变量做比较；</li>
+<li>作为一个参数为对象的函数的调用传参；</li>
+<li><p>作为一个返回对象的函数的返回值。</p>
+<p>适用场景：</p>
+</li>
+<li>不要用null来判断函数调用时有无参数；</li>
+<li>不要与未初始化的变量做比较。</li>
+</ul>
+</li>
+<li><strong>undefined</strong>：永远不要直接使用undefined进行变量比较；使用<code>typeof</code>和字符串<code>undefined</code>对变量进行判断。</li>
+<li><strong>jshint</strong>：<ul>
+<li>用<code>===</code>，<code>!===</code>代替<code>==</code>，<code>!=</code>；</li>
+<li>for-in里一定要有hasOwnProperty的判断；</li>
+<li>不要在内置对象的原型上添加方法，如Array, Date；</li>
+<li>不要在内层作用域的代码里声明了变量，之后却访问到了外层作用域的同名变量；</li>
+<li>变量不要先使用后声明；</li>
+<li>不要在一句代码中单单使用构造函数，记得将其赋值给某个变量；</li>
+<li>不要在同个作用域下声明同名变量；</li>
+<li>不要在一些不需要的地方加括号，例：delete(a.b)；</li>
+<li>不要使用未声明的变量（全局变量需要加到.jshintrc文件的globals属性里面）；</li>
+<li>不要声明了变量却不使用；</li>
+<li>不要在应该做比较的地方做赋值；</li>
+<li>debugger不要出现在提交的代码里；</li>
+<li>数组中不要存在空元素；</li>
+<li>不要在循环内部声明函数；</li>
+<li>不要像这样使用构造函数，例：new function () { … }, new Object；</li>
+</ul>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;web前端代码规范–JavaScript篇&quot;&gt;&lt;a href=&quot;#web前端代码规范–JavaScript篇&quot; class=&quot;headerlink&quot; title=&quot;web前端代码规范–JavaScript篇&quot;&gt;&lt;/a&gt;web前端代码规范–JavaScript篇&lt;/h3&gt;
+    
+    </summary>
+    
+    
+      <category term="JavaScript" scheme="http://fengzheqi.com/tags/JavaScript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>css选择器简述</title>
+    <link href="http://fengzheqi.com/2015/11/04/css%E9%80%89%E6%8B%A9%E5%99%A8%E7%AE%80%E8%BF%B0/"/>
+    <id>http://fengzheqi.com/2015/11/04/css选择器简述/</id>
+    <published>2015-11-03T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.174Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="CSS选择器简述"><a href="#CSS选择器简述" class="headerlink" title="CSS选择器简述"></a>CSS选择器简述</h3><p>&emsp;&emsp;在css中，选择器的重要性不言而喻，平常用的时候总是会忘记，刚好抽个时间整理一下，如有遗漏和不对的地方，希望大家多提意见:)</p>
+<a id="more"></a>
+<h4 id="一、分类"><a href="#一、分类" class="headerlink" title="一、分类"></a>一、分类</h4><h5 id="1-基本选择器分类"><a href="#1-基本选择器分类" class="headerlink" title="1.基本选择器分类"></a>1.基本选择器分类</h5><ul>
+<li>元素选择器</li>
+<li>类选择器</li>
+<li>id选择器</li>
+<li>属性选择器</li>
+</ul>
+<h5 id="2-文档结构分类"><a href="#2-文档结构分类" class="headerlink" title="2.文档结构分类"></a>2.文档结构分类</h5><ul>
+<li>后代选择器（子代选择器）</li>
+<li>相邻选择器</li>
+</ul>
+<h5 id="3-伪类与伪元素"><a href="#3-伪类与伪元素" class="headerlink" title="3.伪类与伪元素"></a>3.伪类与伪元素</h5><ul>
+<li>伪类选择器</li>
+<li>伪元素选择器 </li>
+</ul>
+<h4 id="二、选择器举例"><a href="#二、选择器举例" class="headerlink" title="二、选择器举例"></a>二、选择器举例</h4><h5 id="1-元素选择器"><a href="#1-元素选择器" class="headerlink" title="1.元素选择器"></a>1.元素选择器</h5><p>根据<code>html</code>元素来选择，例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">p</span> &#123;<span class="attribute">marigin</span>:<span class="number">20px</span>;&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="2-类选择器"><a href="#2-类选择器" class="headerlink" title="2.类选择器"></a>2.类选择器</h5><p>根据元素中<code>class</code>属性来选择，例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.nav</span> &#123;<span class="attribute">color</span>:<span class="number">#fff</span>;&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="3-id选择器"><a href="#3-id选择器" class="headerlink" title="3.id选择器"></a>3.id选择器</h5><p>根据元素中<code>id</code>属性来选择，例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#header</span> &#123;<span class="attribute">font-size</span>: <span class="number">14px</span>;&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="4-属性选择器"><a href="#4-属性选择器" class="headerlink" title="4.属性选择器"></a>4.属性选择器</h5><p>根据元素定义的属性来选择，例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">input</span><span class="selector-attr">[type=text]</span> &#123;<span class="attribute">padding</span>: <span class="number">10px</span>;&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="5-后代选择器"><a href="#5-后代选择器" class="headerlink" title="5.后代选择器"></a>5.后代选择器</h5><p>在dom结构中，当我们需要对文档结构进行选择时，则可以利用后代选择器，例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*对div内的全部p元素应用margin、padding规则*/</span></div><div class="line"> <span class="selector-tag">div</span> <span class="selector-tag">p</span> &#123;<span class="attribute">margin</span>:<span class="number">20px</span>; <span class="attribute">padding</span>:<span class="number">10px</span>;&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>子代选择器</strong>：如果只是对子代进行选择，则可利用如下规则<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*对tr下第一个td应用color:#ccc样式*/</span></div><div class="line"><span class="selector-tag">tr</span> &gt; <span class="selector-tag">td</span> &#123;<span class="attribute">color</span>: <span class="number">#ccc</span>;&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="6-相邻选择器"><a href="#6-相邻选择器" class="headerlink" title="6.相邻选择器"></a>6.相邻选择器</h5><p>对于选择同一级的节点，可以使用相邻选择器，如下：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*p和div属于同一级相邻元素*/</span></div><div class="line"> <span class="selector-tag">p</span> + <span class="selector-tag">div</span> &#123;<span class="attribute">margin</span>: <span class="number">20px</span>&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="7-伪类选择器"><a href="#7-伪类选择器" class="headerlink" title="7.伪类选择器"></a>7.伪类选择器</h5><p>在元素<code>a</code>中，常常需要对hover，visited等伪类做样式控制，在css中可以这样写：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*在定义a元素的伪类时，顺序很重要，link-visited-focus-hover-active*/</span></div><div class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:link</span> &#123;<span class="attribute">color</span>: navy;&#125;</div><div class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:visited</span> &#123;<span class="attribute">color</span>: gray;&#125;</div><div class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:focus</span> &#123;<span class="attribute">color</span>: green;&#125;</div><div class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:hover</span> &#123;<span class="attribute">color</span>: red;&#125;</div><div class="line"><span class="selector-tag">a</span><span class="selector-pseudo">:active</span> &#123;<span class="attribute">color</span>: yellow;&#125;</div></pre></td></tr></table></figure></p>
+<h5 id="8-伪元素选择器"><a href="#8-伪元素选择器" class="headerlink" title="8.伪元素选择器"></a>8.伪元素选择器</h5><p>伪元素目前在css2.1中定义了4个：设置首字母样式、设置第一行样式、设置之前和之后元素的样式。例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">p</span><span class="selector-pseudo">:first-letter</span> &#123;<span class="attribute">color</span>: red;&#125;</div><div class="line"><span class="selector-tag">p</span><span class="selector-pseudo">:first-line</span> &#123;<span class="attribute">color</span>: purple;&#125;</div><div class="line"><span class="selector-tag">h2</span><span class="selector-pseudo">:before</span> &#123;<span class="attribute">content</span>: <span class="string">"**"</span>; <span class="attribute">color</span>: silver;&#125;</div><div class="line"><span class="selector-tag">h2</span><span class="selector-pseudo">:after</span> &#123;<span class="attribute">content</span>: <span class="string">"the end"</span>;&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="三、常见选择器例子"><a href="#三、常见选择器例子" class="headerlink" title="三、常见选择器例子"></a>三、常见选择器例子</h4><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*css中分组,对h2、p都应用样式*/</span></div><div class="line"><span class="selector-tag">h2</span>, <span class="selector-tag">p</span> &#123;<span class="attribute">color</span>: gray;&#125;</div><div class="line"></div><div class="line"><span class="comment">/*选择器混用，如下例，查找的是元素p中class="warning"的元素*/</span></div><div class="line"><span class="selector-tag">p</span><span class="selector-class">.warning</span> &#123;<span class="attribute">font-weight</span>: bold;&#125;</div><div class="line"></div><div class="line"><span class="comment">/*多类选择器，对于一个元素中同时包含多个类的元素。ps. 注意匹配的是同时包含这些类的元素*/</span></div><div class="line"><span class="selector-class">.warning</span><span class="selector-class">.urgent</span> &#123;<span class="attribute">background</span>: silver;&#125;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;CSS选择器简述&quot;&gt;&lt;a href=&quot;#CSS选择器简述&quot; class=&quot;headerlink&quot; title=&quot;CSS选择器简述&quot;&gt;&lt;/a&gt;CSS选择器简述&lt;/h3&gt;&lt;p&gt;&amp;emsp;&amp;emsp;在css中，选择器的重要性不言而喻，平常用的时候总是会忘记，刚好抽个时间整理一下，如有遗漏和不对的地方，希望大家多提意见:)&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="CSS" scheme="http://fengzheqi.com/tags/CSS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>IE的兼容性问题</title>
+    <link href="http://fengzheqi.com/2015/10/18/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9/"/>
+    <id>http://fengzheqi.com/2015/10/18/浏览器兼容/</id>
+    <published>2015-10-17T16:00:00.000Z</published>
+    <updated>2016-11-07T08:36:29.176Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前端开发人员经常要碰到浏览器的兼容问题，大部分情况下，chrome、Firefox对web标准支持度较好，兼容性问题相对较少。但目前在国内，ie6的份额还是比较大，设计传统系统时不时需要考虑兼容。平时抽个时间在网上收集了一下，整理了部分，希望大家指正、补充。</p>
+<a id="more"></a>
+<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><h3 id="HTML兼容"><a href="#HTML兼容" class="headerlink" title="HTML兼容"></a>HTML兼容</h3><p>HTML的兼容比较容易处理，主要是高版本浏览器用了低版本浏览器无法识别的元素，导致其不能解析，所以平时需要注意一点；其次，在一些css库（比如bootstrap）里会简单的设置一些新标签的样式，以便向后兼容，大家也可以关注一下这些的库的源码。</p>
+<h3 id="CSS兼容"><a href="#CSS兼容" class="headerlink" title="CSS兼容"></a>CSS兼容</h3><p>CSS的兼容，一方面是了解并熟悉CSS的通用的方法，其次也可以掌握一些Hack，虽然Hack并不推荐，但学习学习还是可以解决燃眉之急的。<br>  <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* CSS属性级Hack */</span></div><div class="line"><span class="selector-tag">color</span><span class="selector-pseudo">:red</span>; <span class="comment">/* 所有浏览器可识别*/</span></div><div class="line">_<span class="selector-tag">color</span><span class="selector-pseudo">:red</span>; <span class="comment">/* 仅IE6 识别 */</span></div><div class="line">*<span class="selector-tag">color</span><span class="selector-pseudo">:red</span>; <span class="comment">/* IE6、IE7 识别 */</span></div><div class="line">+<span class="selector-tag">color</span><span class="selector-pseudo">:red</span>; <span class="comment">/* IE6、IE7 识别 */</span></div><div class="line">*+<span class="selector-tag">color</span><span class="selector-pseudo">:red</span>; <span class="comment">/* IE6、IE7 识别 */</span></div><div class="line"><span class="selector-tag">color</span><span class="selector-pseudo">:red</span>; <span class="comment">/* IE6、IE7 识别 */</span></div><div class="line"><span class="selector-tag">color</span><span class="selector-pseudo">:red</span>\9; <span class="comment">/* IE6、IE7、IE8、IE9 识别 */</span></div><div class="line"><span class="selector-tag">color</span><span class="selector-pseudo">:red</span>\0; <span class="comment">/* IE8、IE9 识别*/</span></div><div class="line"><span class="selector-tag">color</span><span class="selector-pseudo">:red</span> \0; <span class="comment">/* 仅IE9识别 */</span></div><div class="line"><span class="selector-tag">color</span><span class="selector-pseudo">:red</span>!<span class="selector-tag">important</span>; <span class="comment">/* IE6 不识别!important 有危险*/</span></div><div class="line"></div><div class="line"><span class="comment">/* CSS选择符级Hack */</span></div><div class="line">*<span class="selector-tag">html</span> <span class="selector-id">#demo</span> &#123; <span class="attribute">color</span>:red;&#125; <span class="comment">/* 仅IE6 识别 */</span></div><div class="line">*+<span class="selector-tag">html</span> <span class="selector-id">#demo</span> &#123; <span class="attribute">color</span>:red;&#125; <span class="comment">/* 仅IE7 识别 */</span></div><div class="line"><span class="selector-tag">body</span><span class="selector-pseudo">:nth-of-type(1)</span> <span class="selector-id">#demo</span> &#123; <span class="attribute">color</span>:red;&#125; <span class="comment">/* IE9+、FF3.5+、Chrome、Safari、Opera 可以识别 */</span></div><div class="line"><span class="selector-tag">head</span><span class="selector-pseudo">:first-child+body</span> <span class="selector-id">#demo</span> &#123; <span class="attribute">color</span>:red; &#125; <span class="comment">/* IE7+、FF、Chrome、Safari、Opera 可以识别 */</span></div><div class="line"><span class="selector-pseudo">:root</span> <span class="selector-id">#demo</span> &#123; <span class="attribute">color</span>:red\<span class="number">9</span>; &#125; : <span class="comment">/* 仅IE9识别 */</span></div><div class="line"></div><div class="line"><span class="comment">/* IE条件注释Hack */</span></div><div class="line">&lt;!<span class="selector-tag">--</span><span class="selector-attr">[if IE 6]</span>&gt;此处内容只有<span class="selector-tag">IE6</span><span class="selector-class">.0</span>可见&lt;!<span class="selector-attr">[endif]</span><span class="selector-tag">--</span>&gt;</div><div class="line">&lt;!<span class="selector-tag">--</span><span class="selector-attr">[if IE 7]</span>&gt;此处内容只有<span class="selector-tag">IE7</span><span class="selector-class">.0</span>可见&lt;!<span class="selector-attr">[endif]</span><span class="selector-tag">--</span>&gt;</div></pre></td></tr></table></figure></p>
+<p>下面也大概介绍一些常见的BUG：</p>
+<blockquote>
+<ol>
+<li><p>css盒模型在IE6下解析有问题，我们知道就width来说，一个块级元素的magin、padding、border和width的7个属性的宽度之和，应该小于或等于其父级元素的内容区域（width），而我们一般设置宽度若是未达到其长度，浏览器就会重置margin-right的值，将之它们的和等于其值，当然若是我们为margin设置负值，那么元素的width可能超出其父元素。在标准下，width为元素内容区所占区域，也就是不包括margin、border和padding；在ie6中，width为元素内容区+padding+border，这种情况可以采用CSShack技术处理。</p>
+</li>
+<li><p>IE6的双倍边距BUG，在块级元素浮动后本来外边距10px,但IE解释为20px,解决办法是加上display: inline。<br><strong>问题</strong>：在IE6下如果某个标签使用了float属性，同时设置了其外边距“margin:10px 0 0 10px”可以看出，上边距和左边距同样为10px，但第一个对象距左边有20px。<br><strong>解决办法</strong>：当将其display属性设置为inline时问题就都解决了。<br><strong>说明</strong>：这是因为块级对象默认的display属性值是block，当设置了浮动的同时，还设置了它的外边距 就会出现这种情况。<br>也许你会问：“为什么第二个对象和第一个对象之间就不存在双倍边距的BUG”？<br>因为浮动都有其相对应的对象，只有相对于其父对象的浮动 对象才会出现这样的问题。<br>第一个对象是相对父对象的，而第二个对象是相对第一个对象的，所以第二个对象在设置后不会出现问题。<br>另外在一些特殊布局中，可能需要组合使用display:block;和display:inline;才能达到预期效果。<br>当然最坏的情况下，我们就可以使用”margin:10px 0 0 10px;<em>margin:10px 0 0 10px;_margin:10px 0 0 5px”，<br>这种“标准属性;</em>IE7识别属性;_IE6识别属性”HACK方式解决。<br><strong>总结</strong>：这个现象仅当块级对象设置了浮动属性后才会出现，内联对象（行级对象）不会出现此问题。并且只有设置左边距和右边距的值才会出问题，上下边距不会出现问题。<br>margin双布局可以说是IE6下经典的bug之一。产生的条件是：block元素+浮动+margin。<br>而为什么display:inline可以解决这个双边距bug，首先是inline元素或inline-block元素是不存在双边距问题的。<br>然后，float:left等浮动属性可以让inline元素haslayout，会让inline元素表现得跟inline-block元素的特性一样， 支持高宽，垂直margin和padding等，<br>所以div class的所有样式可以用在这个display inline的元素上。</p>
+</li>
+<li><p>IE6下图片下方有空隙产生；解决这个BUG的方法也有很多,可以是改变html的排版,或者设置img 为display:block，<br>或者设置vertical-align 属性为vertical-align:top bottom middle text-bottom都可以解决.</p>
+</li>
+<li><p>IE6 3px bug 两个浮动层中间有间隙，这个IE的3PX BUG也是经常出现的,<br>解决的办法是给右边元素也同样浮动 float:left 或者相对IE6定义.left margin-right:-3px;<br>经典两列布局，float: left;width:200px; 第二个，margin-left,200px; 他们之间会产生3px的间距。</p>
+</li>
+<li><p>在IE6中没有min-width的概念，其默认width就是min-width，所以有时字体过多它会选择撑开容器。</p>
+</li>
+<li><p>IE6无法定义1px左右高度的容器，是因为默认的行高造成的,解决的方法也有很多,<br>例如: overflow:hidden zoom:0.08 line-height:1px ⑦ 使用margin ： 0 auto；方法使容器居中依然在IE6中行不通，我们要对其父容器使用text-align:center;</p>
+</li>
+<li><p>被点击访问过的超链接样式不在具有hover和active了,很多人应该都遇到过这个问题,<br>解决方法是改变CSS属性的排列顺序: L-V-H-A 。<br>a:link {}  a:visited {}  a:hover {}  a:active {}</p>
+</li>
+<li><p>在使用绝对定位/相对定位时，设置z-index在ie中可能会失效，是因为其元素依赖于其父元素的z-index，而父元素默认为0 ？<br>所以子元素z-index高，而父元素底，依然不会改变其显示顺序；</p>
+</li>
+<li><p>外边距叠加问题：<br>box{ margin:10px; background-color:Red; }<br>box p { margin:20px; background:gray; }<br>&lt;div id=”box”&gt;&lt;p&gt;dd&lt;/p&gt;&lt;/div&gt;<br>该代码会导致外边距叠加，并且外边距跑到div包裹外去，bug是由于块级子元素高度计算方式造成的。<br>若是元素没有垂直边框或者padding，那么它的高度就是包含的子元素的顶部和底部边框的的距离。</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="JavaScript兼容"><a href="#JavaScript兼容" class="headerlink" title="JavaScript兼容"></a>JavaScript兼容</h3><p>在javascript中，各个浏览器基本语法差距不大，其兼容问题主要出现在各个浏览器的实现上，尤其对事件的支持有很大问题，在此我就说说我知道的几个问题。</p>
+<ol>
+<li><p>在标准的事件绑定中绑定事件的方法函数为 addEventListener，而IE使用的是attachEvent。</p>
+</li>
+<li><p>标准浏览器采用事件捕获的方式，IE采用的是事件冒泡机制，即标准由最外元素至最内元素或者IE由最内元素到最外元素；最后标准方亦觉得IE这方面的比较合理，所以便将事件冒泡纳入了标准，这也是addEventListener第三个参数的由来，而且事件冒泡作为了默认值。</p>
+</li>
+<li><p>事件处理中非常有用的event属性获得亦不相同，标准浏览器是作为参数带入，而ie是window.event方式获得，获得目标元素标准浏览器为e.target，ie为e.srcElement。</p>
+</li>
+<li><p>然后在ie中是不能操作tr的innerHtml的。</p>
+</li>
+<li><p>然后ie日期函数处理与其它浏览器不大一致，比如： var year= new Date().getYear(); 在IE中会获得当前年，但是在firefox中则会获得当前年与1900的差值。通常使用getFullYear()。</p>
+</li>
+<li><p>关于AJAX的实现上亦有所不同；如果要支持ie6，需要判断MSXML2.XMLHTTP的版本，如果是ie7+或者其他浏览器，可以直接调用原生的XHR来实现。  </p>
+</li>
+</ol>
+<p>就javascript来说，各大浏览器之间的差异还是不少的，但是具体我变得这里都不大关注了，因为我们开发过程中一般都会使用类库，若是不使用，都会自己积累形成一个类库，所以就js而言，兼容性问题基本解决了。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;前端开发人员经常要碰到浏览器的兼容问题，大部分情况下，chrome、Firefox对web标准支持度较好，兼容性问题相对较少。但目前在国内，ie6的份额还是比较大，设计传统系统时不时需要考虑兼容。平时抽个时间在网上收集了一下，整理了部分，希望大家指正、补充。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="HTML" scheme="http://fengzheqi.com/tags/HTML/"/>
+    
+  </entry>
+  
+</feed>

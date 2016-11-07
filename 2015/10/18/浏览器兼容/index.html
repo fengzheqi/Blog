@@ -1,0 +1,698 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="HTML," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="浮生奇影" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言前端开发人员经常要碰到浏览器的兼容问题，大部分情况下，chrome、Firefox对web标准支持度较好，兼容性问题相对较少。但目前在国内，ie6的份额还是比较大，设计传统系统时不时需要考虑兼容。平时抽个时间在网上收集了一下，整理了部分，希望大家指正、补充。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IE的兼容性问题">
+<meta property="og:url" content="http://fengzheqi.com/2015/10/18/浏览器兼容/index.html">
+<meta property="og:site_name" content="浮生奇影">
+<meta property="og:description" content="前言前端开发人员经常要碰到浏览器的兼容问题，大部分情况下，chrome、Firefox对web标准支持度较好，兼容性问题相对较少。但目前在国内，ie6的份额还是比较大，设计传统系统时不时需要考虑兼容。平时抽个时间在网上收集了一下，整理了部分，希望大家指正、补充。">
+<meta property="og:updated_time" content="2016-11-07T08:36:29.176Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IE的兼容性问题">
+<meta name="twitter:description" content="前言前端开发人员经常要碰到浏览器的兼容问题，大部分情况下，chrome、Firefox对web标准支持度较好，兼容性问题相对较少。但目前在国内，ie6的份额还是比较大，设计传统系统时不时需要考虑兼容。平时抽个时间在网上收集了一下，整理了部分，希望大家指正、补充。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> IE的兼容性问题 | 浮生奇影 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">浮生奇影</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                IE的兼容性问题
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-10-18T00:00:00+08:00" content="2015-10-18">
+              2015-10-18
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前端开发人员经常要碰到浏览器的兼容问题，大部分情况下，chrome、Firefox对web标准支持度较好，兼容性问题相对较少。但目前在国内，ie6的份额还是比较大，设计传统系统时不时需要考虑兼容。平时抽个时间在网上收集了一下，整理了部分，希望大家指正、补充。</p>
+<a id="more"></a>
+<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><h3 id="HTML兼容"><a href="#HTML兼容" class="headerlink" title="HTML兼容"></a>HTML兼容</h3><p>HTML的兼容比较容易处理，主要是高版本浏览器用了低版本浏览器无法识别的元素，导致其不能解析，所以平时需要注意一点；其次，在一些css库（比如bootstrap）里会简单的设置一些新标签的样式，以便向后兼容，大家也可以关注一下这些的库的源码。</p>
+<h3 id="CSS兼容"><a href="#CSS兼容" class="headerlink" title="CSS兼容"></a>CSS兼容</h3><p>CSS的兼容，一方面是了解并熟悉CSS的通用的方法，其次也可以掌握一些Hack，虽然Hack并不推荐，但学习学习还是可以解决燃眉之急的。<br>  <figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* CSS属性级Hack */</span></div><div class="line"><span class="selector-tag">color</span><span class="selector-pseudo">:red</span>; <span class="comment">/* 所有浏览器可识别*/</span></div><div class="line">_<span class="selector-tag">color</span><span class="selector-pseudo">:red</span>; <span class="comment">/* 仅IE6 识别 */</span></div><div class="line">*<span class="selector-tag">color</span><span class="selector-pseudo">:red</span>; <span class="comment">/* IE6、IE7 识别 */</span></div><div class="line">+<span class="selector-tag">color</span><span class="selector-pseudo">:red</span>; <span class="comment">/* IE6、IE7 识别 */</span></div><div class="line">*+<span class="selector-tag">color</span><span class="selector-pseudo">:red</span>; <span class="comment">/* IE6、IE7 识别 */</span></div><div class="line"><span class="selector-tag">color</span><span class="selector-pseudo">:red</span>; <span class="comment">/* IE6、IE7 识别 */</span></div><div class="line"><span class="selector-tag">color</span><span class="selector-pseudo">:red</span>\9; <span class="comment">/* IE6、IE7、IE8、IE9 识别 */</span></div><div class="line"><span class="selector-tag">color</span><span class="selector-pseudo">:red</span>\0; <span class="comment">/* IE8、IE9 识别*/</span></div><div class="line"><span class="selector-tag">color</span><span class="selector-pseudo">:red</span> \0; <span class="comment">/* 仅IE9识别 */</span></div><div class="line"><span class="selector-tag">color</span><span class="selector-pseudo">:red</span>!<span class="selector-tag">important</span>; <span class="comment">/* IE6 不识别!important 有危险*/</span></div><div class="line"></div><div class="line"><span class="comment">/* CSS选择符级Hack */</span></div><div class="line">*<span class="selector-tag">html</span> <span class="selector-id">#demo</span> &#123; <span class="attribute">color</span>:red;&#125; <span class="comment">/* 仅IE6 识别 */</span></div><div class="line">*+<span class="selector-tag">html</span> <span class="selector-id">#demo</span> &#123; <span class="attribute">color</span>:red;&#125; <span class="comment">/* 仅IE7 识别 */</span></div><div class="line"><span class="selector-tag">body</span><span class="selector-pseudo">:nth-of-type(1)</span> <span class="selector-id">#demo</span> &#123; <span class="attribute">color</span>:red;&#125; <span class="comment">/* IE9+、FF3.5+、Chrome、Safari、Opera 可以识别 */</span></div><div class="line"><span class="selector-tag">head</span><span class="selector-pseudo">:first-child+body</span> <span class="selector-id">#demo</span> &#123; <span class="attribute">color</span>:red; &#125; <span class="comment">/* IE7+、FF、Chrome、Safari、Opera 可以识别 */</span></div><div class="line"><span class="selector-pseudo">:root</span> <span class="selector-id">#demo</span> &#123; <span class="attribute">color</span>:red\<span class="number">9</span>; &#125; : <span class="comment">/* 仅IE9识别 */</span></div><div class="line"></div><div class="line"><span class="comment">/* IE条件注释Hack */</span></div><div class="line">&lt;!<span class="selector-tag">--</span><span class="selector-attr">[if IE 6]</span>&gt;此处内容只有<span class="selector-tag">IE6</span><span class="selector-class">.0</span>可见&lt;!<span class="selector-attr">[endif]</span><span class="selector-tag">--</span>&gt;</div><div class="line">&lt;!<span class="selector-tag">--</span><span class="selector-attr">[if IE 7]</span>&gt;此处内容只有<span class="selector-tag">IE7</span><span class="selector-class">.0</span>可见&lt;!<span class="selector-attr">[endif]</span><span class="selector-tag">--</span>&gt;</div></pre></td></tr></table></figure></p>
+<p>下面也大概介绍一些常见的BUG：</p>
+<blockquote>
+<ol>
+<li><p>css盒模型在IE6下解析有问题，我们知道就width来说，一个块级元素的magin、padding、border和width的7个属性的宽度之和，应该小于或等于其父级元素的内容区域（width），而我们一般设置宽度若是未达到其长度，浏览器就会重置margin-right的值，将之它们的和等于其值，当然若是我们为margin设置负值，那么元素的width可能超出其父元素。在标准下，width为元素内容区所占区域，也就是不包括margin、border和padding；在ie6中，width为元素内容区+padding+border，这种情况可以采用CSShack技术处理。</p>
+</li>
+<li><p>IE6的双倍边距BUG，在块级元素浮动后本来外边距10px,但IE解释为20px,解决办法是加上display: inline。<br><strong>问题</strong>：在IE6下如果某个标签使用了float属性，同时设置了其外边距“margin:10px 0 0 10px”可以看出，上边距和左边距同样为10px，但第一个对象距左边有20px。<br><strong>解决办法</strong>：当将其display属性设置为inline时问题就都解决了。<br><strong>说明</strong>：这是因为块级对象默认的display属性值是block，当设置了浮动的同时，还设置了它的外边距 就会出现这种情况。<br>也许你会问：“为什么第二个对象和第一个对象之间就不存在双倍边距的BUG”？<br>因为浮动都有其相对应的对象，只有相对于其父对象的浮动 对象才会出现这样的问题。<br>第一个对象是相对父对象的，而第二个对象是相对第一个对象的，所以第二个对象在设置后不会出现问题。<br>另外在一些特殊布局中，可能需要组合使用display:block;和display:inline;才能达到预期效果。<br>当然最坏的情况下，我们就可以使用”margin:10px 0 0 10px;<em>margin:10px 0 0 10px;_margin:10px 0 0 5px”，<br>这种“标准属性;</em>IE7识别属性;_IE6识别属性”HACK方式解决。<br><strong>总结</strong>：这个现象仅当块级对象设置了浮动属性后才会出现，内联对象（行级对象）不会出现此问题。并且只有设置左边距和右边距的值才会出问题，上下边距不会出现问题。<br>margin双布局可以说是IE6下经典的bug之一。产生的条件是：block元素+浮动+margin。<br>而为什么display:inline可以解决这个双边距bug，首先是inline元素或inline-block元素是不存在双边距问题的。<br>然后，float:left等浮动属性可以让inline元素haslayout，会让inline元素表现得跟inline-block元素的特性一样， 支持高宽，垂直margin和padding等，<br>所以div class的所有样式可以用在这个display inline的元素上。</p>
+</li>
+<li><p>IE6下图片下方有空隙产生；解决这个BUG的方法也有很多,可以是改变html的排版,或者设置img 为display:block，<br>或者设置vertical-align 属性为vertical-align:top bottom middle text-bottom都可以解决.</p>
+</li>
+<li><p>IE6 3px bug 两个浮动层中间有间隙，这个IE的3PX BUG也是经常出现的,<br>解决的办法是给右边元素也同样浮动 float:left 或者相对IE6定义.left margin-right:-3px;<br>经典两列布局，float: left;width:200px; 第二个，margin-left,200px; 他们之间会产生3px的间距。</p>
+</li>
+<li><p>在IE6中没有min-width的概念，其默认width就是min-width，所以有时字体过多它会选择撑开容器。</p>
+</li>
+<li><p>IE6无法定义1px左右高度的容器，是因为默认的行高造成的,解决的方法也有很多,<br>例如: overflow:hidden zoom:0.08 line-height:1px ⑦ 使用margin ： 0 auto；方法使容器居中依然在IE6中行不通，我们要对其父容器使用text-align:center;</p>
+</li>
+<li><p>被点击访问过的超链接样式不在具有hover和active了,很多人应该都遇到过这个问题,<br>解决方法是改变CSS属性的排列顺序: L-V-H-A 。<br>a:link {}  a:visited {}  a:hover {}  a:active {}</p>
+</li>
+<li><p>在使用绝对定位/相对定位时，设置z-index在ie中可能会失效，是因为其元素依赖于其父元素的z-index，而父元素默认为0 ？<br>所以子元素z-index高，而父元素底，依然不会改变其显示顺序；</p>
+</li>
+<li><p>外边距叠加问题：<br>box{ margin:10px; background-color:Red; }<br>box p { margin:20px; background:gray; }<br>&lt;div id=”box”&gt;&lt;p&gt;dd&lt;/p&gt;&lt;/div&gt;<br>该代码会导致外边距叠加，并且外边距跑到div包裹外去，bug是由于块级子元素高度计算方式造成的。<br>若是元素没有垂直边框或者padding，那么它的高度就是包含的子元素的顶部和底部边框的的距离。</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="JavaScript兼容"><a href="#JavaScript兼容" class="headerlink" title="JavaScript兼容"></a>JavaScript兼容</h3><p>在javascript中，各个浏览器基本语法差距不大，其兼容问题主要出现在各个浏览器的实现上，尤其对事件的支持有很大问题，在此我就说说我知道的几个问题。</p>
+<ol>
+<li><p>在标准的事件绑定中绑定事件的方法函数为 addEventListener，而IE使用的是attachEvent。</p>
+</li>
+<li><p>标准浏览器采用事件捕获的方式，IE采用的是事件冒泡机制，即标准由最外元素至最内元素或者IE由最内元素到最外元素；最后标准方亦觉得IE这方面的比较合理，所以便将事件冒泡纳入了标准，这也是addEventListener第三个参数的由来，而且事件冒泡作为了默认值。</p>
+</li>
+<li><p>事件处理中非常有用的event属性获得亦不相同，标准浏览器是作为参数带入，而ie是window.event方式获得，获得目标元素标准浏览器为e.target，ie为e.srcElement。</p>
+</li>
+<li><p>然后在ie中是不能操作tr的innerHtml的。</p>
+</li>
+<li><p>然后ie日期函数处理与其它浏览器不大一致，比如： var year= new Date().getYear(); 在IE中会获得当前年，但是在firefox中则会获得当前年与1900的差值。通常使用getFullYear()。</p>
+</li>
+<li><p>关于AJAX的实现上亦有所不同；如果要支持ie6，需要判断MSXML2.XMLHTTP的版本，如果是ie7+或者其他浏览器，可以直接调用原生的XHR来实现。  </p>
+</li>
+</ol>
+<p>就javascript来说，各大浏览器之间的差异还是不少的，但是具体我变得这里都不大关注了，因为我们开发过程中一般都会使用类库，若是不使用，都会自己积累形成一个类库，所以就js而言，兼容性问题基本解决了。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/asserts/wepay.png" alt="tommyzqfeng WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/asserts/alipay.png" alt="tommyzqfeng Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HTML/" rel="tag">#HTML</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/04/css选择器简述/" rel="prev" title="css选择器简述">
+                css选择器简述 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/asserts/author.png"
+               alt="tommyzqfeng" />
+          <p class="site-author-name" itemprop="name">tommyzqfeng</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://facebook.com/your-user-name" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://github.com/" title="Github" target="_blank">Github</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础"><span class="nav-number">2.</span> <span class="nav-text">基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTML兼容"><span class="nav-number">2.1.</span> <span class="nav-text">HTML兼容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS兼容"><span class="nav-number">2.2.</span> <span class="nav-text">CSS兼容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript兼容"><span class="nav-number">2.3.</span> <span class="nav-text">JavaScript兼容</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tommyzqfeng</span>
+</div>
+
+<div class="powered-by" style="display:none">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info" style="display:none">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

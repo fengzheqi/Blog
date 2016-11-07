@@ -1,0 +1,803 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JSHint," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="浮生奇影" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="JSHint中options配置详解本文引用博客JSHint中文DOC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JSHint中options配置详解">
+<meta property="og:url" content="http://fengzheqi.com/2015/11/19/JSHint中options配置详解/index.html">
+<meta property="og:site_name" content="浮生奇影">
+<meta property="og:description" content="JSHint中options配置详解本文引用博客JSHint中文DOC">
+<meta property="og:updated_time" content="2016-11-07T08:36:29.172Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JSHint中options配置详解">
+<meta name="twitter:description" content="JSHint中options配置详解本文引用博客JSHint中文DOC">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> JSHint中options配置详解 | 浮生奇影 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">浮生奇影</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JSHint中options配置详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-19T00:00:00+08:00" content="2015-11-19">
+              2015-11-19
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="JSHint中options配置详解"><a href="#JSHint中options配置详解" class="headerlink" title="JSHint中options配置详解"></a>JSHint中<code>options</code>配置详解</h3><p><em>本文引用博客<a href="http://www.cnblogs.com/code/articles/4103070.html" target="_blank" rel="external">JSHint中文DOC</a></em></p>
+<a id="more"></a>
+<h4 id="1-增强参数（Enforcing-Options）"><a href="#1-增强参数（Enforcing-Options）" class="headerlink" title="1. 增强参数（Enforcing Options）"></a>1. 增强参数（Enforcing Options）</h4><p>本类参数设为true，JSHint会产生更多告警。</p>
+<ul>
+<li><p><code>bitwise</code><br>  禁用位运算符(如^，&amp;)<br>  位运算符在JS中很少使用，性能也较差，出现&amp;也很可能是想写&amp;&amp;。</p>
+</li>
+<li><p><code>camelcase</code><br>  使用驼峰命名(camelCase)或全大写下划线命名(UPPER_CASE)<br>  这是条最佳实践，关键不在于采用什么样的命名规则(比如纯小写配下划线)，而在于要有规则，在代码中看到不同的命名规则会让人头痛不已。</p>
+</li>
+<li><p><code>curly</code><br>  if和while等语句中使用{}来明确代码块</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> (day)</div><div class="line">    shuffle();</div><div class="line">    sleep();</div></pre></td></tr></table></figure>
+<p>  虽然缩进表示两条语句都在循环中，但事实却是只有一句循环。</p>
+</li>
+<li><p><code>eqeqeq</code><br>  使用===和!==替代==和!=<br>  ==和!=比较时会对前后元素进行自动转义，作为读者，需要动脑筋想这里可能有什么样的转义规则，加重负担；作为作者，其实很可能是不确定这段代码运行时是怎么样的，想要偷懒。</p>
+</li>
+<li><p><code>es3</code><br>  强制使用ECMAScript 3规范</p>
+</li>
+<li><p><code>forin</code><br>  在for in循环中使用Object.prototype.hasOwnProperty()来过滤原型链中的属性</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (key <span class="keyword">in</span> obj) &#123;</div><div class="line">    <span class="keyword">if</span> (obj.hasOwnProperty(key)) &#123;</div><div class="line">    <span class="comment">// We are sure that obj[key] belongs to the object and was not inherieted.</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>  for in遍历对象属性的时候，包括继承自原型链的属性，hasOwnProperty可以来判断一个属性是否是对象本身的属性而不是继承得来的。</p>
+</li>
+<li><p><code>freeze</code><br>  禁止复写原生对象(如Array, Date)的原型</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/* jshint freeze:true */</div><div class="line">Array.prototype.count = function (value) &#123; return 4; &#125;;</div><div class="line">// -&gt; Warning: Extending prototype of native object: &apos;Array&apos;.</div></pre></td></tr></table></figure>
+<p>  为原生对象添加属性确实看上去很方便，但也带来了潜在的问题，一是如果项目中有多处为同一个对象添加了同样的属性（或函数），则很可能产生冲突；二是如果某段逻辑依赖于对象属性遍历，则可能产生错误。</p>
+</li>
+<li><p><code>immed</code><br>  匿名函数调用必须</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">   <span class="comment">// body </span></div><div class="line">&#125;());</div><div class="line">而不是</div><div class="line"></div><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">   <span class="comment">// body</span></div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<p>  这是为了表明，表达式的值是函数的结果，而不是函数本身。</p>
+</li>
+<li><p><code>indent</code><br>  代码缩进宽度（空格数）<br>  前面几个项目我比较喜欢4，新项目我又在尝试2。关键不在于是几，而在于大家都要设成一样的。</p>
+</li>
+<li><p><code>latedef</code><br>  变量定义前禁止使用<br>  JS的变量是“函数级作用域”，而不是通常所见的“块级作用域”，简单说</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">numbers</span>) </span>&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, n = numbers.length; i &lt; n; i++) &#123;</div><div class="line">        <span class="keyword">var</span> sum = sum + numbers[i];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> sum;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>  相当于</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">numbers</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> i, n, sum;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>, n = numbers.length; i &lt; n; i++) &#123;</div><div class="line">       sum = sum + numbers[i];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> sum;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>  这个行为叫做“变量声明提升”，为了不产生混淆，这条规则建议函数都使用第二种写法。</p>
+</li>
+<li><p><code>newcap</code><br>  构造函数名首字母必须大写<br>  这条最佳实践是为了方便区分构造函数和普通函数，这样在直接调用大写字母开头的函数时，使用者就会想想是不是自己写错了。<br>不通过new而直接调用构造函数，会使得构造函数中的this指向global对象，从而产生错误。<br>PS. 有些高手可以通过在构造函数中判断this的指向来判断是否重新new自身，从而让构造函数也能直接调用产生新对象。但这有些高深，加重开发人员和使用人员的负担，也不利于统一编码风格。</p>
+</li>
+<li><p><code>noarg</code><br>  禁止使用arguments.caller和arguments.callee<br>  一方面这两个属性不是所有的浏览器都支持，另一方面这两个属性的使用会导致JS引擎很难优化代码，在未来的JS规范中会被去掉，所以不建议使用。</p>
+</li>
+<li><p><code>noempty</code><br>  禁止出现空的代码块<br>  空的代码块并不是有害的，但是出现的话我们需要考虑下为什么。</p>
+</li>
+<li><p><code>nonbsp</code><br>  禁止”non-breaking whitespace”<br>  这是Mac键盘在某种情况下可以键入的字符，据说会破坏非UTF8编码的页面。</p>
+</li>
+<li><p><code>nonew</code><br>  禁止使用构造器<br>  new MyConstructor();<br>  构造一个对象，却不给它赋值到某个变量，只是利用构造函数中的逻辑。这个行为完全可以用一个普通函数来完成，不应该借助构造器。</p>
+</li>
+<li><p><code>plusplus</code><br>  禁止使用++和–-<br>  不是很赞成把这个选项打成true，不过乱用自增/自减确实也会带来阅读上的障碍。</p>
+</li>
+<li><p><code>quotemark</code><br>  统一使用单引号或双引号<br>  这个最佳实践要求代码风格统一，我比较喜欢统一成单引号。<br>  这是为什么规定最佳实践的一个好例子，在写到字符串的时候我们就不用考虑使用单引号好还是用双引号好，就都用单引号，这在一定程度上也减轻了我们的思考负担。</p>
+</li>
+<li><p><code>undef</code><br>  禁止使用不在全局变量列表中的未定义的变量</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> myVar = <span class="string">'Hello, World'</span>;</div><div class="line">    <span class="built_in">console</span>.log(myvar); <span class="comment">// Oops, typoed here. JSHint with undef will complain</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>如果本地作用域里的变量没有使用var来声明，则会被放到全局作用域下面，众所周知，全局变量时罪恶的源泉。</p>
+<ul>
+<li><p><code>unused</code><br>  禁止定义变量却不使用</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">a, b</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> c, d = <span class="number">2</span>;</div><div class="line">    <span class="keyword">return</span> a + d;</div><div class="line">&#125;</div><div class="line">test(<span class="number">1</span>, <span class="number">2</span>);</div><div class="line"><span class="comment">// Line 1: 'b' was defined but never used.</span></div><div class="line"><span class="comment">// Line 2: 'c' was defined but never used.</span></div></pre></td></tr></table></figure>
+<p>  这种变量通常是写作过程中遗留下来的垃圾，需要及时清理掉。</p>
+</li>
+<li><p><code>strict</code><br>  强制使用ES5的严格模式<br>  Strict Mode是对JS用法的一些限制，过滤掉了容易出错的特性和不容易优化的特性。<br>通过在函数开头处加入’use strict’;来触发严格模式，不要在文件头部加入，因为在JS链接的时候很可能就失效了。</p>
+</li>
+<li><p><code>trailing</code><br>  禁止行尾空格</p>
+</li>
+<li><p><code>maxparams</code><br>  函数可以接受的最大参数数量<br>  函数参数数量应该控制在3个以内，超出则可能造成使用困难，比如需要记忆参数顺序，难以设定默认值等。另外，在JS中可以很方便的使用参数对象来封装多个参数。</p>
+</li>
+<li><p><code>maxdepth</code><br>  代码块中可以嵌入{}的最大深度</p>
+</li>
+<li><p><code>maxstatement</code><br>  函数中最大语句数</p>
+</li>
+<li><p><code>maxcomplexity</code><br>  函数的最大圈复杂度</p>
+</li>
+<li><p><code>maxlen</code><br>  一行中最大字符数<br>  这个是为了减轻代码阅读的困难，简单说就是不要折行。<br>上面四个参数最终都是为了减小代码的复杂程度，简单轻巧的代码片段更容易阅读和维护。</p>
+</li>
+</ul>
+<h4 id="2-松弛参数（Relaxing-Options）"><a href="#2-松弛参数（Relaxing-Options）" class="headerlink" title="2. 松弛参数（Relaxing Options）"></a>2. 松弛参数（Relaxing Options）</h4><p>本类参数设为true，JSHint会产生更少告警。</p>
+<ul>
+<li><p><code>asi</code><br>  允许省略分号<br>  JavaScript的语法允许自动补全分号，但是这一特性也会造成难以定位的错误，所以建议写代码时不要省略分号。</p>
+</li>
+<li><p><code>boss</code><br>允许在if，for，while语句中使用赋值<br>在条件语句中使用赋值经常是笔误if (a = 10) {}，但是牛人(boss)可以把这个特性用的很好，我们作为普通人就算了。</p>
+</li>
+<li><p><code>debug</code><br>允许debugger语句<br>debugger语句在产品代码中应该去掉。</p>
+</li>
+<li><p><code>eqnull</code><br>允许==null<br>==null通常用来比较=== null         === undefined</p>
+</li>
+<li><p><code>esnext</code><br>允许ECMAScript 6规约<br>目前ES6的特性不是所有的浏览器都支持。</p>
+</li>
+<li><p><code>evil</code><br>允许使用eval<br>eval有“注入攻击”的危险，另一方面也不利于JS引擎优化代码，所以尽量不要使用。</p>
+</li>
+<li><p><code>expr</code><br>允许应该出现赋值或函数调用的地方使用表达式</p>
+</li>
+<li><p><code>funcscope</code><br>允许在控制体内定义变量而在外部使用</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</div><div class="line">        <span class="keyword">var</span> x = <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    x += <span class="number">1</span>; <span class="comment">// Default: 'x' used out of scope.</span></div><div class="line">            <span class="comment">// No warning when funcscope:true</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>虽然“变量声明提升”使得上面的代码可以运行通过，但是读者还是会感到头晕。</p>
+<ul>
+<li><p><code>globalstrict</code><br>允许全局严格模式<br>在strict中解释了，’use strict’;放在全局域可能造成JS文件链接错误。</p>
+</li>
+<li><p><code>iterator</code><br>允许<strong>iterator</strong><br>不是所有的浏览器都支持<strong>iterator</strong>。</p>
+</li>
+<li><p><code>lastsemic</code><br>允许单行控制块省略分号</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> name = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> <span class="string">'Anton'</span> &#125;());</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>高手用得到的特性，我们还是坚持加上分号吧。</p>
+<ul>
+<li><p><code>laxbreak</code><br>允许不安全的行中断(与laxcomma配合使用)</p>
+</li>
+<li><p><code>laxcomma</code><br>允许逗号开头的编码样式</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> obj = &#123;</div><div class="line">    <span class="attr">name</span>: <span class="string">'Anton'</span></div><div class="line">  , <span class="attr">handle</span>: <span class="string">'valueof'</span></div><div class="line">  , <span class="attr">role</span>: <span class="string">'SW Engineer'</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>loopfunc</code><br>允许循环中定义函数<br>在循环中定义函数经常会导致错误：</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> nums = [];</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">    nums[i] = <span class="function"><span class="keyword">function</span> (<span class="params">j</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> i + j;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">nums[<span class="number">0</span>](<span class="number">2</span>); <span class="comment">// Prints 12 instead of 2</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>错误的根源在于function(j)中的i是对循环中的i的引用，而不是赋值。所以在最终函数执行时，i的值是10。<br>修改的方法是使用闭包：</p>
+<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> nums = [];</div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">    (<span class="function"><span class="keyword">function</span> (<span class="params">i</span>) </span>&#123;</div><div class="line">        nums[i] = <span class="function"><span class="keyword">function</span> (<span class="params">j</span>) </span>&#123;</div><div class="line">            <span class="keyword">return</span> i + j;</div><div class="line">        &#125;;</div><div class="line">    &#125;(i));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><ul>
+<li><p><code>maxerr</code><br>JSHint中断扫描前允许的最大错误数<br>因为最终我们需要清零JSHint报错的，所以这个值用在对已有项目的扫描中。</p>
+</li>
+<li><p><code>multistr</code><br>允许多行字符串</p>
+</li>
+<li><p><code>notypeof</code><br>允许非法的typeof操作</p>
+</li>
+<li><p><code>proto</code><br>允许 proto<br>不是所有的浏览器都支持<strong>proto</strong>.</p>
+</li>
+<li><p><code>smarttabs</code><br>允许混合tab和space排版<br>SmartTabs方法使用tab进行缩进，使用空格进行代码对齐。比较高级的用法，有兴趣的话可以尝试下。</p>
+</li>
+<li><p><code>shadow</code><br>允许变量shadow</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> x = <span class="number">10</span>;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (<span class="literal">true</span>) &#123;</div><div class="line">        <span class="keyword">var</span> x = <span class="number">20</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> x;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>基于“函数作用域”，多次定义变量和单次定义是没有区别的，但是会造成阅读障碍。</p>
+<ul>
+<li><p><code>sub</code><br>允许person[‘name’]<br>JSHint推荐使用person.name代替person[‘name’]</p>
+</li>
+<li><p><code>supernew</code><br>允许new function() {…}和new Object;</p>
+</li>
+<li><p><code>validthis</code><br>允许严格模式下在非构造函数中使用this</p>
+</li>
+<li><p><code>noyield</code><br>允许发生器中没有yield语句</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/asserts/wepay.png" alt="tommyzqfeng WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/asserts/alipay.png" alt="tommyzqfeng Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JSHint/" rel="tag">#JSHint</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/17/sublime text 软件配置/" rel="next" title="sublime text软件配置">
+                <i class="fa fa-chevron-left"></i> sublime text软件配置
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/22/前端面试总结（HTML篇）/" rel="prev" title="前端面试总结（HTML篇）">
+                前端面试总结（HTML篇） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/asserts/author.png"
+               alt="tommyzqfeng" />
+          <p class="site-author-name" itemprop="name">tommyzqfeng</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://facebook.com/your-user-name" target="_blank" title="Facebook">
+                  
+                    <i class="fa fa-fw fa-facebook"></i>
+                  
+                  Facebook
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/your-user-name" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://github.com/" title="Github" target="_blank">Github</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#JSHint中options配置详解"><span class="nav-number">1.</span> <span class="nav-text">JSHint中options配置详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-增强参数（Enforcing-Options）"><span class="nav-number">1.1.</span> <span class="nav-text">1. 增强参数（Enforcing Options）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-松弛参数（Relaxing-Options）"><span class="nav-number">1.2.</span> <span class="nav-text">2. 松弛参数（Relaxing Options）</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tommyzqfeng</span>
+</div>
+
+<div class="powered-by" style="display:none">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info" style="display:none">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
